@@ -1,12 +1,15 @@
 package net.mat0u5.lifeseries.seasons.season.finallife;
 
 import net.mat0u5.lifeseries.config.SeasonConfig;
+import net.mat0u5.lifeseries.entity.triviabot.server.trivia.TriviaHandler;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.finallife.boogeyman.BoogeymanWeaponManager;
 import net.mat0u5.lifeseries.seasons.season.finallife.boogeyman.FinalLifeBoogeymanManager;
 import net.mat0u5.lifeseries.seasons.season.finallife.boogeyman.ThrownBoogeymanWeapon;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.InBetweenManager;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.trivia.InBetweenTriviaHandler;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.trivia.InBetweenTriviaManager;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.window.InBetweenFileSync;
 import net.mat0u5.lifeseries.seasons.util.LivesManager;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
@@ -39,10 +42,17 @@ public class FinalLife extends Season {
 	}
 
 	@Override
+	public void initialize() {
+		super.initialize();
+		InBetweenTriviaHandler.initializeItemSpawner();
+		InBetweenTriviaManager.initialize();
+	}
+	@Override
 	public void reload() {
 		super.reload();
 		finalLifeBoogeymanManager.onReload();
 		if (InBetweenManager.ENABLED.get()) InBetweenFileSync.onReload();
+		TriviaHandler.guiType = FinalLifeConfig.get().TRIVIA_GUI_TYPE.get();
 	}
 
 	@Override
@@ -77,32 +87,35 @@ public class FinalLife extends Season {
 	public boolean sessionStart() {
 		finalLifeBoogeymanManager.onSessionStart();
 		super.sessionStart();
+		InBetweenTriviaManager.killAllBots();
 		return true;
 	}
 	@Override
 	public void sessionEnd() {
 		finalLifeBoogeymanManager.onSessionEnd();
 		super.sessionEnd();
+		InBetweenTriviaManager.killAllBots();
 	}
 
 	@Override
 	public void onPlayerDisconnect(ServerPlayer player) {
+		finalLifeBoogeymanManager.onPlayerDisconnect(player);
+		super.onPlayerDisconnect(player);
 		ThrownBoogeymanWeapon.returnWeapons(player);
 		InBetweenManager.onPlayerDisconnect(player);
 		InBetweenFileSync.onPlayerDisconnect(player);
-		super.onPlayerDisconnect(player);
-		finalLifeBoogeymanManager.onPlayerDisconnect(player);
 	}
 
 	@Override
 	public void switchOutOfSeason(Seasons changedTo) {
+		super.switchOutOfSeason(changedTo);
 		ScoreboardUtils.removeObjective(DEATHS_SCOREBOARD);
 		createScoreboards();
 		ThrownBoogeymanWeapon.returnAllWeapons();
 		BoogeymanWeaponManager.removeAllBoogeymanWeaponNBTs();
 		InBetweenManager.exitInBetweenAllPlayers();
 		InBetweenFileSync.switchOutOfSeason();
-		super.switchOutOfSeason(changedTo);
+		InBetweenTriviaManager.killAllBots();
 		finalLifeBoogeymanManager.switchOutOfSeason();
 	}
 

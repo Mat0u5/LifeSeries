@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.seasons.boogeyman.BoogeymanCommand;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLifeCommands;
 import net.mat0u5.lifeseries.seasons.season.finallife.FinalLifeCommands;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.trivia.InBetweenTriviaCommand;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeCommands;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeTriviaCommand;
 import net.mat0u5.lifeseries.seasons.season.pastlife.PastLifeCommands;
@@ -57,6 +58,7 @@ public abstract class CustomCommand extends Command {
 				,new FinalLifeCommands()
 				,new WildLifeTriviaCommand()
 				,new NiceLifeTriviaCommand()
+				,new InBetweenTriviaCommand()
 				,new SelfMessageCommand()
 				,new SideTitleCommand()
 				,new TestingCommands()

@@ -75,6 +75,10 @@ public class InBetweenFileSync {
 	// Loads the memory files of the player in the background, then tells the client which files it needs
 	public static void checkPlayerMemories(ServerPlayer player) {
 		if (server == null) return;
+		if (!InBetweenWindowManager.isEnabled()) {
+			applyMemories(player, List.of());
+			return;
+		}
 		UUID uuid = player.getUUID();
 		String name = player.getScoreboardName();
 		loading.add(uuid);
@@ -84,17 +88,21 @@ public class InBetweenFileSync {
 					if (error != null) return; // Logged below
 					ServerPlayer updatedPlayer = PlayerUtils.getPlayer(uuid);
 					if (updatedPlayer == null) return;
-					setMemories(updatedPlayer, loadedMemories);
-					updatePlayer(updatedPlayer);
-					InBetweenInstance instance = InBetweenManager.getInstance(updatedPlayer);
-					if (instance != null) {
-						instance.windowManager.onMemoriesLoaded(updatedPlayer, filterCurrentMemories(loadedMemories, instance.deathNumber));
-					}
+					applyMemories(updatedPlayer, loadedMemories);
 				}, server)
 				.exceptionally(e -> {
 					LifeSeries.LOGGER.error("[In-Between] Failed to load the memories of {}", name, e);
 					return null;
 				});
+	}
+
+	private static void applyMemories(ServerPlayer player, List<InBetweenMemory> loadedMemories) {
+		setMemories(player, loadedMemories);
+		updatePlayer(player);
+		InBetweenInstance instance = InBetweenManager.getInstance(player);
+		if (instance != null) {
+			instance.windowManager.onMemoriesLoaded(player, filterCurrentMemories(loadedMemories, instance.deathNumber));
+		}
 	}
 
 	public static void onReload() {
@@ -146,6 +154,7 @@ public class InBetweenFileSync {
 	}
 
 	private static List<InBetweenMemory> filterCurrentMemories(List<InBetweenMemory> memories, int deathNumber) {
+		if (!InBetweenWindowManager.hasWindows(deathNumber)) return List.of();
 		List<InBetweenMemory> result = new ArrayList<>();
 		for (InBetweenMemory memory : memories) {
 			if (memory.deathNumber() == deathNumber) result.add(memory);
@@ -167,6 +176,7 @@ public class InBetweenFileSync {
 	}
 
 	public static List<InBetweenMemory> getLoadedMemories(ServerPlayer player, int deathNumber) {
+		if (!InBetweenWindowManager.hasWindows(deathNumber)) return List.of();
 		PlayerBoundFiles playerFiles = players.get(player.getUUID());
 		if (playerFiles == null) {
 			if (!loading.contains(player.getUUID())) checkPlayerMemories(player);

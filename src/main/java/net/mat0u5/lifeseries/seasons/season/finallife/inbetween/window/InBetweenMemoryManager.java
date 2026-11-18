@@ -49,6 +49,7 @@ public class InBetweenMemoryManager {
 			Matcher deathMatcher = DEATH_FOLDER_PATTERN.matcher(deathFolder.getName().toLowerCase(Locale.ROOT));
 			if (!deathMatcher.matches()) continue;
 			int deathNumber = Integer.parseInt(deathMatcher.group(1));
+			if (!InBetweenWindowManager.hasWindows(deathNumber)) continue;
 
 			Map<Integer, Path> images = new TreeMap<>();
 			Map<Integer, Path> sounds = new HashMap<>();

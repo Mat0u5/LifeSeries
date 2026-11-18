@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.entity.triviabot.server;
 
 import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.trivia.InBetweenTriviaPath;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.lifeseries.utils.world.AnimationUtils;
@@ -19,6 +20,8 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 public class TriviaBotPathfinding {
     private TriviaBot bot;
     public TriviaBotPathfinding(TriviaBot bot) {
@@ -35,10 +38,33 @@ public class TriviaBotPathfinding {
             navigationInit = true;
             updateNavigation();
         }
+        if (bot.inBetweenBot()) {
+            tickInBetweenPath();
+        }
+    }
+
+    private void tickInBetweenPath() {
+        if (!bot.onGround()) return;
+        Vec3 playerPos = bot.serverData.getPlayerPos();
+        List<Vec3> path = InBetweenTriviaPath.getPath(bot);
+        Vec3 target = null;
+        if (!noPathfinding && !bot.interactedWith() && bot.serverData.shouldPathfind() && playerPos != null && path != null) {
+            target = InBetweenTriviaPath.getNextTarget(path, bot.position(), playerPos);
+        }
+        if (target != null) {
+            bot.getMoveControl().setWantedPosition(target.x, target.y, target.z, TriviaBot.MOVEMENT_SPEED);
+        }
+        else {
+            bot.getMoveControl().setWantedPosition(bot.getX(), bot.getY(), bot.getZ(), 0); // Stand still
+        }
     }
 
     public void fakeTeleportToPlayer() {
         if (bot.level().isClientSide()) return;
+        if (bot.inBetweenBot()) {
+            teleportOnPathToPlayer();
+            return;
+        }
         ServerPlayer boundPlayer = bot.serverData.getBoundPlayer();
         Entity boundEntity = bot.serverData.getBoundEntity();
         if (boundEntity == null) return;
@@ -53,6 +79,20 @@ public class TriviaBotPathfinding {
                 TriviaWildcard.spawnBotFor(boundPlayer, tpTo);
             }
         }
+    }
+
+    private void teleportOnPathToPlayer() {
+        Vec3 playerPos = bot.serverData.getPlayerPos();
+        List<Vec3> path = InBetweenTriviaPath.getPath(bot);
+        if (playerPos == null || path == null || !(bot.level() instanceof ServerLevel level)) return;
+        Vec3 target = InBetweenTriviaPath.getClosestPathPoint(path, playerPos);
+        if (target == null) return;
+        level.playSound(null, bot.getX(), bot.getY(), bot.getZ(), ModifiableSound.FINALLIFE_TRIVIA_TELEPORT.get(), bot.getSoundSource(), bot.soundVolume(), bot.getVoicePitch());
+        level.playSound(null, target.x, target.y, target.z, ModifiableSound.FINALLIFE_TRIVIA_TELEPORT.get(), bot.getSoundSource(), bot.soundVolume(), bot.getVoicePitch());
+        AnimationUtils.spawnTeleportParticles(level, bot.position());
+        AnimationUtils.spawnTeleportParticles(level, target);
+        bot.getNavigation().stop();
+        bot.teleportTo(target.x, target.y, target.z);
     }
 
     public static BlockPos getBlockPosNearPlayer(Entity target, BlockPos targetPos, double distanceFromTarget) {
@@ -77,7 +117,7 @@ public class TriviaBotPathfinding {
 
     public void updateNavigationTarget() {
         Vec3 targetPos = bot.serverData.getPlayerPos();
-        if (noPathfinding || bot.interactedWith() ||!bot.serverData.shouldPathfind() || targetPos == null ||
+        if (bot.inBetweenBot() || noPathfinding || bot.interactedWith() ||!bot.serverData.shouldPathfind() || targetPos == null ||
                 bot.distanceToSqr(targetPos) > (TriviaBot.MAX_DISTANCE*TriviaBot.MAX_DISTANCE)) {
             bot.getNavigation().stop();
             return;
@@ -91,7 +131,7 @@ public class TriviaBotPathfinding {
     @Nullable
     public BlockPos getGroundBlock() {
         Vec3 startPos = bot.position();
-        Vec3 endPos = startPos.add(0, bot.level().getMinY(), 0);
+        Vec3 endPos = new Vec3(startPos.x(), bot.level().getMinY(), startPos.z());
 
         BlockHitResult result = bot.level().clip(
                 new ClipContext(

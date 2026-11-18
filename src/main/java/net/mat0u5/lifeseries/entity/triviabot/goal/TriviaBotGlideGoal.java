@@ -29,7 +29,7 @@ public final class TriviaBotGlideGoal extends Goal {
             return false;
         }
 
-        if (mob.pathfinding.getDistanceToGroundBlock() <= 1.5) {
+        if (mob.pathfinding.getDistanceToGroundBlock() <= 1) {
             return false;
         }
 
@@ -49,12 +49,12 @@ public final class TriviaBotGlideGoal extends Goal {
 
     @Override
     public boolean canContinueToUse() {
-        return mob.pathfinding.getDistanceToGroundBlock() >= 1;
+        return mob.pathfinding.getDistanceToGroundBlock() >= 0.3;
     }
 
     @Override
     public void tick() {
-        mob.setDeltaMovement(0, -0.1, 0);
+        mob.setDeltaMovement(0, mob.inBetweenBot() ? -0.2 : -0.1, 0);
     }
 
     @Override

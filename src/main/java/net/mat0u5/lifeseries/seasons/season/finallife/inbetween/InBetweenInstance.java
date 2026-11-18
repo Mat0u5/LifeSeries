@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.seasons.season.finallife.inbetween;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.choice.InBetweenChoice;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.choice.InBetweenChoiceManager;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.particle.InBetweenParticles;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.trivia.InBetweenTriviaManager;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.window.InBetweenWindowManager;
 import net.mat0u5.matlib.utils.world.LevelUtils;
 import net.minecraft.server.level.ServerLevel;
@@ -22,6 +23,7 @@ public class InBetweenInstance {
 	public final int inBetweenSlot;
 	public final UUID playerUUID;
 	public final int deathNumber;
+	public boolean spawnedTrivia = false;
 	public boolean finished = false;
 	public int age = 0;
 	@Nullable
@@ -81,6 +83,7 @@ public class InBetweenInstance {
 		forceInBounds(player);
 		particleManager.tick(player);
 		choiceManager.tick(player, age);
+		InBetweenTriviaManager.tick(player, this);
 	}
 
 	public void forceInBounds(ServerPlayer player) {

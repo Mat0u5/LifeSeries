@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLifeConfig;
 import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLifeLivesManager;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.trivia.InBetweenTriviaManager;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeTriviaManager;
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLifeUsedTasks;
 import net.mat0u5.lifeseries.seasons.season.secretlife.TaskManager;
@@ -348,6 +349,9 @@ public class SeasonConfig extends DefaultConfigValues {
         if (LifeSeries.isSeason(Seasons.NICE_LIFE) && NiceLifeTriviaManager.triviaQuestions != null) {
             addTriviaEntries(result, NiceLifeTriviaManager.triviaQuestions, "normal", "season.trivia.questions");
         }
+        if (LifeSeries.isSeason(Seasons.FINAL_LIFE) && InBetweenTriviaManager.triviaQuestions != null) {
+            addTriviaEntries(result, InBetweenTriviaManager.triviaQuestions, "normal", "season.inbetween.trivia.questions");
+        }
     }
 
     private void addTriviaEntries(List<DynamicEntry> result, TriviaQuestionManager manager, String type, String group) {
@@ -356,6 +360,7 @@ public class SeasonConfig extends DefaultConfigValues {
             info.add(type);
             info.add(question.getQuestion());
             info.add(String.valueOf(question.getCorrectAnswerIndex()));
+            info.add(question.hasPlayer() ? question.getPlayer() : ""); // Optional player target
             info.addAll(question.getAnswers());
             result.add(new DynamicEntry(
                     LifeSeriesConfigTypes.TRIVIA_QUESTION,

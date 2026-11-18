@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.InBetweenManager;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.trivia.InBetweenTriviaManager;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLife;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeTriviaManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
@@ -113,7 +114,15 @@ public class ServerGamePacketListenerImplMixin {
         if (TriviaWildcard.bots.containsKey(player.getUUID())) {
             TriviaBot bot = TriviaWildcard.bots.get(player.getUUID());
             if (bot.interactedWith() && !bot.submittedAnswer()) {
-                ((IPlayer) player).ls$message(ModifiableText.MUTED_TRIVIABOT.get());
+                ((IPlayer) player).ls$message(ModifiableText.WILDLIFE_TRIVIA_MUTED.get());
+                ci.cancel();
+                return true;
+            }
+        }
+        if (InBetweenTriviaManager.bots.containsKey(player.getUUID())) {
+            TriviaBot bot = InBetweenTriviaManager.bots.get(player.getUUID());
+            if (bot.interactedWith() && !bot.submittedAnswer()) {
+                ((IPlayer) player).ls$message(ModifiableText.FINALLIFE_TRIVIA_MUTED.get());
                 ci.cancel();
                 return true;
             }

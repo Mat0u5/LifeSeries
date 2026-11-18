@@ -80,8 +80,8 @@ import net.minecraft.world.entity.EntityTypes;
 //?}
 
 public class WildLifeTriviaHandler extends TriviaHandler {
-    private static int AUTO_OPEN_TIME = Time.seconds(120).getTicks();
-    private static int AUTO_OPEN_NEAR_PLAYER_TIME = Time.seconds(15).getTicks();
+    public static int AUTO_OPEN_TIME = Time.seconds(120).getTicks();
+    public static int AUTO_OPEN_NEAR_PLAYER_TIME = Time.seconds(45).getTicks();
     private long ticks = 0;
     private long ticksNearPlayer = 0;
 
@@ -183,6 +183,7 @@ public class WildLifeTriviaHandler extends TriviaHandler {
 
         return InteractionResult.SUCCESS;
     }
+
     public Tuple<Integer, TriviaQuestion> generateTrivia(ServerPlayer boundPlayer) {
         return TriviaWildcard.getTriviaQuestion(boundPlayer);
     }

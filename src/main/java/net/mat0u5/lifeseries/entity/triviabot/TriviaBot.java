@@ -11,6 +11,7 @@ import net.mat0u5.lifeseries.entity.triviabot.server.trivia.NiceLifeTriviaHandle
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.TriviaHandler;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.WildLifeTriviaHandler;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.trivia.InBetweenTriviaHandler;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLifeConfig;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.matlib.config.entry.ConfigRef;
@@ -63,6 +64,7 @@ public class TriviaBot extends AmbientCreature {
     private static final EntityDataAccessor<Boolean> gliding = SynchedEntityData.defineId(TriviaBot.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> analyzing = SynchedEntityData.defineId(TriviaBot.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> santaBot = SynchedEntityData.defineId(TriviaBot.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> inBetweenBot = SynchedEntityData.defineId(TriviaBot.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> waving = SynchedEntityData.defineId(TriviaBot.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> leaving = SynchedEntityData.defineId(TriviaBot.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<String> skinName = SynchedEntityData.defineId(TriviaBot.class, EntityDataSerializers.STRING);
@@ -83,10 +85,17 @@ public class TriviaBot extends AmbientCreature {
             if (LifeSeries.isSeason(Seasons.NICE_LIFE)) {
                 triviaHandler = new NiceLifeTriviaHandler(this);
                 setSantaBot(true);
+                setInBetweenBot(false);
+            }
+            else if (LifeSeries.isSeason(Seasons.FINAL_LIFE)) {
+                triviaHandler = new InBetweenTriviaHandler(this);
+                setSantaBot(false);
+                setInBetweenBot(true);
             }
             else {
                 triviaHandler = new WildLifeTriviaHandler(this);
                 setSantaBot(false);
+                setInBetweenBot(false);
             }
         }
     }
@@ -236,6 +245,7 @@ public class TriviaBot extends AmbientCreature {
         this.entityData.define(gliding, false);
         this.entityData.define(analyzing, -1);
         this.entityData.define(santaBot, false);
+        this.entityData.define(inBetweenBot, false);
         this.entityData.define(waving, -1);
         this.entityData.define(leaving, false);
         this.entityData.define(skinName, "");
@@ -251,6 +261,7 @@ public class TriviaBot extends AmbientCreature {
         builder.define(gliding, false);
         builder.define(analyzing, -1);
         builder.define(santaBot, false);
+        builder.define(inBetweenBot, false);
         builder.define(waving, -1);
         builder.define(leaving, false);
         builder.define(skinName, "");
@@ -276,6 +287,9 @@ public class TriviaBot extends AmbientCreature {
     }
     public void setSantaBot(boolean value) {
         this.entityData.set(santaBot, value);
+    }
+    public void setInBetweenBot(boolean value) {
+        this.entityData.set(inBetweenBot, value);
     }
     public void setWaving(int value) {
         this.entityData.set(waving, value);
@@ -307,6 +321,12 @@ public class TriviaBot extends AmbientCreature {
     }
     public boolean santaBot() {
         return this.entityData.get(santaBot);
+    }
+    public boolean inBetweenBot() {
+        return this.entityData.get(inBetweenBot);
+    }
+    public boolean defaultBot() {
+        return !santaBot() && !inBetweenBot();
     }
     public int waving() {
         return this.entityData.get(waving);

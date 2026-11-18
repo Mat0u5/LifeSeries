@@ -50,6 +50,7 @@ public class FinalLifeCommands extends Command {
 								)
 						)
 						.then(literal("deaths")
+								.executes(context -> getDeaths(context.getSource()))
 								.then(argument("player", EntityArgument.player())
 										.executes(context -> getDeaths(context.getSource(), EntityArgument.getPlayer(context, "player")))
 										.then(literal("set")
@@ -96,6 +97,12 @@ public class FinalLifeCommands extends Command {
 		}
 		sendCommandFeedback(source, ModifiableText.FINALLIFE_INBETWEEN_COMMAND_EXIT.get(exited, TextUtils.pluralize("player", exited)));
 		return exited;
+	}
+
+	public int getDeaths(CommandSourceStack source) {
+		ServerPlayer self = source.getPlayer();
+		if (self == null) return -1;
+		return getDeaths(source, self);
 	}
 
 	public int getDeaths(CommandSourceStack source, ServerPlayer player) {

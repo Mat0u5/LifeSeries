@@ -50,8 +50,8 @@ public abstract class TriviaHandler {
         bot.setInteractedWith(true);
     }
 
-    abstract Tuple<Integer, TriviaQuestion> generateTrivia(ServerPlayer boundPlayer);
-    abstract void setTimeBasedOnDifficulty(int difficulty);
+    public abstract Tuple<Integer, TriviaQuestion> generateTrivia(ServerPlayer boundPlayer);
+    public abstract void setTimeBasedOnDifficulty(int difficulty);
 
     public InteractionResult interactMob(Player player, InteractionHand hand) {
         return InteractionResult.SUCCESS;

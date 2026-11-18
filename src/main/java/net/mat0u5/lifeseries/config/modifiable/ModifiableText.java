@@ -477,7 +477,7 @@ public enum ModifiableText {
     ,WILDLIFE_TRIVIA_RESET_SINGLE(Seasons.WILD_LIFE, "Reset {}'s assigned trivia", List.of("Player"))
     ,WILDLIFE_TRIVIA_RESET_MULTIPLE(Seasons.WILD_LIFE, "Reset assigned trivia of {} targets", List.of("number of targets"))
     ,WILDLIFE_TRIVIA_RESET_USED(Seasons.WILD_LIFE, "Reset all used trivia questions")
-    ,MUTED_TRIVIABOT(Seasons.WILD_LIFE, "<Trivia Bot> No phoning a friend allowed!")
+    ,WILDLIFE_TRIVIA_MUTED(Seasons.WILD_LIFE, "<Trivia Bot> No phoning a friend allowed!")
     ,WILDLIFE_HUNGER_INACTIVE(Seasons.WILD_LIFE, "The Hunger wildcard is not active right now.")
     ,WILDLIFE_HUNGER_RANDOMIZE_TITLE(Seasons.WILD_LIFE, "")
     ,WILDLIFE_HUNGER_RANDOMIZE_SUBTITLE(Seasons.WILD_LIFE, "§7Food is about to be randomised...")
@@ -645,6 +645,13 @@ public enum ModifiableText {
     ,FINALLIFE_INBETWEEN_COMMAND_DEATHS_GET(Seasons.FINAL_LIFE, "{} has {} stored {}", List.of("Player", "amount", "death/s"))
     ,FINALLIFE_INBETWEEN_COMMAND_DEATHS_SET(Seasons.FINAL_LIFE, "Set {}'s stored deaths to {}", List.of("Player", "amount"))
     ,FINALLIFE_INBETWEEN_CHAT_ACCESS(Seasons.FINAL_LIFE, "§cYou cannot use the chat right now.")
+    ,FINALLIFE_TRIVIA_QUESTION_INVALID(Seasons.FINAL_LIFE, "Could not find trivia with that question.")
+    ,FINALLIFE_TRIVIA_SET_SINGLE(Seasons.FINAL_LIFE, "Assigned {}'s trivia", List.of("Player"))
+    ,FINALLIFE_TRIVIA_SET_MULTIPLE(Seasons.FINAL_LIFE, "Assigned trivia of {} targets", List.of("number of targets"))
+    ,FINALLIFE_TRIVIA_RESET_SINGLE(Seasons.FINAL_LIFE, "Reset {}'s assigned trivia", List.of("Player"))
+    ,FINALLIFE_TRIVIA_RESET_MULTIPLE(Seasons.FINAL_LIFE, "Reset assigned trivia of {} targets", List.of("number of targets"))
+    ,FINALLIFE_TRIVIA_RESET_USED(Seasons.FINAL_LIFE, "Reset all used trivia questions")
+    ,FINALLIFE_TRIVIA_MUTED(Seasons.FINAL_LIFE, "<Trivia Bot> No phoning a friend allowed!")
 
 //ModifiableText.NAME.get(
 

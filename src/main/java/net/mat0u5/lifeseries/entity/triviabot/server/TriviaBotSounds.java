@@ -25,15 +25,29 @@ public class TriviaBotSounds {
         }
         if (introSoundCooldown > 0) introSoundCooldown--;
 
-        if (introSoundCooldown == 0 && !bot.interactedWith() && !bot.santaBot()) {
+        if (introSoundCooldown == 0 && !bot.interactedWith() && bot.defaultBot()) {
             ModifiableSound.WILDLIFE_TRIVIA_INTRO.playWithSource(PlayerUtils.getAllPlayers(), bot, SoundSource.NEUTRAL, 1, 1);
             introSoundCooldown = 830;
+            // Santa Bot Intro is played by the client , see SoundBehavior.FOLLOWED_BY
+            // In Between Bot Intro plays before it spawns
         }
-        // Santa Bot Intro is played by the client , see SoundBehavior.FOLLOWED_BY
 
         if (!playedCountdownEndingSound && bot.interactedWith() && !bot.submittedAnswer() && !bot.ranOutOfTime()
                 && ((!bot.santaBot() && bot.triviaHandler.getRemainingTicks() <= 676) || (bot.santaBot() && bot.triviaHandler.getRemainingTicks() <= 643))) {
-            if (!bot.santaBot()) {
+            if (bot.santaBot()) {
+                ModifiableSound.NICELIFE_SANTABOT_SUSPENSE_END.play(bot.serverData.getBoundPlayer(), 0.65f, 1);
+            }
+            else if (bot.inBetweenBot()) {
+                // Same as wild life normal bot, just changed modifiable sounds
+                List<ServerPlayer> otherPlayers = PlayerUtils.getAllPlayers();
+                ServerPlayer boundPlayer = bot.serverData.getBoundPlayer();
+                if (boundPlayer != null) {
+                    otherPlayers.remove(boundPlayer);
+                    ModifiableSound.FINALLIFE_TRIVIA_SUSPENSE_END.playWithSource(List.of(boundPlayer), bot, SoundSource.MASTER, 0.65f, 1);
+                }
+                ModifiableSound.FINALLIFE_TRIVIA_SUSPENSE_END.playWithSource(otherPlayers, bot, SoundSource.NEUTRAL, 0.65f, 1);
+            }
+            else {
                 List<ServerPlayer> otherPlayers = PlayerUtils.getAllPlayers();
                 ServerPlayer boundPlayer = bot.serverData.getBoundPlayer();
                 if (boundPlayer != null) {
@@ -41,20 +55,19 @@ public class TriviaBotSounds {
                     ModifiableSound.WILDLIFE_TRIVIA_SUSPENSE_END.playWithSource(List.of(boundPlayer), bot, SoundSource.MASTER, 0.65f, 1);
                 }
                 ModifiableSound.WILDLIFE_TRIVIA_SUSPENSE_END.playWithSource(otherPlayers, bot, SoundSource.NEUTRAL, 0.65f, 1);
-
-            }
-            else {
-                ModifiableSound.NICELIFE_SANTABOT_SUSPENSE_END.play(bot.serverData.getBoundPlayer(), 0.65f, 1);
             }
             playedCountdownEndingSound = true;
             playedCountdownSound = true;
         }
         else if (!playedCountdownSound && bot.interactedWith() && !bot.submittedAnswer() && !bot.ranOutOfTime()) {
-            if (!bot.santaBot()) {
-                ModifiableSound.WILDLIFE_TRIVIA_SUSPENSE.playWithSource(PlayerUtils.getAllPlayers(), bot, SoundSource.NEUTRAL, 0.65f, 1);
-            }
-            else  {
+            if (bot.santaBot()) {
                 ModifiableSound.NICELIFE_SANTABOT_SUSPENSE.play(bot.serverData.getBoundPlayer(), 0.65f, 1);
+            }
+            else if (bot.inBetweenBot()) {
+                ModifiableSound.FINALLIFE_TRIVIA_SUSPENSE.playWithSource(PlayerUtils.getAllPlayers(), bot, SoundSource.NEUTRAL, 0.65f, 1);
+            }
+            else {
+                ModifiableSound.WILDLIFE_TRIVIA_SUSPENSE.playWithSource(PlayerUtils.getAllPlayers(), bot, SoundSource.NEUTRAL, 0.65f, 1);
             }
             playedCountdownSound = true;
         }

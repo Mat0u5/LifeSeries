@@ -14,6 +14,7 @@ public class TriviaBotClientData {
     public final AnimationState countdownAnimationState = new AnimationState();
     public final AnimationState analyzingAnimationState = new AnimationState();
     public final AnimationState answerCorrectAnimationState = new AnimationState();
+    public final AnimationState answerCorrectLongAnimationState = new AnimationState();
     public final AnimationState answerIncorrectAnimationState = new AnimationState();
     public final AnimationState snailTransformAnimationState = new AnimationState();
 
@@ -53,20 +54,26 @@ public class TriviaBotClientData {
             pauseAllAnimations("glide");
             glideAnimationState.startIfStopped(bot.tickCount);
         }
-        else if (bot.ranOutOfTime() && !bot.santaBot()) {
+        else if (bot.ranOutOfTime() && bot.defaultBot()) {
             pauseAllAnimations("snail_transform");
             if (!lastRanOutOfTime) {
                 snailTransformAnimationState.startIfStopped(bot.tickCount);
             }
         }
-        else if (bot.getAnalyzingTime() > 0) {
+        else if (bot.getAnalyzingTime() > 0 && !bot.inBetweenBot()) { // No analyzing for the in-between bot
             pauseAllAnimations("analyzing");
         }
         else if (bot.submittedAnswer()) {
-            if (bot.getAnalyzingTime() == 0) {
+            if (bot.getAnalyzingTime() == 0 || (bot.inBetweenBot() && bot.getAnalyzingTime() <= 0)) {
                 if (bot.answeredRight()) {
-                    pauseAllAnimations("answer_correct");
-                    answerCorrectAnimationState.startIfStopped(bot.tickCount);
+                    if (bot.inBetweenBot()) {
+                        pauseAllAnimations("answer_correct_long");
+                        answerCorrectLongAnimationState.startIfStopped(bot.tickCount);
+                    }
+                    else {
+                        pauseAllAnimations("answer_correct");
+                        answerCorrectAnimationState.startIfStopped(bot.tickCount);
+                    }
                 }
                 else {
                     pauseAllAnimations("answer_incorrect");
@@ -161,19 +168,20 @@ public class TriviaBotClientData {
         if (!except.equalsIgnoreCase("countdown")) countdownAnimationState.stop();
         if (!except.equalsIgnoreCase("analyzing")) analyzingAnimationState.stop();
         if (!except.equalsIgnoreCase("answer_correct")) answerCorrectAnimationState.stop();
+        if (!except.equalsIgnoreCase("answer_correct_long")) answerCorrectLongAnimationState.stop();
         if (!except.equalsIgnoreCase("answer_incorrect")) answerIncorrectAnimationState.stop();
         if (!except.equalsIgnoreCase("snail_transform")) snailTransformAnimationState.stop();
 
         if (!except.equalsIgnoreCase("santa_analyzing")) santaAnalyzingAnimationState.stop();
         if (!except.equalsIgnoreCase("santa_answer_correct")) {
             santaAnswerCorrectAnimationState.stop();
-            if (bot.submittedAnswer() && bot.getAnalyzingTime() < 0 && bot.answeredRight()) {
+            if (bot.santaBot() && bot.submittedAnswer() && bot.getAnalyzingTime() < 0 && bot.answeredRight()) {
                 faceHappyAnimationState.startIfStopped(bot.tickCount);
             }
         }
         if (!except.equalsIgnoreCase("santa_answer_incorrect")) {
             santaAnswerIncorrectAnimationState.stop();
-            if (bot.submittedAnswer() && bot.getAnalyzingTime() < 0 && !bot.answeredRight()) {
+            if (bot.santaBot() && bot.submittedAnswer() && bot.getAnalyzingTime() < 0 && !bot.answeredRight()) {
                 faceAngryAnimationState.startIfStopped(bot.tickCount);
             }
         }

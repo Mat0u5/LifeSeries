@@ -4,7 +4,10 @@ import net.mat0u5.lifeseries.config.LifeSeriesConfigTypes;
 import net.mat0u5.lifeseries.config.SeasonConfig;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.window.InBetweenFileSync;
+import net.mat0u5.lifeseries.utils.enums.TriviaGuiType;
 import net.mat0u5.matlib.config.entry.ConfigGuiEntry;
+import net.mat0u5.matlib.config.entry.ConfigHeader;
 import net.mat0u5.matlib.config.entry.ConfigurableValue;
 import net.mat0u5.matlib.config.type.ConfigTypes;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
@@ -108,17 +111,47 @@ public class FinalLifeConfig extends SeasonConfig {
 			.setNew(true)
 			.group("season.boogeyman");
 
-	public final ConfigurableValue<Boolean> FINAL_LIFE_IN_BETWEEN = ConfigurableValue.register(this, "final_life_in_between", true)
+	public final ConfigurableValue<Boolean> IN_BETWEEN = ConfigurableValue.register(this, "in_between", true)
 			.name("The In-Between")
 			.description("Controls whether players who die are sent to the In-Between before respawning.")
 			.setNew(true)
 			.group("season.inbetween").groupHeader(true);
-	public final ConfigurableValue<Boolean> FINAL_LIFE_IN_BETWEEN_ISOLATE_CHAT = ConfigurableValue.register(this, "final_life_in_between_isolate_chat", true)
+	public final ConfigurableValue<Boolean> IN_BETWEEN_ISOLATE_CHAT = ConfigurableValue.register(this, "in_between_isolate_chat", true)
 			.name("Isolate Chat")
 			.description("Controls whether the In-Between players have isolated chat.")
 			.setNew(true)
 			.serverShared()
 			.group("season.inbetween");
+	public final ConfigurableValue<Boolean> IN_BETWEEN_WINDOWS = ConfigurableValue.register(this, "in_between_windows", true)
+			.name("Memory Windows")
+			.description("Controls whether the memory windows show up in the In-Between.")
+			.setNew(true)
+			.group("season.inbetween");
+	public final ConfigurableValue<Boolean> IN_BETWEEN_TRIVIA = ConfigurableValue.register(this, "in_between_trivia", true)
+			.name("Enable Trivia")
+			.description("Controls whether the trivia bot shows up in the In-Between.")
+			.setNew(true)
+			.group("season.inbetween.trivia").groupHeader(true);
+	public final ConfigurableValue<Integer> TRIVIA_DEATH_NUM_MIN = ConfigurableValue.register(this, "trivia_death_num_min", 3)
+			.name("Trivia Death Number Min")
+			.description("Controls on which death the trivia bot starts showing up in the in-between.")
+			.setNew(true)
+			.group("season.inbetween.trivia");
+	public final ConfigurableValue<Integer> TRIVIA_DEATH_NUM_MAX = ConfigurableValue.register(this, "trivia_death_num_max", 3)
+			.name("Trivia Death Number Max")
+			.description("Controls on which death the trivia bot stops showing up in the in-between.")
+			.setNew(true)
+			.group("season.inbetween.trivia");
+	public final ConfigurableValue<TriviaGuiType> TRIVIA_GUI_TYPE = ConfigurableValue.register(this, "gui_type", TriviaGuiType.NICE_LIFE)
+			.name("Gui Type")
+			.description("Controls the trivia gui style.")
+			.group("season.inbetween.trivia");
+	public final ConfigurableValue<Integer> TRIVIA_QUESTION_TIME = ConfigurableValue.register(this, "trivia_question_time", 68, ConfigTypes.SECONDS)
+			.name("Trivia Question Time")
+			.description("Controls how much time people have to answer the trivia, in seconds.")
+			.group("season.inbetween.trivia");
+	public final ConfigHeader GROUP_TRIVIA_QUESTIONS = ConfigHeader.register(this, "group_trivia_questions", "Trivia Questions")
+			.group("season.inbetween.trivia.questions").groupHeader(true);
 
 	protected FinalLifeConfig() {
 		super(Seasons.FINAL_LIFE);
@@ -133,6 +166,10 @@ public class FinalLifeConfig extends SeasonConfig {
 		FINAL_LIFE_BOOGEYMAN_HIDE_ARMOR.onChange((oldValue, newValue) -> {
 			if (isActive()) PlayerUtils.resendVisibleEquipment();
 		});
+		IN_BETWEEN_WINDOWS.onChange((oldValue, newValue) -> { if (isActive()) InBetweenFileSync.onReload(); });
+		IN_BETWEEN_TRIVIA.onChange((oldValue, newValue) -> { if (isActive()) InBetweenFileSync.onReload(); });
+		TRIVIA_DEATH_NUM_MIN.onChange((oldValue, newValue) -> { if (isActive()) InBetweenFileSync.onReload(); });
+		TRIVIA_DEATH_NUM_MAX.onChange((oldValue, newValue) -> { if (isActive()) InBetweenFileSync.onReload(); });
 	}
 
 	public static FinalLifeConfig get() {

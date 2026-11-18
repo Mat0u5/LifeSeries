@@ -65,6 +65,20 @@ public class DatapackManager {
         //?}
     }
 
+    public static String getResourceFinalLifeTriviaPackVersion() {
+        //? if < 1.20.5 {
+        //return "_pre1.20.5";
+        //?} else if < 1.21 {
+        //return "_pre1.21";
+        //?} else if <= 1.21.4 {
+        //return "";
+        //?} else if <= 26.2 {
+        //return "_1.21.5";
+        //?} else {
+        return "_26.3";
+        //?}
+    }
+
     public static String getResourceNiceLifeTriviaPackVersion() {
         //? if < 1.20.5 {
         //return "_pre1.20.5";

@@ -3,7 +3,10 @@ package net.mat0u5.lifeseries.entity.triviabot.server;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.entity.PlayerBoundEntity;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.InBetweenManager;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.trivia.InBetweenTriviaManager;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeTriviaManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
@@ -61,6 +64,7 @@ public class TriviaBotServerData implements PlayerBoundEntity {
     public void tick() {
         if (bot.level().isClientSide()) return;
         bot.setSantaBot(LifeSeries.isSeason(Seasons.NICE_LIFE));
+        bot.setInBetweenBot(LifeSeries.isSeason(Seasons.FINAL_LIFE));
         if (despawnChecks()) return;
         bot.pathfinding.tick();
         bot.triviaHandler.tick();
@@ -88,6 +92,17 @@ public class TriviaBotServerData implements PlayerBoundEntity {
             }
             else if (LifeSeries.isSeason(Seasons.NICE_LIFE)) {
                 if (!NiceLifeTriviaManager.bots.containsValue(bot)) {
+                    despawn();
+                    return true;
+                }
+            }
+            else if (LifeSeries.isSeason(Seasons.FINAL_LIFE)) {
+                if (!InBetweenManager.isInInBetween(player)) {
+                    if (player != null) SimplePackets.STOP_TRIVIA_SOUNDS.sendToClient(player);
+                    despawn();
+                    return true;
+                }
+                if (!InBetweenTriviaManager.bots.containsValue(bot)) {
                     despawn();
                     return true;
                 }
@@ -124,6 +139,7 @@ public class TriviaBotServerData implements PlayerBoundEntity {
     public void despawn() {
         if (getBoundPlayerUUID() != null) {
             TriviaWildcard.bots.remove(getBoundPlayerUUID());
+            InBetweenTriviaManager.bots.remove(getBoundPlayerUUID(), bot); // Only if a newer bot didn't replace it
         }
         if (!bot.level().isClientSide()) {
             //? if <= 1.21 {

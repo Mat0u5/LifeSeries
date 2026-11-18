@@ -2,12 +2,14 @@ package net.mat0u5.lifeseries.seasons.season.finallife.inbetween;
 
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
+import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
 import net.mat0u5.lifeseries.registries.ParticleRegistry;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.finallife.FinalLife;
 import net.mat0u5.lifeseries.seasons.season.finallife.FinalLifeConfig;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.choice.InBetweenChoice;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.choice.InBetweenChoiceManager;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.trivia.InBetweenTriviaManager;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.window.InBetweenFileSync;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.window.InBetweenWindowManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
@@ -30,6 +32,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+//? if >= 1.20.5
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -52,8 +56,8 @@ public class InBetweenManager {
 	public static final String DIMENSION_ID = "in_between";
 	public static final ResourceKey<Level> DIMENSION = ResourceKey.create(Registries.DIMENSION, IdentifierHelper.lifeseries(DIMENSION_ID));
 
-	public static final ConfigRef<Boolean> ENABLED = ConfigRef.of(() -> FinalLifeConfig.get().FINAL_LIFE_IN_BETWEEN);
-	public static final ConfigRef<Boolean> ISOLATE_CHAT = ConfigRef.of(() -> FinalLifeConfig.get().FINAL_LIFE_IN_BETWEEN_ISOLATE_CHAT); // Synced Value
+	public static final ConfigRef<Boolean> ENABLED = ConfigRef.of(() -> FinalLifeConfig.get().IN_BETWEEN);
+	public static final ConfigRef<Boolean> ISOLATE_CHAT = ConfigRef.of(() -> FinalLifeConfig.get().IN_BETWEEN_ISOLATE_CHAT); // Synced Value
 
 	private static final Map<UUID, InBetweenInstance> instances = new HashMap<>();
 	private static final Set<UUID> preparedRespawns = new HashSet<>();
@@ -72,6 +76,24 @@ public class InBetweenManager {
 
 	public static boolean shouldBlockInteractions(Player player) {
 		return isInInBetween(player) && !player.isCreative() && !player.isSpectator();
+	}
+
+	public static boolean shouldBlockEntityInteraction(Player player, Entity entity) {
+		if (entity instanceof TriviaBot) return false;
+		return shouldBlockInteractions(player);
+	}
+
+	public static boolean shouldBlockItemUse(Player player, ItemStack stack) {
+		if (isFood(stack)) return false;
+		return shouldBlockInteractions(player);
+	}
+
+	private static boolean isFood(ItemStack stack) {
+		//? if <= 1.20.3 {
+		/*return stack.isEdible();
+		*///?} else {
+		return stack.has(DataComponents.FOOD);
+		//?}
 	}
 
 	private static boolean isFinalLife() {
@@ -272,6 +294,7 @@ public class InBetweenManager {
 		if (instance != null) {
 			instance.destroy();
 		}
+		InBetweenTriviaManager.onInstanceDiscarded(uuid);
 	}
 
 	private static void restoreGameMode(ServerPlayer player) {

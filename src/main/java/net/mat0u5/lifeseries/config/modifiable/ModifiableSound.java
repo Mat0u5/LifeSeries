@@ -174,6 +174,16 @@ public enum ModifiableSound {
 	,FINALLIFE_BOOGEYMAN_WEAPON_AIR(Seasons.FINAL_LIFE, IdentifierHelper.lifeseries("finallife_fly_woosh"))
 	,FINALLIFE_BOOGEYMAN_WEAPON_CHARGED(Seasons.FINAL_LIFE, IdentifierHelper.vanilla("item.crossbow.loading_end"))
 	,FINALLIFE_DIMENSION_SWAP(Seasons.FINAL_LIFE, IdentifierHelper.lifeseries("finallife_dimension_swap"))
+	,FINALLIFE_TRIVIA_INTRO(Seasons.FINAL_LIFE, IdentifierHelper.lifeseries("finallife_trivia_intro"))
+	,FINALLIFE_TRIVIA_SUSPENSE(Seasons.FINAL_LIFE, IdentifierHelper.lifeseries("wildlife_trivia_suspense"))
+	,FINALLIFE_TRIVIA_SUSPENSE_END(Seasons.FINAL_LIFE, IdentifierHelper.lifeseries("wildlife_trivia_suspense_end"))
+	,FINALLIFE_TRIVIA_CORRECT(Seasons.FINAL_LIFE, IdentifierHelper.lifeseries("wildlife_trivia_correct"))
+	,FINALLIFE_TRIVIA_INCORRECT(Seasons.FINAL_LIFE, IdentifierHelper.lifeseries("wildlife_trivia_incorrect"))
+	//? if <= 1.20.2 {
+	/*,FINALLIFE_TRIVIA_TELEPORT(Seasons.FINAL_LIFE, SoundEvents.ENDERMAN_TELEPORT)
+	*///?} else {
+	,FINALLIFE_TRIVIA_TELEPORT(Seasons.FINAL_LIFE, SoundEvents.PLAYER_TELEPORT)
+	//?}
 
 	;
 

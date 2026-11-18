@@ -12,6 +12,7 @@ import net.mat0u5.lifeseries.seasons.season.secretlife.SecretKeeper;
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.SnailSkins;
+import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestionManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaSkins;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.seasons.util.SeasonChanger;
@@ -129,6 +130,7 @@ public class Events {
 
     public static void onServerStart(MinecraftServer server) {
         DatapackManager.onServerStarted(server);
+        TriviaQuestionManager.createDefaultFiles();
         if (LifeSeries.modDisabled()) return;
         currentSeason.initialize();
         blacklist.reloadBlacklist();
@@ -200,7 +202,10 @@ public class Events {
         if (isFakePlayer(player)) return InteractionResult.PASS;
 
         if (level instanceof ServerLevel serverLevel && LifeSeries.isLogicalSide()) {
-            if (InBetweenManager.shouldBlockInteractions(player)) return InteractionResult.FAIL;
+            if (InBetweenManager.shouldBlockInteractions(player)) {
+                PlayerUtils.updatePlayerInventory(player);
+                return InteractionResult.FAIL;
+            }
             if (currentSeason instanceof SecretLife) {
                 SecretKeeper.onBlockUse(player, serverLevel, hitResult);
             }
@@ -214,7 +219,10 @@ public class Events {
         if (isFakePlayer(player) || modDisabled()) return InteractionResult.PASS;
 
         if (level instanceof ServerLevel serverLevel && LifeSeries.isLogicalSide()) {
-            if (InBetweenManager.shouldBlockInteractions(player)) return InteractionResult.FAIL;
+            if (InBetweenManager.shouldBlockItemUse(player, player.getItemInHand(hand))) {
+                PlayerUtils.updatePlayerInventory(player);
+                return InteractionResult.FAIL;
+            }
             ItemStack itemStack = player.getItemInHand(hand);
             //? if >= 1.21.2 {
             if (itemStack.is(Items.FIREWORK_ROCKET)) {
@@ -250,7 +258,10 @@ public class Events {
 
         try {
             if (!LifeSeries.isLogicalSide()) return InteractionResult.PASS;
-            if (InBetweenManager.shouldBlockInteractions(player)) return InteractionResult.FAIL;
+            if (InBetweenManager.shouldBlockEntityInteraction(player, entity)) {
+                if (player instanceof ServerPlayer serverPlayer) PlayerUtils.updatePlayerInventory(serverPlayer);
+                return InteractionResult.FAIL;
+            }
             if (player instanceof ServerPlayer serverPlayer) {
                 currentSeason.onRightClickEntity(serverPlayer, level, hand, entity, hitResult);
             }

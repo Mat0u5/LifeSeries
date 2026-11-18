@@ -1,7 +1,10 @@
 package net.mat0u5.lifeseries.seasons.season.finallife.inbetween.window;
 
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
+import net.mat0u5.lifeseries.seasons.season.finallife.FinalLifeConfig;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.InBetweenManager;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.trivia.InBetweenTriviaManager;
+import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -9,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 public class InBetweenWindowManager {
+	public static final ConfigRef<Boolean> WINDOWS_ENABLED = ConfigRef.of(() -> FinalLifeConfig.get().IN_BETWEEN_WINDOWS);
 	public record WindowMarker(Vec3 pos, float yaw) {} //pos - bottom center of the window
 	public record PlacedWindow(InBetweenMemory memory, Vec3 pos, float yaw) {} //pos - real center of the window
 
@@ -65,6 +69,14 @@ public class InBetweenWindowManager {
 
 	public static void sendClientClearWindows(ServerPlayer player) {
 		SimplePackets.IN_BETWEEN_WINDOWS.sendToClient(List.of(), player);
+	}
+
+	public static boolean isEnabled() {
+		return InBetweenManager.ENABLED.get() && WINDOWS_ENABLED.get();
+	}
+
+	public static boolean hasWindows(int deathNumber) {
+		return isEnabled() && !InBetweenTriviaManager.hasTrivia(deathNumber); //TODO perhaps make this more configurable to allow for having both.
 	}
 
 	@Nullable

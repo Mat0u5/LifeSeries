@@ -9,6 +9,7 @@ import net.mat0u5.lifeseries.compatibilities.voicechat.VoicechatMain;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.WildLifeTriviaHandler;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.trivia.InBetweenTriviaManager;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeTriviaManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestion;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestionManager;
@@ -128,7 +129,7 @@ public class WildLifeTriviaCommand extends CustomCommand {
                                 )
                         )
                         .then(literal("resetUsed")
-                                .requires(source -> isAllowed() || LifeSeries.isSeason(Seasons.NICE_LIFE))
+                                .requires(source -> isAllowed() || LifeSeries.isSeason(Seasons.NICE_LIFE) || LifeSeries.isSeason(Seasons.FINAL_LIFE))
                                 .executes(context -> resetUsedTrivia(
                                         context.getSource()
                                 ))
@@ -150,6 +151,11 @@ public class WildLifeTriviaCommand extends CustomCommand {
     }
 
     public int resetUsedTrivia(CommandSourceStack source) {
+        if (LifeSeries.isSeason(Seasons.FINAL_LIFE) && !LifeSeries.modDisabled()) {
+            InBetweenTriviaManager.resetUsedQuestions();
+            sendCommandFeedback(source, ModifiableText.FINALLIFE_TRIVIA_RESET_USED.get());
+            return 1;
+        }
         if (LifeSeries.isSeason(Seasons.NICE_LIFE) && !LifeSeries.modDisabled()) {
             NiceLifeTriviaManager.resetUsedQuestions();
             sendCommandFeedback(source, ModifiableText.NICELIFE_TRIVIA_RESET_USED.get());
