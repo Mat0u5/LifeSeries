@@ -340,12 +340,12 @@ public class TriviaWildcard extends Wildcard {
         int difficulty = 1 + player.getRandom().nextInt(3);
         try {
             if (difficulty == 1) {
-                return Tuple.of(difficulty, getEasyQuestion());
+                return Tuple.of(difficulty, getEasyQuestion(player.getScoreboardName()));
             }
             if (difficulty == 2) {
-                return Tuple.of(difficulty, getNormalQuestion());
+                return Tuple.of(difficulty, getNormalQuestion(player.getScoreboardName()));
             }
-            return Tuple.of(difficulty, getHardQuestion());
+            return Tuple.of(difficulty, getHardQuestion(player.getScoreboardName()));
         } catch(Exception e) {
             LifeSeries.LOGGER.error(e.toString());
             return Tuple.of(difficulty, TriviaQuestion.getDefault());
@@ -383,25 +383,25 @@ public class TriviaWildcard extends Wildcard {
         getUsedHardQuestions().save(List.of());
     }
 
-    public static TriviaQuestion getEasyQuestion() throws IOException {
+    public static TriviaQuestion getEasyQuestion(String playerName) throws IOException {
         if (easyTrivia == null) {
             easyTrivia = new TriviaQuestionManager("./config/lifeseries/wildlife","easy-trivia.json");
         }
-        return easyTrivia.getRandomQuestion(getUsedEasyQuestions(), rnd);
+        return easyTrivia.getRandomQuestion(getUsedEasyQuestions(), rnd, playerName);
     }
 
-    public static TriviaQuestion getNormalQuestion() throws IOException {
+    public static TriviaQuestion getNormalQuestion(String playerName) throws IOException {
         if (normalTrivia == null) {
             normalTrivia = new TriviaQuestionManager("./config/lifeseries/wildlife","normal-trivia.json");
         }
-        return normalTrivia.getRandomQuestion(getUsedNormalQuestions(), rnd);
+        return normalTrivia.getRandomQuestion(getUsedNormalQuestions(), rnd, playerName);
     }
 
-    public static TriviaQuestion getHardQuestion() throws IOException {
+    public static TriviaQuestion getHardQuestion(String playerName) throws IOException {
         if (hardTrivia == null) {
             hardTrivia = new TriviaQuestionManager("./config/lifeseries/wildlife","hard-trivia.json");
         }
-        return hardTrivia.getRandomQuestion(getUsedHardQuestions(), rnd);
+        return hardTrivia.getRandomQuestion(getUsedHardQuestions(), rnd, playerName);
     }
 
     public static int getBotsPerPlayer() {

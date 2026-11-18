@@ -12,6 +12,7 @@ import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.trivia.InBetweenTriviaManager;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.window.InBetweenFileSync;
 import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLife;
 import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLifeConfig;
@@ -158,6 +159,9 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
             if (VersionControl.isDevVersion()) LifeSeries.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Received trivia answer (from {}): {}", player, payload.number()));
             if (LifeSeries.isSeason(Seasons.NICE_LIFE)) {
                 NiceLifeTriviaManager.handleAnswer(player, payload.number());
+            }
+            else if (LifeSeries.isSeason(Seasons.FINAL_LIFE)) {
+                InBetweenTriviaManager.handleAnswer(player, payload.number());
             }
             else {
                 TriviaWildcard.handleAnswer(player, payload.number());
@@ -353,16 +357,18 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
                 List<TriviaQuestion> triviaQuestions = new ArrayList<>();
                 for (String questionStr : payload.value()) {
                     try {
+                        // question~~~correct answer index~~~player (opt)~~~answers...
                         if (!questionStr.contains("~~~")) continue;
                         String[] splitQuestion = questionStr.split("~~~");
-                        if (splitQuestion.length < 3) continue;
+                        if (splitQuestion.length < 4) continue;
                         String questionText = splitQuestion[0];
                         int correctAnswerIndex = Integer.parseInt(splitQuestion[1]);
+                        String playerName = splitQuestion[2];
                         List<String> answers = new ArrayList<>();
-                        for (int i = 2; i < splitQuestion.length; i++) {
+                        for (int i = 3; i < splitQuestion.length; i++) {
                             answers.add(splitQuestion[i]);
                         }
-                        triviaQuestions.add(new TriviaQuestion(questionText, answers, correctAnswerIndex-1));
+                        triviaQuestions.add(new TriviaQuestion(questionText, answers, correctAnswerIndex-1, playerName));
                     }catch(Exception e) {}
                 }
                 TriviaQuestionManager manager = null;
@@ -377,8 +383,11 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
                         manager = TriviaWildcard.hardTrivia;
                     }
                 }
-                else {
+                else if (LifeSeries.isSeason(Seasons.NICE_LIFE)){
                     manager = NiceLifeTriviaManager.triviaQuestions;
+                }
+                else if (LifeSeries.isSeason(Seasons.FINAL_LIFE)) {
+                    manager = InBetweenTriviaManager.triviaQuestions;
                 }
                 if (manager == null) return;
                 try {

@@ -1,8 +1,10 @@
 package net.mat0u5.lifeseries.client.gui.config.entries.extra;
 
+import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.config.LifeSeriesConfigGuiClient;
 import net.mat0u5.lifeseries.config.LifeSeriesConfigTypes;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.matlib.client.gui.config.ConfigScreen;
 import net.mat0u5.matlib.client.gui.config.entries.ConfigEntry;
 import net.mat0u5.matlib.client.gui.config.entries.EmptyConfigEntry;
@@ -13,8 +15,11 @@ import net.mat0u5.matlib.client.render.RenderUtils;
 import net.mat0u5.matlib.client.utils.TextColors;
 import net.mat0u5.matlib.config.entry.ConfigGuiEntry;
 import net.mat0u5.matlib.config.type.ConfigType;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.network.chat.Component;
 
 import java.util.*;
@@ -23,6 +28,7 @@ import java.util.*;
 import net.minecraft.client.input.*;
 
 public class TriviaQuestionConfigEntry extends ModifiableListEntry {
+    private static final int TOGGLE_BUTTON_SIZE = 16;
     boolean sentToServer = false;
     public InnerTriviaQuestionConfigEntry child;
     public GroupConfigEntry<InnerTriviaQuestionConfigEntry> renderAsGroup;
@@ -32,10 +38,15 @@ public class TriviaQuestionConfigEntry extends ModifiableListEntry {
         String text;
         String triviaType;
         EditBox textField;
+        String defaultPlayer;
+        EditBox playerField;
+        Button playerToggleButton;
+        boolean showPlayer;
+        boolean defaultShowPlayer;
         private int maxTextFieldLength = 8192;
         private TriviaQuestionConfigEntry parent;
 
-        public InnerTriviaQuestionConfigEntry(TriviaQuestionConfigEntry parent, ConfigGuiEntry guiEntry, String question, String type, List<ConfigEntry> answers) {
+        public InnerTriviaQuestionConfigEntry(TriviaQuestionConfigEntry parent, ConfigGuiEntry guiEntry, String question, String type, String player, List<ConfigEntry> answers) {
             super(guiEntry);
             this.text = question;
             this.defaultText = question;
@@ -44,24 +55,79 @@ public class TriviaQuestionConfigEntry extends ModifiableListEntry {
             textField.setMaxLength(maxTextFieldLength);
             textField.setValue(question);
             textField.setResponder(this::onChanged);
+
+            this.defaultPlayer = player;
+            this.showPlayer = !player.isEmpty() && canHavePlayer();
+            this.defaultShowPlayer = showPlayer;
+            playerField = new EditBox(textRenderer, 0, 0, 30, 18, Component.empty());
+            playerField.setMaxLength(64);
+            playerField.setValue(player);
+            playerField.setResponder(value -> markChanged());
+
             //? if <= 1.20 {
-            //textField.moveCursorToStart();
-             //?} else {
+            /*textField.moveCursorToStart();
+            playerField.moveCursorToStart();
+            *///?} else {
             textField.moveCursorToStart(false);
+            playerField.moveCursorToStart(false);
             //?}
+
+            playerToggleButton = Button.builder(Component.empty(), button -> togglePlayer())
+                    .bounds(0, 0, TOGGLE_BUTTON_SIZE, TOGGLE_BUTTON_SIZE)
+                    .build();
+            playerToggleButton.setTooltip(Tooltip.create(Component.literal("Player specific question.\nOnly that specific player gets them.")));
             this.parent = parent;
+        }
+
+        private void togglePlayer() {
+            showPlayer = !showPlayer;
+            if (!showPlayer) playerField.setFocused(false);
+        }
+
+        public String getPlayer() {
+            return playerField.getValue().trim();
+        }
+
+        @Override
+        public int getPreferredHeight() {
+            int height = super.getPreferredHeight();
+            return showPlayer ? height * 2 : height;
         }
 
         @Override
         public void renderEntry(GuiGraphicsExtractor context, int x, int y, int width, int height, int mouseX, int mouseY, boolean hovered, float tickDelta) {
             Component questionText = Component.literal("Question:");
             RenderUtils.text(questionText,x + 25, y+6).colored(TextColors.LIGHT_GRAY).render(context, textRenderer);
-            textField.setY(y+1);
-            textField.setX(x + 25 + textRenderer.width(questionText) + 7);
+            int fieldX = x + 25 + textRenderer.width(questionText) + 7;
             int buttonX = resetButton != null ? resetButton.getX() : width;
-            textField.setWidth(buttonX-textField.getX()-10);
+            int fieldEndX = buttonX - 10;
+            int rowY = y + super.getPreferredHeight();
+            if (showPlayer) {
+                Component playerText = Component.literal("Player:");
+                RenderUtils.text(playerText, fieldX - 7 - textRenderer.width(playerText), rowY+6).colored(TextColors.LIGHT_GRAY).render(context, textRenderer);
+            }
+
             //~ renames_26_1_volatile
+            if (canHavePlayer()) {
+                ChatFormatting color = !showPlayer && !getPlayer().isEmpty() ? ChatFormatting.YELLOW : ChatFormatting.WHITE;
+                playerToggleButton.setMessage(Component.literal(showPlayer ? "▲" : "▼").withStyle(color));
+                playerToggleButton.setX(fieldEndX - TOGGLE_BUTTON_SIZE);
+                playerToggleButton.setY(y+2);
+                playerToggleButton.extractRenderState(context, mouseX, mouseY, tickDelta);
+                fieldEndX -= TOGGLE_BUTTON_SIZE + 5;
+            }
+
+            textField.setY(y+1);
+            textField.setX(fieldX);
+            textField.setWidth(fieldEndX-fieldX);
             textField.extractRenderState(context, mouseX, mouseY, tickDelta);
+
+            if (showPlayer) {
+                playerField.setY(rowY+1);
+                playerField.setX(fieldX);
+                playerField.setWidth(fieldEndX-fieldX);
+                playerField.extractRenderState(context, mouseX, mouseY, tickDelta);
+            }
             //~ !renames_26_1_volatile
         }
 
@@ -102,6 +168,8 @@ public class TriviaQuestionConfigEntry extends ModifiableListEntry {
         @Override
         public void resetToDefault() {
             textField.setValue(defaultText);
+            playerField.setValue(defaultPlayer);
+            showPlayer = defaultShowPlayer;
             for (TriviaAnswerConfigEntry answerConfigEntry : getAnswerEntries()) {
                 answerConfigEntry.resetToDefault();
             }
@@ -110,6 +178,7 @@ public class TriviaQuestionConfigEntry extends ModifiableListEntry {
         @Override
         public boolean isModified() {
             if (!Objects.equals(textField.getValue(), defaultText)) return true;
+            if (!Objects.equals(getPlayer(), defaultPlayer)) return true;
             for (TriviaAnswerConfigEntry answerConfigEntry : getAnswerEntries()) {
                 if (answerConfigEntry.isModified()) return true;
             }
@@ -126,15 +195,22 @@ public class TriviaQuestionConfigEntry extends ModifiableListEntry {
             super.setFocused(focused);
             if (!focused) {
                 textField.setFocused(false);
+                playerField.setFocused(false);
+                playerToggleButton.setFocused(false);
             }
         }
 
         //? if <= 1.21.6 {
         /*@Override
         protected boolean mouseClickedEntry(double mouseX, double mouseY, int button) {
+            if (canHavePlayer() && playerToggleButton.mouseClicked(mouseX, mouseY, button)) {
+                return true;
+            }
             boolean textFieldClick = textField.mouseClicked(mouseX, mouseY, button);
             textField.setFocused(textFieldClick);
-            if (textFieldClick) {
+            boolean playerFieldClick = showPlayer && playerField.mouseClicked(mouseX, mouseY, button);
+            playerField.setFocused(playerFieldClick);
+            if (textFieldClick || playerFieldClick) {
                 return true;
             }
             return super.mouseClickedEntry(mouseX, mouseY, button);
@@ -145,6 +221,9 @@ public class TriviaQuestionConfigEntry extends ModifiableListEntry {
             if (textField.keyPressed(keyCode, scanCode, modifiers)) {
                 return true;
             }
+            if (showPlayer && playerField.keyPressed(keyCode, scanCode, modifiers)) {
+                return true;
+            }
             return super.keyPressedEntry(keyCode, scanCode, modifiers);
         }
 
@@ -153,14 +232,22 @@ public class TriviaQuestionConfigEntry extends ModifiableListEntry {
             if (textField.charTyped(chr, modifiers)) {
                 return true;
             }
+            if (showPlayer && playerField.charTyped(chr, modifiers)) {
+                return true;
+            }
             return super.charTypedEntry(chr, modifiers);
         }
         *///?} else {
         @Override
         protected boolean mouseClickedEntry(MouseButtonEvent click, boolean doubled) {
+            if (canHavePlayer() && playerToggleButton.mouseClicked(click, doubled)) {
+                return true;
+            }
             boolean textFieldClick = textField.mouseClicked(click, doubled);
             textField.setFocused(textFieldClick);
-            if (textFieldClick) {
+            boolean playerFieldClick = showPlayer && playerField.mouseClicked(click, doubled);
+            playerField.setFocused(playerFieldClick);
+            if (textFieldClick || playerFieldClick) {
                 return true;
             }
             return super.mouseClickedEntry(click, doubled);
@@ -171,12 +258,18 @@ public class TriviaQuestionConfigEntry extends ModifiableListEntry {
             if (textField.keyPressed(input)) {
                 return true;
             }
+            if (showPlayer && playerField.keyPressed(input)) {
+                return true;
+            }
             return super.keyPressedEntry(input);
         }
 
         @Override
         protected boolean charTypedEntry(CharacterEvent input) {
             if (textField.charTyped(input)) {
+                return true;
+            }
+            if (showPlayer && playerField.charTyped(input)) {
                 return true;
             }
             return super.charTypedEntry(input);
@@ -192,6 +285,9 @@ public class TriviaQuestionConfigEntry extends ModifiableListEntry {
         }
     }
 
+    private static boolean canHavePlayer() {
+        return !LifeSeries.isSeason(Seasons.NICE_LIFE); // Nice life has global trivia questions
+    }
 
     @Override
     public boolean isModified() {
@@ -270,9 +366,9 @@ public class TriviaQuestionConfigEntry extends ModifiableListEntry {
         return this.child.parentGroup.getPreferredHeight();
     }
 
-    public TriviaQuestionConfigEntry(ConfigGuiEntry guiEntry, String question, String type, List<ConfigEntry> answers) {
+    public TriviaQuestionConfigEntry(ConfigGuiEntry guiEntry, String question, String type, String player, List<ConfigEntry> answers) {
         super(guiEntry);
-        this.child = new InnerTriviaQuestionConfigEntry(this, LifeSeriesConfigGuiClient.copyWithKey(guiEntry, fieldName+"_inner"), question, type, answers);
+        this.child = new InnerTriviaQuestionConfigEntry(this, LifeSeriesConfigGuiClient.copyWithKey(guiEntry, fieldName+"_inner"), question, type, player, answers);
         renderAsGroup = new GroupConfigEntry<>(this.child, answers, false, true);
         renderAsGroup.setScreen(this.screen);
     }
@@ -288,7 +384,7 @@ public class TriviaQuestionConfigEntry extends ModifiableListEntry {
         for (int i = 1; i <= getAnswerEntries().size(); i++) {
             answers.add("Answer #"+i);
         }
-        TriviaQuestionConfigEntry newEntry = getEntry(inboundGuiEntry, child.triviaType, "Placeholder Question", 0, answers);
+        TriviaQuestionConfigEntry newEntry = getEntry(inboundGuiEntry, child.triviaType, "Placeholder Question", 0, "", answers);
         newEntry.setScreen(this.screen);
         return newEntry;
     }
@@ -315,10 +411,11 @@ public class TriviaQuestionConfigEntry extends ModifiableListEntry {
         String triviaType = args.remove(0);
         String question = args.remove(0);
         int correctAnswerIndex = Integer.parseInt(args.remove(0));
-        return getEntry(guiEntry, triviaType, question, correctAnswerIndex, args);
+        String player = args.remove(0);
+        return getEntry(guiEntry, triviaType, question, correctAnswerIndex, player, args);
     }
 
-    public static TriviaQuestionConfigEntry getEntry(ConfigGuiEntry base, String triviaType, String question, int correctAnswerIndex, List<String> answers) {
+    public static TriviaQuestionConfigEntry getEntry(ConfigGuiEntry base, String triviaType, String question, int correctAnswerIndex, String player, List<String> answers) {
         String id = "dynamic_trivia_entry_"+ UUID.randomUUID();
         List<ConfigEntry> childEntries = new ArrayList<>();
         int answerIndex = 0;
@@ -327,7 +424,7 @@ public class TriviaQuestionConfigEntry extends ModifiableListEntry {
             TriviaAnswerConfigEntry answerEntry = new TriviaAnswerConfigEntry(LifeSeriesConfigGuiClient.copyWithKey(base, id+"_ans"+answerIndex), answerText, answerIndex, (answerIndex-1) == correctAnswerIndex);
             childEntries.add(answerEntry);
         }
-        return new TriviaQuestionConfigEntry(LifeSeriesConfigGuiClient.copyWithKey(base, id), question, triviaType, childEntries);
+        return new TriviaQuestionConfigEntry(LifeSeriesConfigGuiClient.copyWithKey(base, id), question, triviaType, player, childEntries);
     }
 
     @Override
@@ -338,6 +435,11 @@ public class TriviaQuestionConfigEntry extends ModifiableListEntry {
     @Override
     public ConfigType<?> getValueType() {
         return LifeSeriesConfigTypes.TRIVIA_QUESTION;
+    }
+
+    private static String removeIllegal(String text) {
+        while (text.contains("~~~")) text = text.replace("~~~", "~~");
+        return text;
     }
 
     @Override
@@ -354,16 +456,14 @@ public class TriviaQuestionConfigEntry extends ModifiableListEntry {
                 int correctAnswerIndex = 1;
                 List<String> answers = new ArrayList<>();
                 for (TriviaAnswerConfigEntry answerConfigEntry : questionConfigEntry.getAnswerEntries()) {
-                    String answerText = answerConfigEntry.text;
-                    while (answerText.contains("~~~")) answerText = answerText.replace("~~~", "~~");
-                    answers.add(answerConfigEntry.text);
+                    answers.add(removeIllegal(answerConfigEntry.text));
                     if (answerConfigEntry.isCorrect) {
                         correctAnswerIndex = answerConfigEntry.answerIndex;
                     }
                 }
-                String questionText = questionConfigEntry.child.text;
-                while (questionText.contains("~~~")) questionText = questionText.replace("~~~", "~~");
-                list.add(questionText + "~~~" + correctAnswerIndex + "~~~" + String.join("~~~", answers));
+                String questionText = removeIllegal(questionConfigEntry.child.text);
+                String player = removeIllegal(questionConfigEntry.child.getPlayer());
+                list.add(questionText + "~~~" + correctAnswerIndex + "~~~" + player + "~~~" + String.join("~~~", answers));
             }
         }
         sentToServer = true;
