@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia;
 
 import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.config.StringListConfig;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.entity.snail.Snail;
@@ -82,9 +83,6 @@ public class TriviaWildcard extends Wildcard {
 
     @Override
     public void activate() {
-        usedEasyQuestions.clear();
-        usedNormalQuestions.clear();
-        usedHardQuestions.clear();
         resetQueue();
         spawnedBotsFor.clear();
         activatedAt = currentSession.getPassedTime();
@@ -101,9 +99,6 @@ public class TriviaWildcard extends Wildcard {
 
     @Override
     public void deactivate() {
-        usedEasyQuestions.clear();
-        usedNormalQuestions.clear();
-        usedHardQuestions.clear();
         resetQueue();
         spawnedBotsFor.clear();
         bots.clear();
@@ -357,64 +352,56 @@ public class TriviaWildcard extends Wildcard {
         }
     }
 
-    private static List<String> usedEasyQuestions = new ArrayList<>();
+    private static StringListConfig usedEasyQuestions;
+    private static StringListConfig usedNormalQuestions;
+    private static StringListConfig usedHardQuestions;
+
+    private static StringListConfig getUsedEasyQuestions() {
+        if (usedEasyQuestions == null) {
+            usedEasyQuestions = new StringListConfig("lifeseries/main", "DO_NOT_MODIFY_wildlife_used_trivia_easy.properties");
+        }
+        return usedEasyQuestions;
+    }
+
+    private static StringListConfig getUsedNormalQuestions() {
+        if (usedNormalQuestions == null) {
+            usedNormalQuestions = new StringListConfig("lifeseries/main", "DO_NOT_MODIFY_wildlife_used_trivia_normal.properties");
+        }
+        return usedNormalQuestions;
+    }
+
+    private static StringListConfig getUsedHardQuestions() {
+        if (usedHardQuestions == null) {
+            usedHardQuestions = new StringListConfig("lifeseries/main", "DO_NOT_MODIFY_wildlife_used_trivia_hard.properties");
+        }
+        return usedHardQuestions;
+    }
+
+    public static void resetUsedQuestions() {
+        getUsedEasyQuestions().save(List.of());
+        getUsedNormalQuestions().save(List.of());
+        getUsedHardQuestions().save(List.of());
+    }
+
     public static TriviaQuestion getEasyQuestion() throws IOException {
         if (easyTrivia == null) {
             easyTrivia = new TriviaQuestionManager("./config/lifeseries/wildlife","easy-trivia.json");
         }
-        List<TriviaQuestion> unusedQuestions = new ArrayList<>();
-        for (TriviaQuestion trivia : easyTrivia.getTriviaQuestions()) {
-            if (usedEasyQuestions.contains(trivia.getQuestion())) continue;
-            unusedQuestions.add(trivia);
-        }
-        if (unusedQuestions.isEmpty()) {
-            usedEasyQuestions.clear();
-            unusedQuestions = easyTrivia.getTriviaQuestions();
-        }
-        if (unusedQuestions.isEmpty()) return TriviaQuestion.getDefault();
-        TriviaQuestion result = unusedQuestions.get(rnd.nextInt(unusedQuestions.size()));
-        usedEasyQuestions.add(result.getQuestion());
-        return result;
+        return easyTrivia.getRandomQuestion(getUsedEasyQuestions(), rnd);
     }
 
-    private static List<String> usedNormalQuestions = new ArrayList<>();
     public static TriviaQuestion getNormalQuestion() throws IOException {
         if (normalTrivia == null) {
             normalTrivia = new TriviaQuestionManager("./config/lifeseries/wildlife","normal-trivia.json");
         }
-        List<TriviaQuestion> unusedQuestions = new ArrayList<>();
-        for (TriviaQuestion trivia : normalTrivia.getTriviaQuestions()) {
-            if (usedNormalQuestions.contains(trivia.getQuestion())) continue;
-            unusedQuestions.add(trivia);
-        }
-        if (unusedQuestions.isEmpty()) {
-            usedNormalQuestions.clear();
-            unusedQuestions = normalTrivia.getTriviaQuestions();
-        }
-        if (unusedQuestions.isEmpty()) return TriviaQuestion.getDefault();
-        TriviaQuestion result = unusedQuestions.get(rnd.nextInt(unusedQuestions.size()));
-        usedNormalQuestions.add(result.getQuestion());
-        return result;
+        return normalTrivia.getRandomQuestion(getUsedNormalQuestions(), rnd);
     }
 
-    private static List<String> usedHardQuestions = new ArrayList<>();
     public static TriviaQuestion getHardQuestion() throws IOException {
         if (hardTrivia == null) {
             hardTrivia = new TriviaQuestionManager("./config/lifeseries/wildlife","hard-trivia.json");
         }
-        List<TriviaQuestion> unusedQuestions = new ArrayList<>();
-        for (TriviaQuestion trivia : hardTrivia.getTriviaQuestions()) {
-            if (usedHardQuestions.contains(trivia.getQuestion())) continue;
-            unusedQuestions.add(trivia);
-        }
-        if (unusedQuestions.isEmpty()) {
-            usedHardQuestions.clear();
-            unusedQuestions = hardTrivia.getTriviaQuestions();
-        }
-        if (unusedQuestions.isEmpty()) return TriviaQuestion.getDefault();
-        TriviaQuestion result = unusedQuestions.get(rnd.nextInt(unusedQuestions.size()));
-        usedHardQuestions.add(result.getQuestion());
-        return result;
+        return hardTrivia.getRandomQuestion(getUsedHardQuestions(), rnd);
     }
 
     public static int getBotsPerPlayer() {

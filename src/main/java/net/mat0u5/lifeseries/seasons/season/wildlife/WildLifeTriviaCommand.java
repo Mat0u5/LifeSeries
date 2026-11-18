@@ -9,6 +9,7 @@ import net.mat0u5.lifeseries.compatibilities.voicechat.VoicechatMain;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.WildLifeTriviaHandler;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeTriviaManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestion;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestionManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaSkins;
@@ -126,6 +127,12 @@ public class WildLifeTriviaCommand extends CustomCommand {
                                         )
                                 )
                         )
+                        .then(literal("resetUsed")
+                                .requires(source -> isAllowed() || LifeSeries.isSeason(Seasons.NICE_LIFE))
+                                .executes(context -> resetUsedTrivia(
+                                        context.getSource()
+                                ))
+                        )
                         .then(literal("textures")
                                 .requires(PermissionManager::isAdmin)
                                 .executes(context -> getTriviaTexturesInfo(context.getSource()))
@@ -140,6 +147,18 @@ public class WildLifeTriviaCommand extends CustomCommand {
                                 )
                         )
         );
+    }
+
+    public int resetUsedTrivia(CommandSourceStack source) {
+        if (LifeSeries.isSeason(Seasons.NICE_LIFE) && !LifeSeries.modDisabled()) {
+            NiceLifeTriviaManager.resetUsedQuestions();
+            sendCommandFeedback(source, ModifiableText.NICELIFE_TRIVIA_RESET_USED.get());
+            return 1;
+        }
+        if (checkBanned(source)) return -1;
+        TriviaWildcard.resetUsedQuestions();
+        sendCommandFeedback(source, ModifiableText.WILDLIFE_TRIVIA_RESET_USED.get());
+        return 1;
     }
 
     public int triviaTexturesReload(CommandSourceStack source) {
