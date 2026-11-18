@@ -66,6 +66,7 @@ public class TriviaBotRenderer extends AgeableMobRenderer<TriviaBot, TriviaBotRe
         state.countdownAnimationState.copyFrom(triviaBot.clientData.countdownAnimationState);
         state.analyzingAnimationState.copyFrom(triviaBot.clientData.analyzingAnimationState);
         state.answerCorrectAnimationState.copyFrom(triviaBot.clientData.answerCorrectAnimationState);
+        state.answerCorrectLongAnimationState.copyFrom(triviaBot.clientData.answerCorrectLongAnimationState);
         state.answerIncorrectAnimationState.copyFrom(triviaBot.clientData.answerIncorrectAnimationState);
         state.snailTransformAnimationState.copyFrom(triviaBot.clientData.snailTransformAnimationState);
 

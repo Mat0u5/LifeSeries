@@ -15,6 +15,7 @@ public class TriviaBotRenderState extends LivingEntityRenderState {
     public final AnimationState countdownAnimationState = new AnimationState();
     public final AnimationState analyzingAnimationState = new AnimationState();
     public final AnimationState answerCorrectAnimationState = new AnimationState();
+    public final AnimationState answerCorrectLongAnimationState = new AnimationState();
     public final AnimationState answerIncorrectAnimationState = new AnimationState();
     public final AnimationState snailTransformAnimationState = new AnimationState();
 

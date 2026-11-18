@@ -29,6 +29,7 @@ public class TriviaBotModel extends EntityModel<TriviaBotRenderState> {
     private final KeyframeAnimation countdownAnimation;
     private final KeyframeAnimation analyzingAnimation;
     private final KeyframeAnimation answerCorrectAnimation;
+    private final KeyframeAnimation answerCorrectLongAnimation;
     private final KeyframeAnimation answerIncorrectAnimation;
     private final KeyframeAnimation snailTransformAnimation;
 
@@ -133,6 +134,7 @@ public class TriviaBotModel extends EntityModel<TriviaBotRenderState> {
         countdownAnimation = TriviaBotAnimations.countdown.bake(root);
         analyzingAnimation = TriviaBotAnimations.analyzing.bake(root);
         answerCorrectAnimation = TriviaBotAnimations.answer_correct.bake(root);
+        answerCorrectLongAnimation = TriviaBotAnimations.answer_correct_long.bake(root);
         answerIncorrectAnimation = TriviaBotAnimations.answer_incorrect.bake(root);
         snailTransformAnimation = TriviaBotAnimations.snail_transform.bake(root);
 
@@ -294,6 +296,7 @@ public class TriviaBotModel extends EntityModel<TriviaBotRenderState> {
         this.animate(entity.clientData.countdownAnimationState, TriviaBotAnimations.countdown, ageInTicks);
         this.animate(entity.clientData.analyzingAnimationState, TriviaBotAnimations.analyzing, ageInTicks);
         this.animate(entity.clientData.answerCorrectAnimationState, TriviaBotAnimations.answer_correct, ageInTicks);
+        this.animate(entity.clientData.answerCorrectLongAnimationState, TriviaBotAnimations.answer_correct_long, ageInTicks);
         this.animate(entity.clientData.answerIncorrectAnimationState, TriviaBotAnimations.answer_incorrect, ageInTicks);
         this.animate(entity.clientData.snailTransformAnimationState, TriviaBotAnimations.snail_transform, ageInTicks);
 
@@ -339,6 +342,7 @@ public class TriviaBotModel extends EntityModel<TriviaBotRenderState> {
         this.animate(state.countdownAnimationState, TriviaBotAnimations.countdown, state.ageInTicks);
         this.animate(state.analyzingAnimationState, TriviaBotAnimations.analyzing, state.ageInTicks);
         this.animate(state.answerCorrectAnimationState, TriviaBotAnimations.answer_correct, state.ageInTicks);
+        this.animate(state.answerCorrectLongAnimationState, TriviaBotAnimations.answer_correct_long, state.ageInTicks);
         this.animate(state.answerIncorrectAnimationState, TriviaBotAnimations.answer_incorrect, state.ageInTicks);
         this.animate(state.snailTransformAnimationState, TriviaBotAnimations.snail_transform, state.ageInTicks);
 
@@ -361,6 +365,7 @@ public class TriviaBotModel extends EntityModel<TriviaBotRenderState> {
         this.countdownAnimation.apply(state.countdownAnimationState, state.ageInTicks);
         this.analyzingAnimation.apply(state.analyzingAnimationState, state.ageInTicks);
         this.answerCorrectAnimation.apply(state.answerCorrectAnimationState, state.ageInTicks);
+        this.answerCorrectLongAnimation.apply(state.answerCorrectLongAnimationState, state.ageInTicks);
         this.answerIncorrectAnimation.apply(state.answerIncorrectAnimationState, state.ageInTicks);
         this.snailTransformAnimation.apply(state.snailTransformAnimationState, state.ageInTicks);
 
