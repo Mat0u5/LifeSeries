@@ -18,7 +18,12 @@ public class LifeSeriesResourcePacks {
 		if (armorbehavior == MinimalArmorBehavior.FALSE) enableMinimalArmorPack = false;
 		if (armorbehavior == MinimalArmorBehavior.MATCH_SERVER) enableMinimalArmorPack = LifeSeriesClient.SERVER_MINIMAL_ARMOR;
 
-		ClientResourcePacks.setClientResourcepack(MINIMAL_ARMOR_RESOURCEPACK, enableMinimalArmorPack);
-		ClientResourcePacks.setClientResourcepack(NICELIFE_NETHER_RESOURCEPACK, (LifeSeries.isSeason(Seasons.NICE_LIFE) && LifeSeriesClient.NICELIFE_SNOWY_NETHER));
+		if (armorbehavior != MinimalArmorBehavior.MATCH_SERVER || LifeSeriesClient.RECEIVED_SERVER_MINIMAL_ARMOR) {
+			ClientResourcePacks.setClientResourcepack(MINIMAL_ARMOR_RESOURCEPACK, enableMinimalArmorPack);
+		}
+		boolean niceLife = LifeSeries.isSeason(Seasons.NICE_LIFE);
+		if (!niceLife || LifeSeriesClient.RECEIVED_SNOWY_NETHER) {
+			ClientResourcePacks.setClientResourcepack(NICELIFE_NETHER_RESOURCEPACK, niceLife && LifeSeriesClient.NICELIFE_SNOWY_NETHER);
+		}
 	}
 }

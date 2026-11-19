@@ -261,11 +261,19 @@ public class LifeSeriesNetworkHandlerClient implements RegistrableClient {
         SimplePackets.ANIMAL_DISGUISE_ARMOR.setClientReceive(payload -> Morph.showArmor = payload.value());
         SimplePackets.ANIMAL_DISGUISE_HANDS.setClientReceive(payload -> Morph.showHandItems = payload.value());
         SimplePackets.NICELIFE_DISABLE_SNOW.setClientReceive(payload -> LifeSeriesClient.NICELIFE_DISABLE_SNOW = payload.value());
-        SimplePackets.SERVER_MINIMAL_ARMOR.setClientReceive(payload -> LifeSeriesClient.SERVER_MINIMAL_ARMOR = payload.value());
+        SimplePackets.SERVER_MINIMAL_ARMOR.setClientReceive(payload -> {
+            boolean newValue = payload.value();
+            if (!LifeSeriesClient.RECEIVED_SERVER_MINIMAL_ARMOR || LifeSeriesClient.SERVER_MINIMAL_ARMOR != newValue) {
+                LifeSeriesClient.SERVER_MINIMAL_ARMOR = newValue;
+                LifeSeriesClient.RECEIVED_SERVER_MINIMAL_ARMOR = true;
+                LifeSeriesResourcePacks.checkClientPacks();
+            }
+        });
         SimplePackets.SNOWY_NETHER.setClientReceive(payload -> {
             boolean newValue = payload.value();
-            if (LifeSeriesClient.NICELIFE_SNOWY_NETHER != newValue) {
+            if (!LifeSeriesClient.RECEIVED_SNOWY_NETHER || LifeSeriesClient.NICELIFE_SNOWY_NETHER != newValue) {
                 LifeSeriesClient.NICELIFE_SNOWY_NETHER = newValue;
+                LifeSeriesClient.RECEIVED_SNOWY_NETHER = true;
                 LifeSeriesResourcePacks.checkClientPacks();
             }
         });

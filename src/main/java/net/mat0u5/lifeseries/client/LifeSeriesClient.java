@@ -37,6 +37,8 @@ public class LifeSeriesClient implements MultiplatformClientModInitializer, Life
     public static boolean NICELIFE_SNOWY_NETHER = true;
     public static boolean NICELIFE_DISABLE_SNOW = false;
     public static boolean SERVER_MINIMAL_ARMOR = false;
+    public static boolean RECEIVED_SNOWY_NETHER = false;
+    public static boolean RECEIVED_SERVER_MINIMAL_ARMOR = false;
 
     public static Map<String, String> playerDisguiseNames = new HashMap<>();
     public static Map<UUID, UUID> playerDisguiseUUIDs = new HashMap<>();
@@ -165,6 +167,8 @@ public class LifeSeriesClient implements MultiplatformClientModInitializer, Life
         NICELIFE_SNOWY_NETHER = true;
         NICELIFE_DISABLE_SNOW = false;
         SERVER_MINIMAL_ARMOR = false;
+        RECEIVED_SNOWY_NETHER = false;
+        RECEIVED_SERVER_MINIMAL_ARMOR = false;
         ClientSounds.resetSoundBehaviors();
 
 
