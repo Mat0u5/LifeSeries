@@ -126,7 +126,7 @@ public class InBetweenFileSync {
 		PlayerBoundFiles playerFiles = players.get(player.getUUID());
 		if (playerFiles == null || player.isDeadOrDying()) return;
 
-		List<InBetweenMemory> neededMemories = filterCurrentMemories(playerFiles.memories, getDesiredMemoryDeathNumber(player));
+		List<InBetweenMemory> neededMemories = getNeededMemories(player, playerFiles.memories);
 		List<String> entries = createPacketListFromMemores(neededMemories);
 		if (entries.equals(playerFiles.sentEntries)) return;
 
@@ -146,20 +146,36 @@ public class InBetweenFileSync {
 		SimplePackets.IN_BETWEEN_MEMORY_FILES.sendToClient(entries, player);
 	}
 
-	private static int getDesiredMemoryDeathNumber(ServerPlayer player) {
+	private static List<InBetweenMemory> getNeededMemories(ServerPlayer player, List<InBetweenMemory> memories) {
 		InBetweenInstance instance = InBetweenManager.getInstance(player);
-		if (instance != null) return instance.deathNumber;
+		if (instance != null) return filterCurrentMemories(memories, instance.deathNumber);
 		int deaths = InBetweenManager.getDeaths(player);
-		return InBetweenManager.isInInBetween(player) ? deaths : deaths + 1;
+		Set<InBetweenMemory> needed = new LinkedHashSet<>(filterCurrentMemories(memories, deaths + 1));
+		needed.addAll(filterCurrentMemories(memories, deaths));
+		return new ArrayList<>(needed);
 	}
 
 	private static List<InBetweenMemory> filterCurrentMemories(List<InBetweenMemory> memories, int deathNumber) {
 		if (!InBetweenWindowManager.hasWindows(deathNumber)) return List.of();
+		int memoryDeath = getMemoryDeathNumber(memories, deathNumber);
 		List<InBetweenMemory> result = new ArrayList<>();
 		for (InBetweenMemory memory : memories) {
-			if (memory.deathNumber() == deathNumber) result.add(memory);
+			if (memory.deathNumber() == memoryDeath) result.add(memory);
 		}
 		return result;
+	}
+
+	private static int getMemoryDeathNumber(List<InBetweenMemory> memories, int deathNumber) {
+		int latest = -1;
+		int first = -1;
+		for (InBetweenMemory memory : memories) {
+			int memoryDeath = memory.deathNumber();
+			if (!InBetweenWindowManager.hasWindows(memoryDeath)) continue;
+			if (memoryDeath <= deathNumber) latest = Math.max(latest, memoryDeath);
+			if (first < 0 || memoryDeath < first) first = memoryDeath;
+		}
+		if (latest >= 0) return latest;
+		return deathNumber < 1 ? first : -1;
 	}
 
 	private static List<String> createPacketListFromMemores(List<InBetweenMemory> memories) {

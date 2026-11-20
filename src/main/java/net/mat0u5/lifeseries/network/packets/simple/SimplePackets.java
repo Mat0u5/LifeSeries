@@ -38,6 +38,7 @@ public class SimplePackets {
     public static final SimpleStringPacket TEAM_NAME = new SimpleStringPacket("TEAM_NAME");
     public static final SimpleStringPacket TEAM_COLOR = new SimpleStringPacket("TEAM_COLOR");
     public static final SimpleStringPacket TRIVIA_GUI_TYPE = new SimpleStringPacket("TRIVIA_GUI_TYPE");
+    public static final SimpleStringPacket IN_BETWEEN_TRANSITION = new SimpleStringPacket("IN_BETWEEN_TRANSITION");
 
     public static final SimpleBooleanPacket PREVENT_GLIDING = new SimpleBooleanPacket("PREVENT_GLIDING");
     public static final SimpleBooleanPacket TABLIST_SHOW_EXACT = new SimpleBooleanPacket("TABLIST_SHOW_EXACT");
@@ -59,6 +60,7 @@ public class SimplePackets {
 
     public static final SimpleDoublePacket PLAYER_MIN_MSPT = new SimpleDoublePacket("PLAYER_MIN_MSPT");
     public static final SimpleDoublePacket SIZESHIFTING_CHANGE = new SimpleDoublePacket("SIZESHIFTING_CHANGE");
+    public static final SimpleDoublePacket IN_BETWEEN_PATH_YAW = new SimpleDoublePacket("IN_BETWEEN_PATH_YAW");
 
     public static final SimpleLongPacket CURSE_SLIDING = new SimpleLongPacket("CURSE_SLIDING");
     public static final SimpleLongPacket SUPERPOWER_COOLDOWN = new SimpleLongPacket("SUPERPOWER_COOLDOWN");

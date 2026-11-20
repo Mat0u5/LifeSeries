@@ -123,7 +123,6 @@ public class InBetweenChoiceManager {
 	}
 
 	public void checkChoices(ServerPlayer player) {
-		//TODO do not make it instant.
 		if (player.isSpectator()) return;
 		List<Vec3> centers = getChoiceCenters();
 		for (int i = 0; i < choices.size() && i < centers.size(); i++) {

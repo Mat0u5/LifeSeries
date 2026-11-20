@@ -12,6 +12,7 @@ import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.trivia.InBetween
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.trivia.InBetweenTriviaManager;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.window.InBetweenFileSync;
 import net.mat0u5.lifeseries.seasons.util.LivesManager;
+import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
 import net.mat0u5.matlib.events.EventResult;
 import net.mat0u5.matlib.utils.player.ScoreboardUtils;
@@ -78,9 +79,14 @@ public class FinalLife extends Season {
 
 	@Override
 	public void onPlayerJoin(ServerPlayer player) {
+		boolean hadAssignedLives = ((IPlayer)player).ls$hasAssignedLives() && !((IPlayer)player).ls$isWatcher();
 		finalLifeBoogeymanManager.onPlayerJoin(player);
 		super.onPlayerJoin(player);
 		if (InBetweenManager.ENABLED.get()) InBetweenFileSync.checkPlayerMemories(player);
+		if (!hadAssignedLives) { // First join
+			InBetweenManager.startTransition(player);
+			InBetweenManager.playDimensionTransition(player);
+		}
 	}
 
 	@Override

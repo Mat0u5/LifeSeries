@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.seasons.season.finallife.inbetween;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.registries.ParticleRegistry;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.finallife.FinalLife;
@@ -199,6 +200,7 @@ public class InBetweenManager {
 		if (instance == null) return null;
 		instances.put(deadPlayer.getUUID(), instance);
 		preparedRespawns.add(deadPlayer.getUUID());
+		startEnterTransition(deadPlayer);
 		return instance;
 	}
 
@@ -239,6 +241,7 @@ public class InBetweenManager {
 
 		player.resetFallDistance();
 		player.setDeltaMovement(Vec3.ZERO);
+		startEnterTransition(player);
 		LevelUtils.teleport(player, instance.level, instance.getSpawnPos(), instance.getSpawnYaw(), 0);
 		onEnteredInBetween(player, instance);
 		return true;
@@ -249,8 +252,20 @@ public class InBetweenManager {
 			player.setGameMode(GameType.ADVENTURE);
 		}
 		instance.windowManager.sendWindowsToClient(player);
+		sendPathYaw(player, instance);
 		InBetweenFileSync.updatePlayer(player);
 		playDimensionTransition(player);
+	}
+
+	// Info on which way the fog should drift client-side.
+	private static void sendPathYaw(ServerPlayer player, InBetweenInstance instance) {
+		List<Vec3> path = instance.inBetweenBuilder.pathPoints;
+		double yaw = instance.getSpawnYaw();
+		if (path.size() >= 2) {
+			Vec3 direction = path.get(path.size() - 1).subtract(path.get(0));
+			if (direction.horizontalDistanceSqr() > 1.0E-6) yaw = Math.toDegrees(Math.atan2(-direction.x, direction.z));
+		}
+		SimplePackets.IN_BETWEEN_PATH_YAW.sendToClient(yaw, player);
 	}
 
 	public static void exitInBetween(ServerPlayer player, @Nullable InBetweenChoice choice) {
@@ -268,6 +283,7 @@ public class InBetweenManager {
 		InBetweenWindowManager.sendClientClearWindows(player);
 
 		restoreGameMode(player);
+		startTransition(player);
 		teleportToRespawnPoint(player);
 		InBetweenFileSync.updatePlayer(player);
 
@@ -278,7 +294,7 @@ public class InBetweenManager {
 				player.level().addFreshEntity(item);
 			}
 		}
-		playDimensionTransition(player); //TODO once the animation is added, wait for the finish
+		playDimensionTransition(player);
 	}
 
 	public static void discardInstance(ServerPlayer player) {
@@ -328,13 +344,20 @@ public class InBetweenManager {
 		//?}
 	}
 
-	private static void playDimensionTransition(ServerPlayer player) {
+	public static void playDimensionTransition(ServerPlayer player) {
 		PlayerReference ref = PlayerReference.of(player);
 		TaskScheduler.scheduleTask(1, () -> {
 			ServerPlayer target = ref.get();
 			if (target != null) ModifiableSound.FINALLIFE_DIMENSION_SWAP.play(target);
 		});
-		//TODO animation
+	}
+
+	public static void startTransition(ServerPlayer player) {
+		SimplePackets.IN_BETWEEN_TRANSITION.sendToClient("fade_in", player);
+	}
+
+	public static void startEnterTransition(ServerPlayer player) {
+		SimplePackets.IN_BETWEEN_TRANSITION.sendToClient("fade_in_black", player);
 	}
 
 	private static int getFirstFreeSlot() {
@@ -388,6 +411,19 @@ public class InBetweenManager {
 	}
 
 	public static void onMadeChoice(ServerPlayer player, InBetweenChoice choice) {
-		exitInBetween(player, choice);
+		InBetweenInstance instance = instances.get(player.getUUID());
+		SimplePackets.IN_BETWEEN_TRANSITION.sendToClient("swallow", player);
+		ModifiableSound.FINALLIFE_DIMENSION_LEAVE.play(player, 0.25f, 1);
+		PlayerReference ref = PlayerReference.of(player);
+		TaskScheduler.scheduleTask(82, () -> { // Cloud transition takes ~4 seconds //TODO wait for the loading screen - make the client play the sounds..
+			ServerPlayer target = ref.get();
+			if (target == null) return;
+			if (instance != null && instances.get(target.getUUID()) != instance) {
+				// Left differently in the meantime
+				SimplePackets.IN_BETWEEN_TRANSITION.sendToClient("fade_in", target);
+				return;
+			}
+			exitInBetween(target, choice);
+		});
 	}
 }
