@@ -583,7 +583,7 @@ public class NiceLifeTriviaHandler extends TriviaHandler {
         ItemStack patat = new ItemStack(Items.POISONOUS_POTATO);
         patat.set(DataComponents.CUSTOM_NAME, Component.nullToEmpty("§6§l§nThe Sacred Patat"));
         ItemStackUtils.addLoreToItemStack(patat,
-                List.of(Component.nullToEmpty("§5§oEating bot might help you. Or maybe not..."))
+                List.of(Component.nullToEmpty("§5§oEating this might help you. Or maybe not..."))
         );
         itemSpawner.addItem(patat, 1);
         //?}

@@ -14,15 +14,19 @@ import java.nio.file.StandardCopyOption;
 public class DynamicDatapackManager {
     private static final String CONFIG_TABLE_TRIVIA = "./config/lifeseries/wildlife/trivia_reward_loottable_"+DatapackManager.getMinecraftVersion()+".json";
     private static final String CONFIG_TABLE_NICELIFE_TRIVIA = "./config/lifeseries/nicelife/trivia_reward_loottable_"+DatapackManager.getMinecraftVersion()+".json";
-    private static final String CONFIG_TABLE_FINALLIFE_TRIVIA = "./config/lifeseries/finallife/trivia_reward_loottable_"+DatapackManager.getMinecraftVersion()+".json";
+    private static final String CONFIG_TABLE_FINALLIFE_TRIVIA1 = "./config/lifeseries/finallife/trivia_reward_loottable_drop1_"+DatapackManager.getMinecraftVersion()+".json";
+    private static final String CONFIG_TABLE_FINALLIFE_TRIVIA2 = "./config/lifeseries/finallife/trivia_reward_loottable_drop2_"+DatapackManager.getMinecraftVersion()+".json";
+    private static final String CONFIG_TABLE_FINALLIFE_TRIVIA3 = "./config/lifeseries/finallife/trivia_reward_loottable_drop3_"+DatapackManager.getMinecraftVersion()+".json";
     private static final String CONFIG_TABLE_TASK = "./config/lifeseries/secretlife/task_reward_loottable_"+DatapackManager.getMinecraftVersion()+".json";
     private static final String CONFIG_TABLE_TASK_HARD = "./config/lifeseries/secretlife/task_reward_loottable_"+DatapackManager.getMinecraftVersion()+"_hard.json";
     private static final String CONFIG_TABLE_TASK_RED = "./config/lifeseries/secretlife/task_reward_loottable_"+DatapackManager.getMinecraftVersion()+"_red.json";
 
-    private static final String LOCAL_TABLE_TRIVIA = "/files/dynamicpack/loottables/trivia_reward_loottable"+DatapackManager.getResourceTriviaPackVersion()+".json";
-    private static final String LOCAL_TABLE_NICELIFE_TRIVIA = "/files/dynamicpack/loottables/nicelife_trivia_reward_loottable"+DatapackManager.getResourceNiceLifeTriviaPackVersion()+".json";
-    private static final String LOCAL_TABLE_FINALLIFE_TRIVIA = "/files/dynamicpack/loottables/finallife_trivia_reward_loottable"+DatapackManager.getResourceFinalLifeTriviaPackVersion()+".json";
-    private static final String LOCAL_TABLE_TASK = "/files/dynamicpack/loottables/task_reward_loottable"+DatapackManager.getResourceTaskPackVersion()+".json";
+    private static final String LOCAL_TABLE_TRIVIA = "/files/dynamicpack/loottables/wildlife/trivia_reward_loottable"+DatapackManager.getResourceTriviaPackVersion()+".json";
+    private static final String LOCAL_TABLE_NICELIFE_TRIVIA = "/files/dynamicpack/loottables/nicelife/trivia_reward_loottable"+DatapackManager.getResourceNiceLifeTriviaPackVersion()+".json";
+    private static final String LOCAL_TABLE_FINALLIFE_TRIVIA1 = "/files/dynamicpack/loottables/finallife/trivia_reward_loottable_drop1"+DatapackManager.getResourceFinalLifeTriviaPackVersion1()+".json";
+    private static final String LOCAL_TABLE_FINALLIFE_TRIVIA2 = "/files/dynamicpack/loottables/finallife/trivia_reward_loottable_drop2"+DatapackManager.getResourceFinalLifeTriviaPackVersion2()+".json";
+    private static final String LOCAL_TABLE_FINALLIFE_TRIVIA3 = "/files/dynamicpack/loottables/finallife/trivia_reward_loottable_drop3"+DatapackManager.getResourceFinalLifeTriviaPackVersion3()+".json";
+    private static final String LOCAL_TABLE_TASK = "/files/dynamicpack/loottables/secretlife/task_reward_loottable"+DatapackManager.getResourceTaskPackVersion()+".json";
     private static final String LOCAL_MCMETA = "/files/dynamicpack/pack.mcmeta";
 
     private static final String DATAPACK_MAIN = "Life Series Dynamic Datapack";
@@ -34,7 +38,9 @@ public class DynamicDatapackManager {
     private static final String DATAPACK_MCMETA = DATAPACK_MAIN+"/pack.mcmeta";
     private static final String DATAPACK_TABLE_TRIVIA = DATAPACK_LOOTTABLE+"/trivia_reward_loottable.json";
     private static final String DATAPACK_TABLE_NICELIFE_TRIVIA = DATAPACK_LOOTTABLE+"/nicelife_trivia_reward_loottable.json";
-    private static final String DATAPACK_TABLE_FINALLIFE_TRIVIA = DATAPACK_LOOTTABLE+"/finallife_trivia_reward_loottable.json";
+    private static final String DATAPACK_TABLE_FINALLIFE_TRIVIA1 = DATAPACK_LOOTTABLE+"/finallife_trivia_reward_loottable_drop1.json";
+    private static final String DATAPACK_TABLE_FINALLIFE_TRIVIA2 = DATAPACK_LOOTTABLE+"/finallife_trivia_reward_loottable_drop2.json";
+    private static final String DATAPACK_TABLE_FINALLIFE_TRIVIA3 = DATAPACK_LOOTTABLE+"/finallife_trivia_reward_loottable_drop3.json";
     private static final String DATAPACK_TABLE_TASK = DATAPACK_LOOTTABLE+"/task_reward_loottable.json";
     private static final String DATAPACK_TABLE_TASK_HARD = DATAPACK_LOOTTABLE+"/task_reward_loottable_hard.json";
     private static final String DATAPACK_TABLE_TASK_RED = DATAPACK_LOOTTABLE+"/task_reward_loottable_red.json";
@@ -66,9 +72,17 @@ public class DynamicDatapackManager {
         if (shouldCopyLootTableToConfig(configNiceLifeTrivia)) {
             handler.copyBundledSingleFile(LOCAL_TABLE_NICELIFE_TRIVIA, configNiceLifeTrivia.toPath());
         }
-        File configFinalLifeTrivia = new File(CONFIG_TABLE_FINALLIFE_TRIVIA);
-        if (shouldCopyLootTableToConfig(configFinalLifeTrivia)) {
-            handler.copyBundledSingleFile(LOCAL_TABLE_FINALLIFE_TRIVIA, configFinalLifeTrivia.toPath());
+        File configFinalLifeTrivia1 = new File(CONFIG_TABLE_FINALLIFE_TRIVIA1);
+        if (shouldCopyLootTableToConfig(configFinalLifeTrivia1)) {
+            handler.copyBundledSingleFile(LOCAL_TABLE_FINALLIFE_TRIVIA1, configFinalLifeTrivia1.toPath());
+        }
+        File configFinalLifeTrivia2 = new File(CONFIG_TABLE_FINALLIFE_TRIVIA2);
+        if (shouldCopyLootTableToConfig(configFinalLifeTrivia2)) {
+            handler.copyBundledSingleFile(LOCAL_TABLE_FINALLIFE_TRIVIA2, configFinalLifeTrivia2.toPath());
+        }
+        File configFinalLifeTrivia3 = new File(CONFIG_TABLE_FINALLIFE_TRIVIA3);
+        if (shouldCopyLootTableToConfig(configFinalLifeTrivia3)) {
+            handler.copyBundledSingleFile(LOCAL_TABLE_FINALLIFE_TRIVIA3, configFinalLifeTrivia3.toPath());
         }
         File configTask = new File(CONFIG_TABLE_TASK);
         if (shouldCopyLootTableToConfig(configTask)) {
@@ -80,7 +94,9 @@ public class DynamicDatapackManager {
         try {
             Files.copy(configTrivia.toPath(), datapackFolder.resolve(DATAPACK_TABLE_TRIVIA), StandardCopyOption.REPLACE_EXISTING);
             Files.copy(configNiceLifeTrivia.toPath(), datapackFolder.resolve(DATAPACK_TABLE_NICELIFE_TRIVIA), StandardCopyOption.REPLACE_EXISTING);
-            Files.copy(configFinalLifeTrivia.toPath(), datapackFolder.resolve(DATAPACK_TABLE_FINALLIFE_TRIVIA), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(configFinalLifeTrivia1.toPath(), datapackFolder.resolve(DATAPACK_TABLE_FINALLIFE_TRIVIA1), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(configFinalLifeTrivia2.toPath(), datapackFolder.resolve(DATAPACK_TABLE_FINALLIFE_TRIVIA2), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(configFinalLifeTrivia3.toPath(), datapackFolder.resolve(DATAPACK_TABLE_FINALLIFE_TRIVIA3), StandardCopyOption.REPLACE_EXISTING);
             Files.copy(configTask.toPath(), datapackFolder.resolve(DATAPACK_TABLE_TASK), StandardCopyOption.REPLACE_EXISTING);
             if (configTaskHard.exists()) {
                 Files.copy(configTaskHard.toPath(), datapackFolder.resolve(DATAPACK_TABLE_TASK_HARD), StandardCopyOption.REPLACE_EXISTING);

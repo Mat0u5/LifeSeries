@@ -22,12 +22,18 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
+import java.util.Objects;
 
 import static net.mat0u5.matlib.MatLib.server;
 
+//? if <= 1.20.5 {
+/*import net.minecraft.world.item.EnchantedBookItem;
+import net.minecraft.world.item.enchantment.EnchantmentInstance;
+*///?}
 //? if >= 1.20.5 {
 import net.minecraft.core.component.DataComponents;
 //?}
@@ -39,7 +45,9 @@ public class InBetweenTriviaHandler extends TriviaHandler {
 	public static final int LANDED_WAIT = 15;
 	private long ticks = 0;
 	private int landedTicks = -1;
-	public static ItemSpawner itemSpawner;
+	public static ItemSpawner itemSpawner1;
+	public static ItemSpawner itemSpawner2;
+	public static ItemSpawner itemSpawner3;
 	public InBetweenTriviaHandler(TriviaBot bot) {
 		super(bot);
 	}
@@ -164,12 +172,10 @@ public class InBetweenTriviaHandler extends TriviaHandler {
 
 	public void answeredCorrect() {
 		super.answeredCorrect();
-		TaskScheduler.scheduleTask(74, this::spawnItemForPlayer);
-		TaskScheduler.scheduleTask(99, this::spawnItemForPlayer);
+		TaskScheduler.scheduleTask(74, () -> spawnItemForPlayer(1));
+		TaskScheduler.scheduleTask(99, () -> spawnItemForPlayer(2));
 		TaskScheduler.scheduleTask(129, () -> {
-			for (int i = 0; i < 6; i++) {
-				spawnItemForPlayer(true);
-			}
+			spawnItemForPlayer(3);
 		});
 		ModifiableSound.FINALLIFE_TRIVIA_CORRECT.playWithSource(PlayerUtils.getAllPlayers(), bot, SoundSource.NEUTRAL, 1f, 1);
 	}
@@ -180,12 +186,11 @@ public class InBetweenTriviaHandler extends TriviaHandler {
 		ModifiableSound.FINALLIFE_TRIVIA_INCORRECT.playWithSource(PlayerUtils.getAllPlayers(), bot, SoundSource.NEUTRAL, 1f, 1);
 	}
 
-	public void spawnItemForPlayer() {
-		spawnItemForPlayer(false);
-	}
-	public void spawnItemForPlayer(boolean inAir) {
+	public void spawnItemForPlayer(int index) {
 		if (bot.level().isClientSide()) return;
-		if (itemSpawner == null) return;
+		if (index == 1 && itemSpawner1 == null) return;
+		if (index == 2 && itemSpawner2 == null) return;
+		if (index == 3 && itemSpawner3 == null) return;
 		if (bot.serverData.getBoundPlayer() == null) return;
 		Vec3 playerPos = bot.serverData.getBoundPlayer().position();
 		Vec3 pos = bot.position().add(0,0.7,0);
@@ -196,70 +201,94 @@ public class InBetweenTriviaHandler extends TriviaHandler {
 		);
 		Vec3 vector = Vec3.ZERO;
 		if (relativeTargetPos.lengthSqr() > 0.0001) {
-			if (inAir) {
-				vector = relativeTargetPos.normalize().scale(0.04).add(0,0.33,0);
-			}
-			else {
-				vector = relativeTargetPos.normalize().scale(0.2).add(0,0.1,0);
-			}
+			vector = relativeTargetPos.normalize().scale(0.04).add(0,0.33,0);
 		}
 
-		List<ItemStack> lootTableItems = ItemSpawner.getRandomItemsFromLootTable(server, (ServerLevel) bot.level(), bot.serverData.getBoundPlayer(), IdentifierHelper.of("lifeseriesdynamic", "finallife_trivia_reward_loottable"), false);
+		List<ItemStack> lootTableItems = ItemSpawner.getRandomItemsFromLootTable(server, (ServerLevel) bot.level(), bot.serverData.getBoundPlayer(), IdentifierHelper.of("lifeseriesdynamic", "finallife_trivia_reward_loottable_drop"+index), false);
 		if (!lootTableItems.isEmpty()) {
 			for (ItemStack item : lootTableItems) {
 				ItemStackUtils.spawnItemForPlayerWithVelocity((ServerLevel) bot.level(), pos, item, bot.serverData.getBoundPlayer(), vector);
 			}
 		}
 		else {
-			ItemStack randomItem = itemSpawner.getRandomItem();
-			ItemStackUtils.spawnItemForPlayerWithVelocity((ServerLevel) bot.level(), pos, randomItem, bot.serverData.getBoundPlayer(), vector);
+			if (index == 1) {
+				ItemStack randomItem = itemSpawner1.getRandomItem();
+				ItemStackUtils.spawnItemForPlayerWithVelocity((ServerLevel) bot.level(), pos, randomItem, bot.serverData.getBoundPlayer(), vector);
+			}
+			if (index == 2) {
+				ItemStack randomItem = itemSpawner2.getRandomItem();
+				ItemStackUtils.spawnItemForPlayerWithVelocity((ServerLevel) bot.level(), pos, randomItem, bot.serverData.getBoundPlayer(), vector);
+			}
+			if (index == 3) {
+				for (int i = 0; i < 5; i++) {
+					ItemStack randomItem = itemSpawner3.getRandomItem();
+					ItemStackUtils.spawnItemForPlayerWithVelocity((ServerLevel) bot.level(), pos, randomItem, bot.serverData.getBoundPlayer(), vector);
+				}
+			}
 		}
 	}
 
-	public static void initializeItemSpawner() {
-		//TODO items probably do not match
-		itemSpawner = new ItemSpawner();
-		itemSpawner.addItem(new ItemStack(Items.GOLDEN_APPLE, 2), 20);
-		itemSpawner.addItem(new ItemStack(Items.ENDER_PEARL, 2), 20);
-		itemSpawner.addItem(new ItemStack(Items.TRIDENT), 10);
-		itemSpawner.addItem(new ItemStack(Items.POWERED_RAIL, 16), 10);
-		itemSpawner.addItem(new ItemStack(Items.DIAMOND, 4), 20);
-		itemSpawner.addItem(new ItemStack(Items.CREEPER_SPAWN_EGG), 10);
-		itemSpawner.addItem(new ItemStack(Items.GOLDEN_CARROT, 8), 10);
-		//? if >= 1.21 {
-		itemSpawner.addItem(new ItemStack(Items.WIND_CHARGE, 16), 10);
-		//?}
-		itemSpawner.addItem(new ItemStack(Items.SCULK_SHRIEKER, 2), 10);
-		itemSpawner.addItem(new ItemStack(Items.SCULK_SENSOR, 8), 10);
-		itemSpawner.addItem(new ItemStack(Items.TNT, 8), 20);
-		itemSpawner.addItem(new ItemStack(Items.COBWEB, 8), 10);
-		itemSpawner.addItem(new ItemStack(Items.OBSIDIAN, 8), 10);
-		itemSpawner.addItem(new ItemStack(Items.PUFFERFISH_BUCKET), 10);
-		itemSpawner.addItem(new ItemStack(Items.NETHERITE_CHESTPLATE), 10);
-		itemSpawner.addItem(new ItemStack(Items.NETHERITE_LEGGINGS), 10);
-		itemSpawner.addItem(new ItemStack(Items.NETHERITE_BOOTS), 10);
-		itemSpawner.addItem(new ItemStack(Items.ARROW, 64), 10);
-		itemSpawner.addItem(new ItemStack(Items.IRON_BLOCK, 2), 10);
+	public static void initializeItemSpawners() {
+		initializeItemSpawner1();
+		initializeItemSpawner2();
+		initializeItemSpawner3();
+	}
+	public static void initializeItemSpawner1() {
+		itemSpawner1 = new ItemSpawner();
 
-		//? if >= 1.21 {
-		ItemStack mace = new ItemStack(Items.MACE);
-		ItemStackUtils.setCustomComponentBoolean(mace, "IgnoreBlacklist", true);
-		ItemStackUtils.setCustomComponentBoolean(mace, "NoModifications", true);
-		mace.setDamageValue(mace.getMaxDamage()-1);
-		itemSpawner.addItem(mace, 5);
+		//? if <= 1.20.5 {
+		//itemSpawner1.addItem(Objects.requireNonNull(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(Enchantments.SILK_TOUCH, 1))), 249);
+		//?} else {
+		itemSpawner1.addItem(Objects.requireNonNull(ItemStackUtils.createEnchantedBook(Enchantments.SILK_TOUCH, 1)), 249);
 		//?}
-
-		ItemStack endCrystal = new ItemStack(Items.END_CRYSTAL);
-		ItemStackUtils.setCustomComponentBoolean(endCrystal, "IgnoreBlacklist", true);
-		itemSpawner.addItem(endCrystal, 10);
 
 		//? if >= 1.20.5 {
 		ItemStack patat = new ItemStack(Items.POISONOUS_POTATO);
 		patat.set(DataComponents.CUSTOM_NAME, Component.nullToEmpty("§6§l§nThe Sacred Patat"));
 		ItemStackUtils.addLoreToItemStack(patat,
-				List.of(Component.nullToEmpty("§5§oEating bot might help you. Or maybe not..."))
+				List.of(Component.nullToEmpty("§5§oEating this might help you. Or maybe not..."))
 		);
-		itemSpawner.addItem(patat, 1);
+		itemSpawner1.addItem(patat, 1);
 		//?}
+	}
+
+	public static void initializeItemSpawner2() {
+		itemSpawner2 = new ItemSpawner();
+
+		//? if <= 1.20.5 {
+		//itemSpawner2.addItem(Objects.requireNonNull(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(Enchantments.MENDING, 1))), 249);
+		//?} else {
+		itemSpawner2.addItem(Objects.requireNonNull(ItemStackUtils.createEnchantedBook(Enchantments.MENDING, 1)), 249);
+		//?}
+
+		//? if >= 1.20.5 {
+		ItemStack patat = new ItemStack(Items.POISONOUS_POTATO);
+		patat.set(DataComponents.CUSTOM_NAME, Component.nullToEmpty("§6§l§nThe Sacred Patat"));
+		ItemStackUtils.addLoreToItemStack(patat,
+				List.of(Component.nullToEmpty("§5§oEating this might help you. Or maybe not..."))
+		);
+		itemSpawner2.addItem(patat, 1);
+		//?}
+	}
+
+	public static void initializeItemSpawner3() {
+		itemSpawner3 = new ItemSpawner();
+
+		//? if <= 1.20.5 {
+		/*itemSpawner3.addItem(Objects.requireNonNull(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(Enchantments.FEATHER_FALLING, 1))), 10);
+		itemSpawner3.addItem(Objects.requireNonNull(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(Enchantments.UNBREAKING, 1))), 10);
+		itemSpawner3.addItem(Objects.requireNonNull(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(Enchantments.FORTUNE, 1))), 10);
+		*///?} else {
+		itemSpawner3.addItem(Objects.requireNonNull(ItemStackUtils.createEnchantedBook(Enchantments.FEATHER_FALLING, 1)), 10);
+		itemSpawner3.addItem(Objects.requireNonNull(ItemStackUtils.createEnchantedBook(Enchantments.UNBREAKING, 1)), 10);
+		itemSpawner3.addItem(Objects.requireNonNull(ItemStackUtils.createEnchantedBook(Enchantments.FORTUNE, 1)), 10);
+		itemSpawner3.addItem(new ItemStack(Items.WIND_CHARGE, 10), 10);
+		//?}
+		itemSpawner3.addItem(new ItemStack(Items.IRON_INGOT, 16), 10);
+		itemSpawner3.addItem(new ItemStack(Items.GOLDEN_CARROT, 8), 10);
+		itemSpawner3.addItem(new ItemStack(Items.COW_SPAWN_EGG, 8), 10);
+		itemSpawner3.addItem(new ItemStack(Items.SHEEP_SPAWN_EGG, 8), 10);
+		itemSpawner3.addItem(new ItemStack(Items.PIG_SPAWN_EGG, 8), 10);
+
 	}
 }

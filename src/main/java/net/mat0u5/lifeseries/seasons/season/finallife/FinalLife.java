@@ -45,7 +45,7 @@ public class FinalLife extends Season {
 	@Override
 	public void initialize() {
 		super.initialize();
-		InBetweenTriviaHandler.initializeItemSpawner();
+		InBetweenTriviaHandler.initializeItemSpawners();
 		InBetweenTriviaManager.initialize();
 	}
 	@Override

@@ -53,11 +53,11 @@ public class DatapackManager {
 
     public static String getResourceTriviaPackVersion() {
         //? if < 1.20.5 {
-        //return "_pre1.20.5";
+        //return "_1.20";
         //?} else if < 1.21 {
-        //return "_pre1.21";
+        //return "_1.20.5";
         //?} else if <= 1.21.4 {
-        //return "";
+        //return "_1.21";
         //?} else if <= 26.2 {
         //return "_1.21.5";
         //?} else {
@@ -65,13 +65,39 @@ public class DatapackManager {
         //?}
     }
 
-    public static String getResourceFinalLifeTriviaPackVersion() {
+    public static String getResourceFinalLifeTriviaPackVersion1() {
         //? if < 1.20.5 {
-        //return "_pre1.20.5";
-        //?} else if < 1.21 {
-        //return "_pre1.21";
+        //return "_1.20";
         //?} else if <= 1.21.4 {
-        //return "";
+        //return "_1.20.5";
+        //?} else if <= 26.2 {
+        //return "_1.21.5";
+        //?} else {
+        return "_26.3";
+        //?}
+    }
+
+
+    public static String getResourceFinalLifeTriviaPackVersion2() {
+        //? if < 1.20.5 {
+        //return "_1.20";
+        //?} else if <= 1.21.4 {
+        //return "_1.20.5";
+        //?} else if <= 26.2 {
+        //return "_1.21.5";
+        //?} else {
+        return "_26.3";
+        //?}
+    }
+
+
+    public static String getResourceFinalLifeTriviaPackVersion3() {
+        //? if < 1.20.5 {
+        //return "_1.20";
+        //?} else if < 1.21 {
+        //return "_1.20.5";
+        //?} else if <= 1.21.4 {
+        //return "_1.21";
         //?} else if <= 26.2 {
         //return "_1.21.5";
         //?} else {
@@ -81,11 +107,11 @@ public class DatapackManager {
 
     public static String getResourceNiceLifeTriviaPackVersion() {
         //? if < 1.20.5 {
-        //return "_pre1.20.5";
+        //return "_1.20";
         //?} else if < 1.21 {
-        //return "_pre1.21";
+        //return "_1.20.5";
         //?} else if <= 1.21.4 {
-        //return "";
+        //return "_1.21";
         //?} else if <= 1.21.5 {
         //return "_1.21.5";
         //?} else if <= 26.2 {
@@ -97,11 +123,11 @@ public class DatapackManager {
 
     public static String getResourceTaskPackVersion() {
         //? if < 1.20.5 {
-        //return "_pre1.20.5";
+        //return "_1.20";
         //?} else if < 1.21 {
-        //return "_pre1.21";
+        //return "_1.20.5";
         //?} else if <= 1.21.4 {
-        //return "";
+        //return "_1.21";
         //?} else if <= 26.2 {
         //return "_1.21.5";
         //?} else {

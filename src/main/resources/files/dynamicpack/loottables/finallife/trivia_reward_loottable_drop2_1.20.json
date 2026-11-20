@@ -1,0 +1,41 @@
+{
+  "type": "minecraft:command",
+  "pools": [
+    {
+      "rolls": 1,
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:enchanted_book",
+          "weight": 249,
+          "functions": [
+            {
+              "function": "minecraft:set_enchantments",
+              "enchantments": {
+                "minecraft:mending": 1
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:poisonous_potato",
+          "weight": 1,
+          "functions": [
+            {
+              "function": "minecraft:set_lore",
+              "lore": [
+                "§5§oEating this might help you. Or maybe not..."
+              ]
+            },
+            {
+              "function": "minecraft:set_name",
+              "name": "§6§l§nThe Sacred Patat"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
