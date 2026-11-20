@@ -1,8 +1,10 @@
 package net.mat0u5.lifeseries.client.render.inbetween;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.mat0u5.lifeseries.client.features.inbetween.InBetweenCameraView;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
 import java.util.Arrays;
 
@@ -12,6 +14,8 @@ public class InBetweenMesh {
 	public static final int ORDER_LIGHT = 2;
 	private static final int FULL_BRIGHT = 0xF000F0;
 	private static final int VARS = 5; // x, y, z, u, v
+	private static final float SCREEN_QUAD_DISTANCE = 0.3f;
+	private static final float SCREEN_QUAD_SIZE = 2f;
 
 	public final RenderType renderType;
 	public final int order;
@@ -40,6 +44,15 @@ public class InBetweenMesh {
 		vertices[i + 4] = (float) v;
 		colors[count] = color;
 		count++;
+	}
+
+	public void addScreenQuad(InBetweenCameraView view, int color) {
+		Vector3f forward = new Vector3f(view.forward()).mul(SCREEN_QUAD_DISTANCE);
+		Vector3f left = new Vector3f(view.left()).mul(SCREEN_QUAD_SIZE);
+		Vector3f up = new Vector3f(view.up()).mul(SCREEN_QUAD_SIZE);
+		for (float[] sign : new float[][]{{1, -1}, {-1, -1}, {-1, 1}, {1, 1}}) {
+			add(forward.x + left.x * sign[0] + up.x * sign[1], forward.y + left.y * sign[0] + up.y * sign[1], forward.z + left.z * sign[0] + up.z * sign[1], 0, 0, color);
+		}
 	}
 
 	public boolean isEmpty() {

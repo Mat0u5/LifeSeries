@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.client.render;
 
 import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.client.features.inbetween.InBetweenTransition;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.finallife.boogeyman.FinalLifeBoogeymanManager;
@@ -49,6 +50,7 @@ public class ClientRenderer {
     public static boolean isGameFullyFrozen = false;
 
     public static void render(GuiGraphicsExtractor graphics) {
+        if (!LifeSeries.modDisabled()) InBetweenTransition.render(graphics);
         TextHud.renderText(graphics);
     }
 

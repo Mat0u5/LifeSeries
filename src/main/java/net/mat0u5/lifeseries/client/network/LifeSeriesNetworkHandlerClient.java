@@ -6,7 +6,10 @@ import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.utils.ClientSeasonChanger;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.client.compatibilities.VoicechatClient;
+import net.mat0u5.lifeseries.client.features.inbetween.InBetweenEffectsClient;
 import net.mat0u5.lifeseries.client.features.inbetween.InBetweenMemoryCache;
+import net.mat0u5.lifeseries.client.features.inbetween.InBetweenTransition;
+import net.mat0u5.lifeseries.client.features.inbetween.InBetweenTriviaClient;
 import net.mat0u5.lifeseries.client.features.inbetween.InBetweenWindowsClient;
 import net.mat0u5.lifeseries.client.features.LifeSkinsClient;
 import net.mat0u5.lifeseries.client.features.Morph;
@@ -117,6 +120,15 @@ public class LifeSeriesNetworkHandlerClient implements RegistrableClient {
         });
         SimplePackets.IN_BETWEEN_MEMORY_FILES.setClientReceive(payload -> {
             InBetweenMemoryCache.onFilesPacket(payload.value());
+        });
+        SimplePackets.IN_BETWEEN_PATH_YAW.setClientReceive(payload -> {
+            InBetweenEffectsClient.setPathYaw(payload.number());
+        });
+        SimplePackets.IN_BETWEEN_TRANSITION.setClientReceive(payload -> {
+            InBetweenTransition.onPacket(payload.value());
+        });
+        SimplePackets.IN_BETWEEN_TRIVIA.setClientReceive(payload -> {
+            InBetweenTriviaClient.onPacket(payload.value());
         });
         SimplePackets.LVL1_CLAMPED_ENCHANTS.setClientReceive(payload -> {
             LifeSeriesClient.lvl1ClampedEnchants = payload.value();
