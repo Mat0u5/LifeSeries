@@ -5,6 +5,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
+import net.mat0u5.lifeseries.client.features.inbetween.InBetweenEffectsClient;
 import net.mat0u5.lifeseries.client.render.ClientRenderer;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.minecraft.client.Camera;
@@ -15,6 +16,7 @@ import net.minecraft.world.level.material.FogType;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector4f;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 
@@ -44,6 +46,15 @@ import net.minecraft.client.renderer.fog.FogData;
 @Mixin(value = FogRenderer.class, priority = 1)
 @MixinEnvironment(value = "client", type = MixinEnvironment.Env.CLIENT)
 public class FogRendererMixin {
+    @Unique
+    private static Vec3 ls$fogColor(Vec3 original) {
+        Vec3 inBetweenOverride = InBetweenEffectsClient.getFogColorIfActive();
+        if (inBetweenOverride != null) {
+            return inBetweenOverride;
+        }
+        return ClientRenderer.modifyColor(original, LifeSeriesClient.fogColor, LifeSeriesClient.fogColorSetMode, null);
+    }
+
     @Inject(method = "setupFog", at = @At("HEAD"), cancellable = true)
 //? if !forge {
     //? if <= 1.21 {
@@ -90,20 +101,21 @@ public class FogRendererMixin {
     //? if <= 1.21 {
     /*@Redirect(method = "setupColor", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;clearColor(FFFF)V"))
     private static void customFogColor(float r, float g, float b, float a) {
-        Vec3 result = ClientRenderer.modifyColor(r, g, b, LifeSeriesClient.fogColor, LifeSeriesClient.fogColorSetMode, null);
+        Vec3 result = ls$fogColor(new Vec3(r, g, b));
         LifeSeriesClient.cachedFogRenderColor = result;
         RenderSystem.clearColor((float) result.x, (float) result.y, (float) result.z, a);
     }
 
     @Redirect(method = "levelFogColor", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderFogColor(FFF)V"))
     private static void customFogColor(float r, float g, float b) {
-        Vec3 result = ClientRenderer.modifyColor(r, g, b, LifeSeriesClient.fogColor, LifeSeriesClient.fogColorSetMode, null);
+        Vec3 result = ls$fogColor(new Vec3(r, g, b));
         RenderSystem.setShaderFogColor((float) result.x, (float) result.y, (float) result.z);
     }
-    *///?} else if <= 1.21.11{
+    *///?} else if <= 1.21.11 {
     /*@ModifyReturnValue(method = "computeFogColor", at = @At("RETURN"))
     private static Vector4f customFogColor(Vector4f original) {
-        Vector4f result = ClientRenderer.modifyColor(original, LifeSeriesClient.fogColor, LifeSeriesClient.fogColorSetMode, null);
+        Vec3 color = ls$fogColor(new Vec3(original.x, original.y, original.z));
+        Vector4f result = new Vector4f((float) color.x, (float) color.y, (float) color.z, original.w);
         LifeSeriesClient.cachedFogRenderColor = new Vec3(result.x, result.y, result.z);
         return result;
     }
@@ -111,16 +123,15 @@ public class FogRendererMixin {
     //? if fabric || forge {
     @WrapOperation(method = "computeFogColor", at = @At(value = "INVOKE", target = "Lorg/joml/Vector4f;set(FFFF)Lorg/joml/Vector4f;"))
     private static Vector4f customFogColor(Vector4f instance, float x, float y, float z, float w, Operation<Vector4f> original) {
-        Vector4f originalColor = new Vector4f(x, y, z, w);
-        Vector4f result = ClientRenderer.modifyColor(originalColor, LifeSeriesClient.fogColor, LifeSeriesClient.fogColorSetMode, null);
+        Vec3 color = ls$fogColor(new Vec3(x, y, z));
+        Vector4f result = new Vector4f((float) color.x, (float) color.y, (float) color.z, w);
         LifeSeriesClient.cachedFogRenderColor = new Vec3(result.x, result.y, result.z);
         return original.call(instance, result.x, result.y, result.z, result.w);
     }
     //?} else {
     /*@WrapOperation(method = "computeFogColor", at = @At(value = "INVOKE", target = "Lnet/neoforged/neoforge/client/ClientHooks;getFogColor(Lnet/minecraft/client/Camera;FLnet/minecraft/client/multiplayer/ClientLevel;IFFFFLorg/joml/Vector4f;)V"))
     private static void customFogColor(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, float fogRed, float fogGreen, float fogBlue, Vector4f dest, Operation<Void> original) {
-        Vec3 originalColor = new Vec3(fogRed, fogGreen, fogBlue);
-        Vec3 result = ClientRenderer.modifyColor(originalColor, LifeSeriesClient.fogColor, LifeSeriesClient.fogColorSetMode, null);
+        Vec3 result = ls$fogColor(new Vec3(fogRed, fogGreen, fogBlue));
         LifeSeriesClient.cachedFogRenderColor = new Vec3(result.x, result.y, result.z);
         original.call(camera, partialTick, level, renderDistance, darkenWorldAmount, (float)result.x, (float)result.y, (float)result.z, dest);
     }

@@ -10,6 +10,12 @@ import net.mat0u5.lifeseries.client.render.ClientRenderer;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 *///?}
+//? if >= 26.3 {
+import net.mat0u5.lifeseries.client.render.inbetween.InBetweenShaders;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+//?}
 
 @Mixin(value = LevelRenderer.class, priority = 1)
 @MixinEnvironment(value = "client", type = MixinEnvironment.Env.CLIENT)
@@ -24,4 +30,11 @@ public class LevelRendererMixin {
         return ClientRenderer.modifyColor(value, LifeSeriesClient.cloudColor, LifeSeriesClient.cloudColorSetMode, LifeSeriesClient.cachedFogRenderColor);
     }
     *///?}
+
+    //? if >= 26.3 {
+    @Inject(method = "executeClassicTransparency", at = @At("HEAD"))
+    private void onDepth(CallbackInfo ci) {
+        InBetweenShaders.copySceneDepth();
+    }
+    //?}
 }

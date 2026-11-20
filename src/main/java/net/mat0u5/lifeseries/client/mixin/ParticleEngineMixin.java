@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.client.mixin;
 
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
+import net.mat0u5.lifeseries.client.features.inbetween.InBetweenEffectsClient;
 import net.mat0u5.lifeseries.client.features.inbetween.InBetweenWindowsClient;
 import net.minecraft.client.particle.ParticleEngine;
 import org.spongepowered.asm.mixin.Mixin;
@@ -9,8 +10,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 //? if >= 1.21.9 {
-import net.mat0u5.lifeseries.client.particle.InBetweenWindowParticle;
-import net.mat0u5.lifeseries.client.particle.InBetweenWindowParticleGroup;
+import net.mat0u5.lifeseries.client.particle.InBetweenParticle;
+import net.mat0u5.lifeseries.client.particle.InBetweenParticleGroup;
 import net.mat0u5.lifeseries.client.particle.TriviaSpiritParticle;
 import net.mat0u5.lifeseries.client.particle.TriviaSpiritParticleGroup;
 import net.minecraft.client.Camera;
@@ -33,6 +34,7 @@ public abstract class ParticleEngineMixin {
     @Inject(method = "clearParticles", at = @At("TAIL"))
     private void onClearParticles(CallbackInfo ci) {
         InBetweenWindowsClient.onParticlesCleared();
+        InBetweenEffectsClient.onParticlesCleared();
     }
 
     @Accessor("particles")
@@ -44,13 +46,13 @@ public abstract class ParticleEngineMixin {
         if (particleRenderType == TriviaSpiritParticle.GROUP) {
             cir.setReturnValue(new TriviaSpiritParticleGroup(engine));
         }
-        else if (particleRenderType == InBetweenWindowParticle.GROUP) {
-            cir.setReturnValue(new InBetweenWindowParticleGroup(engine));
+        else if (particleRenderType == InBetweenParticle.GROUP) {
+            cir.setReturnValue(new InBetweenParticleGroup(engine));
         }
     }
     @Inject(method = "extract", at = @At("TAIL"))
     private void extractTriviaSpriteGroup(ParticlesRenderState particlesRenderState, Frustum frustum, Camera camera, float f, CallbackInfo ci) {
-        for (ParticleRenderType group : List.of(TriviaSpiritParticle.GROUP, InBetweenWindowParticle.GROUP)) {
+        for (ParticleRenderType group : List.of(TriviaSpiritParticle.GROUP, InBetweenParticle.GROUP)) {
             ParticleGroup<?> particleGroup = ls$particles().get(group);
             if (particleGroup != null && !particleGroup.isEmpty()) {
                 particlesRenderState.add(particleGroup.extractRenderState(frustum, camera, f));
