@@ -23,7 +23,7 @@ public class InBetweenInstance {
 	public final int inBetweenSlot;
 	public final UUID playerUUID;
 	public final int deathNumber;
-	public boolean spawnedTrivia = false;
+	public int triviaTicks = -1; // Time since trivia intro
 	public boolean finished = false;
 	public int age = 0;
 	@Nullable
@@ -55,6 +55,7 @@ public class InBetweenInstance {
 	}
 
 	public void destroy() {
+		InBetweenTriviaManager.onInstanceDestroyed(this);
 		choiceManager.destroy();
 		inBetweenBuilder.removeEntities();
 		inBetweenBuilder.clearRegion();

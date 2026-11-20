@@ -27,6 +27,7 @@ public class SimplePackets {
     public static final SimpleStringListPacket IN_BETWEEN_WINDOWS = new SimpleStringListPacket("IN_BETWEEN_WINDOWS");
     public static final SimpleStringListPacket IN_BETWEEN_MEMORY_FILES = new SimpleStringListPacket("IN_BETWEEN_MEMORY_FILES");
     public static final SimpleStringListPacket IN_BETWEEN_MEMORY_FILE_REQUEST = new SimpleStringListPacket("IN_BETWEEN_MEMORY_FILE_REQUEST");
+    public static final SimpleStringListPacket IN_BETWEEN_TRIVIA = new SimpleStringListPacket("IN_BETWEEN_TRIVIA");
 
     public static final SimpleStringPacket CURRENT_SEASON = new SimpleStringPacket("CURRENT_SEASON");
     public static final SimpleStringPacket SESSION_STATUS = new SimpleStringPacket("SESSION_STATUS");

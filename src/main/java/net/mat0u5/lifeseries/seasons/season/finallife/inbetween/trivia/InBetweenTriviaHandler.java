@@ -33,8 +33,12 @@ import net.minecraft.core.component.DataComponents;
 //?}
 
 public class InBetweenTriviaHandler extends TriviaHandler {
-	public static int AUTO_OPEN_TIME = Time.seconds(65).getTicks();
+	public static int AUTO_OPEN_TIME = Time.seconds(50).getTicks();
+	public static final int LANDED_LIGHTS = 30;
+	public static final int LANDED_FADE = 10;
+	public static final int LANDED_WAIT = 15;
 	private long ticks = 0;
+	private int landedTicks = -1;
 	public static ItemSpawner itemSpawner;
 	public InBetweenTriviaHandler(TriviaBot bot) {
 		super(bot);
@@ -42,6 +46,7 @@ public class InBetweenTriviaHandler extends TriviaHandler {
 
 	public void tick() {
 		super.tick();
+		tickLanding();
 		if (bot.tickCount % 2 == 0 && bot.submittedAnswer()) {
 			bot.setAnalyzingTime(bot.getAnalyzingTime()-1);
 		}
@@ -107,6 +112,17 @@ public class InBetweenTriviaHandler extends TriviaHandler {
 				}
 			}
 		}
+	}
+
+	private void tickLanding() {
+		if (!isLanding() || (landedTicks < 0 && (!bot.onGround() || bot.isBotGliding()))) return;
+		landedTicks++;
+		ServerPlayer player = bot.serverData.getBoundPlayer();
+		if (landedTicks == LANDED_LIGHTS && player != null) InBetweenTriviaManager.sendPacketInfo(player, "fade");
+	}
+
+	public boolean isLanding() {
+		return landedTicks < LANDED_LIGHTS + LANDED_FADE + LANDED_WAIT;
 	}
 
 	public Tuple<Integer, TriviaQuestion> generateTrivia(ServerPlayer boundPlayer) {

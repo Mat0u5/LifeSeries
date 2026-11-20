@@ -13,18 +13,17 @@ import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.T
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaQuestionManager;
 import net.mat0u5.lifeseries.seasons.session.SessionTranscript;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
-import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.lifeseries.utils.world.DatapackIntegration;
 import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.matlib.utils.other.Tuple;
-import net.mat0u5.matlib.utils.player.PlayerReference;
 import net.mat0u5.matlib.utils.world.LevelUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.*;
@@ -36,6 +35,14 @@ public class InBetweenTriviaManager {
 	public static final ConfigRef<Integer> DEATH_MIN = ConfigRef.of(() -> FinalLifeConfig.get().TRIVIA_DEATH_NUM_MIN);
 	public static final ConfigRef<Integer> DEATH_MAX = ConfigRef.of(() -> FinalLifeConfig.get().TRIVIA_DEATH_NUM_MAX);
 	public static final ConfigRef<Integer> QUESTION_TIME = ConfigRef.of(() -> FinalLifeConfig.get().TRIVIA_QUESTION_TIME);
+	//Timestamps
+	public static final int TRIGGER_RANGE = 30;
+	public static final int LIGHTS_ON = 220;
+	public static final int FIREWORK_BURST = 320;
+	public static final int BOT_SPAWN = 340;
+	public static final int FIREWORK_LARGE_BALL = 360;
+	public static final int FIREWORK_FACE = 415;
+	public static final int BOT_DROP_HEIGHT = 25;
 	public static Map<UUID, TriviaBot> bots = new HashMap<>();
 	private static final Random rnd = new Random();
 	public static Map<UUID, TriviaQuestion> preAssignedTrivia = new HashMap<>();
@@ -57,18 +64,49 @@ public class InBetweenTriviaManager {
 
 	public static void tick(ServerPlayer player, InBetweenInstance inBetween) {
 		if (player == null || inBetween == null) return;
-		int deathNum = inBetween.deathNumber;
-		if (inBetween.spawnedTrivia || !hasTrivia(deathNum)) return;
 		Vec3 spawnPos = inBetween.inBetweenBuilder.triviaSpawnPos;
-		if (spawnPos == null) return;
-		if (player.position().distanceTo(spawnPos) <= 20) {//TODO maybe tweak range
-			inBetween.spawnedTrivia = true;
-			startBotSpawn(player, inBetween, BlockPos.containing(spawnPos.add(0, 25, 0)));
+		if (spawnPos == null || inBetween.triviaTicks >= FIREWORK_FACE || !hasTrivia(inBetween.deathNumber)) return;
+		if (inBetween.triviaTicks < 0) {
+			if (player.position().distanceTo(spawnPos) > TRIGGER_RANGE) return;
+			ModifiableSound.FINALLIFE_TRIVIA_INTRO.play(player, 0.7f, 1);
+		}
+		inBetween.triviaTicks++;
+		float yaw = getSceneYaw(spawnPos, inBetween);
+		switch (inBetween.triviaTicks) {
+			case LIGHTS_ON -> sendPacketInfo(player, "lights", String.valueOf(spawnPos.x), String.valueOf(spawnPos.y), String.valueOf(spawnPos.z), String.valueOf(yaw));
+			case FIREWORK_BURST -> sendPacketInfo(player, "firework", "burst");
+			case BOT_SPAWN -> {
+				TriviaBot bot = spawnBotFor(player, BlockPos.containing(spawnPos.add(0, BOT_DROP_HEIGHT, 0)), yaw);
+				if (bot != null) sendPacketInfo(player, "track", String.valueOf(bot.getId()));
+				sendPacketInfo(player, "firework", "small_ball");
+			}
+			case FIREWORK_LARGE_BALL -> sendPacketInfo(player, "firework", "large_ball");
+			case FIREWORK_FACE -> sendPacketInfo(player, "firework", "face");
 		}
 	}
 
+	public static void sendPacketInfo(ServerPlayer player, String... values) {
+		SimplePackets.IN_BETWEEN_TRIVIA.sendToClient(List.of(values), player);
+	}
+
+	private static float getSceneYaw(Vec3 triviaPos, InBetweenInstance inBetween) {
+		Vec3 spawn = inBetween.getSpawnPos();
+		double dx = spawn.x - triviaPos.x;
+		double dz = spawn.z - triviaPos.z;
+		if (dx * dx + dz * dz < 0.0001) return inBetween.getSpawnYaw() + 180;
+		return (float) (Math.toDegrees(Math.atan2(dz, dx)) - 90);
+	}
+
 	public static void onInstanceDiscarded(UUID uuid) {
-		bots.remove(uuid); // The bot despawns in its next despawn check
+		bots.remove(uuid);
+	}
+
+	public static void onInstanceDestroyed(InBetweenInstance inBetween) {
+		if (inBetween.triviaTicks < 0) return;
+		ServerPlayer player = PlayerUtils.getPlayer(inBetween.playerUUID);
+		if (player == null) return;
+		if (inBetween.triviaTicks < BOT_SPAWN) SimplePackets.STOP_TRIVIA_SOUNDS.sendToClient(player);
+		sendPacketInfo(player, "stop");
 	}
 
 	public static void handleAnswer(ServerPlayer player, int answer) {
@@ -80,26 +118,13 @@ public class InBetweenTriviaManager {
 		}
 	}
 
-	public static void startBotSpawn(ServerPlayer playerOld, InBetweenInstance inBetween, BlockPos pos) {
-		ModifiableSound.FINALLIFE_TRIVIA_INTRO.play(playerOld, 0.7f, 1);
-		PlayerReference ref = PlayerReference.of(playerOld);
-		TaskScheduler.schedulePriorityTask(309, () -> {
-			ServerPlayer player = ref.get();
-			if (player == null) return;
-			if (InBetweenManager.getInstance(player) != inBetween) {
-				if (!InBetweenManager.isInInBetween(player)) SimplePackets.STOP_TRIVIA_SOUNDS.sendToClient(player);
-				return;
-			}
-			spawnBotFor(player, pos, inBetween.inBetweenBuilder.spawnPos);
-		});
-	}
-
-	public static void spawnBotFor(ServerPlayer player, BlockPos pos, Vec3 faceTowards) {
+	@Nullable
+	public static TriviaBot spawnBotFor(ServerPlayer player, BlockPos pos, float yaw) {
 		SimplePackets.RESET_TRIVIA.sendToClient(player);
 		ServerLevel level = ((IPlayer) player).ls$getServerLevel();
 		TriviaBot bot = LevelUtils.spawnEntity(MobRegistry.TRIVIA_BOT, level, pos);
 		if (bot != null) {
-			faceTowards(bot, faceTowards);
+			setYaw(bot, yaw);
 			SessionTranscript.newTriviaBot(player);
 			bot.serverData.setBoundPlayer(player);
 			bots.put(player.getUUID(), bot);
@@ -108,13 +133,10 @@ public class InBetweenTriviaManager {
 					new DatapackIntegration.Events.MacroEntry("TriviaBot", bot.getStringUUID())
 			));
 		}
+		return bot;
 	}
 
-	private static void faceTowards(TriviaBot bot, Vec3 target) {
-		double dx = target.x - bot.getX();
-		double dz = target.z - bot.getZ();
-		if (dx * dx + dz * dz < 0.0001) return;
-		float yaw = (float) (Math.toDegrees(Math.atan2(dz, dx)) - 90);
+	private static void setYaw(TriviaBot bot, float yaw) {
 		bot.setYRot(yaw);
 		bot.yRotO = yaw;
 		bot.setYBodyRot(yaw);

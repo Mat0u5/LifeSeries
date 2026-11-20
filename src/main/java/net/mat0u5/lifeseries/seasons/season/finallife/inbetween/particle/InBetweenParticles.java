@@ -76,7 +76,7 @@ public class InBetweenParticles {
 	}
 
 	private void spawnAmbientParticles(ServerPlayer player) {
-		ParticleOptions particle = InBetweenManager.getAmbientParticles(inBetween.deathNumber);
+		ParticleOptions particle = InBetweenManager.getAmbientParticles(inBetween);
 		if (particle == null) return;
 		int rangeXZ = 100;
 		int rangeY = 50;

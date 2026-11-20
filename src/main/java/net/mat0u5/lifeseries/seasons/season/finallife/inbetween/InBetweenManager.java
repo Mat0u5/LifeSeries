@@ -385,8 +385,8 @@ public class InBetweenManager {
 		}
 	}
 
-	public static ParticleOptions getAmbientParticles(int deathNumber) {
-		if (deathNumber == 3) {
+	public static ParticleOptions getAmbientParticles(InBetweenInstance inBetween) {
+		if (inBetween.triviaTicks >= 0) { // Once the trivia intro starts
 			return ParticleRegistry.IN_BETWEEN_BACKGROUND_TRIVIA;
 		}
 		return ParticleRegistry.IN_BETWEEN_BACKGROUND;

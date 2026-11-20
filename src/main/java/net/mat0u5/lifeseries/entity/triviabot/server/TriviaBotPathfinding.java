@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.entity.triviabot.server;
 
 import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.trivia.InBetweenTriviaHandler;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.trivia.InBetweenTriviaPath;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.trivia.TriviaWildcard;
 import net.mat0u5.lifeseries.utils.other.OtherUtils;
@@ -48,7 +49,8 @@ public class TriviaBotPathfinding {
         Vec3 playerPos = bot.serverData.getPlayerPos();
         List<Vec3> path = InBetweenTriviaPath.getPath(bot);
         Vec3 target = null;
-        if (!noPathfinding && !bot.interactedWith() && bot.serverData.shouldPathfind() && playerPos != null && path != null) {
+        boolean landing = bot.triviaHandler instanceof InBetweenTriviaHandler handler && handler.isLanding();
+        if (!noPathfinding && !landing && !bot.interactedWith() && bot.serverData.shouldPathfind() && playerPos != null && path != null) {
             target = InBetweenTriviaPath.getNextTarget(path, bot.position(), playerPos);
         }
         if (target != null) {
