@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.client.particle;
 
+import net.mat0u5.lifeseries.client.features.inbetween.InBetweenEffectsClient;
 import net.mat0u5.lifeseries.client.render.ClientRenderer;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -7,7 +8,9 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,8 +37,12 @@ public class InBetweenBackgroundParticle extends SingleQuadParticle {
 
     private final float maxAlpha;
     private final float wobbleOffset;
+    private final Identifier glowSprite;
+    private long lastTickTime;
+    private float brightness = 0;
+    private float brightnessO = 0;
 
-    private InBetweenBackgroundParticle(ClientLevel level, double x, double y, double z, TextureAtlasSprite sprite) {
+    private InBetweenBackgroundParticle(ClientLevel level, double x, double y, double z, TextureAtlasSprite sprite, Identifier glowSprite) {
         //? if <= 1.21.6 {
         /*super(level, x, y, z);
         this.setSprite(sprite);
@@ -45,7 +52,7 @@ public class InBetweenBackgroundParticle extends SingleQuadParticle {
         this.hasPhysics = false;
         this.gravity = 0.0F;
         this.friction = 0.98F;
-        this.lifetime = 40 + this.random.nextInt(20);
+        this.lifetime = 25 + this.random.nextInt(20);
         this.quadSize = 0.12F + this.random.nextFloat() * 0.08F;
         this.xd = (this.random.nextDouble() - 0.5) * 0.01;
         this.yd = 0.04 + this.random.nextDouble() * 0.06;
@@ -53,20 +60,38 @@ public class InBetweenBackgroundParticle extends SingleQuadParticle {
         this.maxAlpha = 0.75F + this.random.nextFloat() * 0.25F;
         this.wobbleOffset = this.random.nextFloat() * (float) (Math.PI * 2);
         this.setAlpha(0.0F);
+        this.glowSprite = glowSprite;
+        this.lastTickTime = level.getGameTime();
+        InBetweenEffectsClient.addGlowingParticle(this);
+    }
+
+    public Identifier getGlowSprite() {
+        return this.glowSprite;
+    }
+
+    public boolean isStillGlowing(long gameTime) {
+        return this.isAlive() && gameTime - this.lastTickTime <= 2;
+    }
+
+    public float getGlowAlpha(float partialTick) {
+        return Mth.lerp(partialTick, this.brightnessO, this.brightness);
+    }
+
+    public Vec3 getGlowPosition(float partialTick) {
+        return new Vec3(Mth.lerp(partialTick, this.xo, this.x), Mth.lerp(partialTick, this.yo, this.y), Mth.lerp(partialTick, this.zo, this.z));
     }
 
     @Override
     public void tick() {
         super.tick();
-        if (this.age < FADE_IN_TICKS) {
-            this.setAlpha(this.maxAlpha * this.age / (float) FADE_IN_TICKS);
-        }
-        else if (this.age > this.lifetime - FADE_OUT_TICKS) {
-            this.setAlpha(this.maxAlpha * Math.max(0, this.lifetime - this.age) / (float) FADE_OUT_TICKS);
-        }
-        else {
-            this.setAlpha(this.maxAlpha);
-        }
+        this.lastTickTime = this.level.getGameTime();
+        int fadeIn = Math.max(1, Math.min(FADE_IN_TICKS, this.lifetime / 2));
+        int fadeOut = Math.max(1, Math.min(FADE_OUT_TICKS, this.lifetime / 2));
+        float in = Math.min(1, this.age / (float) fadeIn);
+        float out = Math.min(1, Math.max(0, this.lifetime - this.age) / (float) fadeOut);
+        this.brightnessO = this.brightness;
+        this.brightness = this.maxAlpha * Math.min(in, out);
+        this.setAlpha(InBetweenEffectsClient.drawsParticle(this) ? 0 : this.brightness);
         this.yd += Mth.sin(this.age * 0.05F + this.wobbleOffset) * 0.0002;
     }
 
@@ -124,8 +149,9 @@ public class InBetweenBackgroundParticle extends SingleQuadParticle {
             //Create particle with random sprite out of the selection
             List<TextureAtlasSprite> sprites = getSprites(textureFolder);
             if (sprites.isEmpty()) return null;
-            TextureAtlasSprite sprite = sprites.get(random.nextInt(sprites.size()));
-            return new InBetweenBackgroundParticle(level, x, y, z, sprite);
+            int index = random.nextInt(sprites.size());
+            Identifier glowSprite = IdentifierHelper.lifeseries("textures/particle/" + textureFolder + "/" + index + ".png");
+            return new InBetweenBackgroundParticle(level, x, y, z, sprites.get(index), glowSprite);
         }
     }
 }
