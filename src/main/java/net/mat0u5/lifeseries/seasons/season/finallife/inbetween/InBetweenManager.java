@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.seasons.season.finallife.inbetween;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
+import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.registries.ParticleRegistry;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -254,7 +255,7 @@ public class InBetweenManager {
 		instance.windowManager.sendWindowsToClient(player);
 		sendPathYaw(player, instance);
 		InBetweenFileSync.updatePlayer(player);
-		playDimensionTransition(player);
+		playDimensionTransition(player, ModifiableSound.FINALLIFE_INBETWEEN_ENTER);
 	}
 
 	// Info on which way the fog should drift client-side.
@@ -345,10 +346,18 @@ public class InBetweenManager {
 	}
 
 	public static void playDimensionTransition(ServerPlayer player) {
+		playDimensionTransition(player, ModifiableSound.FINALLIFE_DIMENSION_SWAP);
+	}
+
+	public static void playDimensionTransition(ServerPlayer player, ModifiableSound sound) {
+		if (LifeSeriesNetworkHandlerServer.wasHandshakeSuccessful(player)) {
+			SimplePackets.IN_BETWEEN_TRANSITION.sendToClient("sound:" + sound.getCurrentSoundId(), player);
+			return;
+		}
 		PlayerReference ref = PlayerReference.of(player);
 		TaskScheduler.scheduleTask(1, () -> {
 			ServerPlayer target = ref.get();
-			if (target != null) ModifiableSound.FINALLIFE_DIMENSION_SWAP.play(target);
+			if (target != null) sound.play(target);
 		});
 	}
 
@@ -386,7 +395,7 @@ public class InBetweenManager {
 	}
 
 	public static ParticleOptions getAmbientParticles(InBetweenInstance inBetween) {
-		if (inBetween.triviaTicks >= 0) { // Once the trivia intro starts
+		if (inBetween.triviaTicks >= InBetweenTriviaManager.LIGHTS_ON) { // Once the trivia intro starts
 			return ParticleRegistry.IN_BETWEEN_BACKGROUND_TRIVIA;
 		}
 		return ParticleRegistry.IN_BETWEEN_BACKGROUND;

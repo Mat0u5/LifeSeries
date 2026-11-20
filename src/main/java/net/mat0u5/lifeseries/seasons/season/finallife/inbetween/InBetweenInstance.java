@@ -24,6 +24,8 @@ public class InBetweenInstance {
 	public final UUID playerUUID;
 	public final int deathNumber;
 	public int triviaTicks = -1; // Time since trivia intro
+	@Nullable
+	public Vec3 triviaPos = null; // Picked once the lights turn on
 	public boolean finished = false;
 	public int age = 0;
 	@Nullable

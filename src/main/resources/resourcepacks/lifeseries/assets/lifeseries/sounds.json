@@ -414,6 +414,11 @@
             "lifeseries:finallife/dimension_swap"
         ]
     },
+    "finallife_inbetween_enter": {
+        "sounds": [
+            "lifeseries:finallife/inbetween_enter"
+        ]
+    },
     "finallife_window_wind": {
         "sounds": [
             "lifeseries:finallife/window_wind"

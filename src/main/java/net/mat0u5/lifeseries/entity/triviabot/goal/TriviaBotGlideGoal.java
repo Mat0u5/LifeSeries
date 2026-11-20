@@ -53,6 +53,11 @@ public final class TriviaBotGlideGoal extends Goal {
     }
 
     @Override
+    public boolean requiresUpdateEveryTick() {
+        return mob.inBetweenBot();
+    }
+
+    @Override
     public void tick() {
         mob.setDeltaMovement(0, mob.inBetweenBot() ? -0.2 : -0.1, 0);
     }

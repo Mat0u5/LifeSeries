@@ -59,7 +59,6 @@ public class InBetweenBuilder {
 	public final List<Vec3> pathPoints = new ArrayList<>();
 	public final ServerLevel level;
 	public Vec3 spawnPos = Vec3.ZERO;
-	@Nullable public Vec3 triviaSpawnPos = null;
 	public float spawnYaw = 0;
 
 	public InBetweenBuilder(InBetweenInstance inBetween, List<Slice> slices, int inBetweenSlot, ServerLevel level) {
@@ -208,10 +207,6 @@ public class InBetweenBuilder {
 				else if (split[0].equalsIgnoreCase("window")) {
 					// window <number> [x offset] [y offset] [z offset] <north/south/east/west or yaw>
 					parseWindowMarker(split, firstNum, markerPos, info.pos());
-				}
-				else if (split[0].equalsIgnoreCase("trivia")) {
-					//trivia
-					triviaSpawnPos = markerPos;
 				}
 				else {
 					LifeSeries.LOGGER.warn("[In-Between] Unknown data marker '{}' at {}", getMetadata(info.nbt()), info.pos());

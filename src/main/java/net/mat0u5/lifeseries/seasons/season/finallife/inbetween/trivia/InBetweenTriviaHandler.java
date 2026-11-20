@@ -33,7 +33,7 @@ import net.minecraft.core.component.DataComponents;
 //?}
 
 public class InBetweenTriviaHandler extends TriviaHandler {
-	public static int AUTO_OPEN_TIME = Time.seconds(50).getTicks();
+	public static int AUTO_OPEN_TIME = Time.seconds(48).getTicks();
 	public static final int LANDED_LIGHTS = 30;
 	public static final int LANDED_FADE = 10;
 	public static final int LANDED_WAIT = 15;

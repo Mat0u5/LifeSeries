@@ -1,11 +1,14 @@
 package net.mat0u5.lifeseries.client.features.inbetween;
 
 import net.mat0u5.lifeseries.client.render.inbetween.InBetweenShaders;
+import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.matlib.client.render.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.LevelLoadingScreen;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.sounds.SoundEvent;
 import org.jetbrains.annotations.Nullable;
 
 //? if <= 1.21.6
@@ -30,9 +33,12 @@ public class InBetweenTransition {
 	private static long readySince = -1;
 	@Nullable
 	private static Object lastLevel = null;
+	@Nullable
+	private static String fadeSound = null;
 
 	public static void onPacket(String value) {
-		if (value.equals("swallow")) startSwallow();
+		if (value.startsWith("sound:")) queueFadeSound(value.substring(6));
+		else if (value.equals("swallow")) startSwallow();
 		else if (value.equals("fade_in")) startFadeIn(false);
 		else if (value.equals("fade_in_black")) startFadeIn(true);
 	}
@@ -53,9 +59,22 @@ public class InBetweenTransition {
 		readySince = -1;
 	}
 
+	private static void queueFadeSound(String soundId) {
+		fadeSound = soundId;
+		if (stage != Stage.COVER && stage != Stage.SWALLOW) playFadeSound();
+	}
+
+	private static void playFadeSound() {
+		if (fadeSound == null) return;
+		SoundEvent sound = SoundEvent.createVariableRangeEvent(IdentifierHelper.parse(fadeSound));
+		fadeSound = null;
+		Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(sound, 1, 1));
+	}
+
 	public static void stopTransition() {
 		setStage(Stage.NONE);
 		fadeQueued = false;
+		fadeSound = null;
 	}
 
 	private static void setStage(Stage newStage) {
@@ -100,6 +119,7 @@ public class InBetweenTransition {
 			if ((fadeQueued && loaded) || seconds >= MAX_COVER_SECONDS) {
 				fadeQueued = false;
 				setStage(Stage.FADE);
+				playFadeSound();
 			}
 		}
 		else if (stage == Stage.FADE && (fadeSeconds >= FADE_SECONDS || seconds >= FADE_SECONDS + 5)) {

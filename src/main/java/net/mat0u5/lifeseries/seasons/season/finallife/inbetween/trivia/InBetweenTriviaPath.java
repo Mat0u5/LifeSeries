@@ -34,6 +34,12 @@ public class InBetweenTriviaPath {
 	}
 
 	@Nullable
+	public static Vec3 getPointAhead(List<Vec3> path, Vec3 pos, double distance) {
+		if (path.size() < 2) return null;
+		return getPointAt(path, getProgress(path, pos) + distance);
+	}
+
+	@Nullable
 	public static Vec3 getClosestPathPoint(List<Vec3> path, Vec3 pos) {
 		Vec3 closest = null;
 		double closestDistance = Double.MAX_VALUE;

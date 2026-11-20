@@ -41,7 +41,7 @@ import net.minecraft.world.item.component.FireworkExplosion;
 import net.minecraft.core.particles.ColorParticleOption;
 
 public class InBetweenTriviaClient {
-	private static final double SOURCE_HEIGHT = 50;
+	private static final double SOURCE_HEIGHT = 36;
 	private static final double SOURCE_SPACING = 20;
 	private static final double SOURCE_RADIUS = 0.4;
 	private static final double SPREAD = 0.016;
@@ -66,7 +66,7 @@ public class InBetweenTriviaClient {
 	private static final Vec3 DUST_DRIFT = new Vec3(0.12, -0.04, 0.08);
 	private static final double NOISE_PERIOD = 128;
 	private static final double TURN_ON_SECONDS = 0.3;
-	private static final double TO_BOT_SECONDS = 0.25;
+	private static final double TO_BOT_SECONDS = 0.5;
 	private static final double FADE_SECONDS = InBetweenTriviaHandler.LANDED_FADE / 20.0;
 	private static final double MAX_SECONDS = 60;
 
