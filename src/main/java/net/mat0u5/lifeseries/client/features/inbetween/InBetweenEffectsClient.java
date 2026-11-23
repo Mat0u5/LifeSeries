@@ -53,21 +53,27 @@ public class InBetweenEffectsClient {
 	private static final double SWIRL_NOISE_PERIOD = 128;
 
 	//Particle glow
-	private static final double GLOW_MARGIN = 2.5;
-	private static final int GLOW_TEXELS_PER_SPRITE = 16;
-	private static final double GLOW_NARROW_SIGMA = 0.1875; // Around each pixel
-	private static final double GLOW_NARROW_WEIGHT = 0.6;
-	private static final double GLOW_WIDE_SIGMA = 1; // Around the whole particle
+	private static final int CORE_TEXELS_PER_PIXEL = 8;
+	private static final double CORE_POWER = 3.5; // Higher = darker pixels stay more colored
+	private static final double CORE_OWN_GAIN = 7.5; // Whitening in each pixel
+	private static final double CORE_BLEED_GAIN = 23; // Whitening that bleeds into other pixels
+	private static final double CORE_BLEED_SIGMA = 0.5; // In sprite pixels
+	private static final double CORE_ENERGY_MAX = 24;
+	private static final double GLOW_MARGIN = 1;
+	private static final int GLOW_TEXELS_PER_SPRITE = 24;
+	private static final double GLOW_NARROW_SIGMA = 0.09; // Around each pixel
+	private static final double GLOW_NARROW_WEIGHT = 0.4;
+	private static final double GLOW_WIDE_SIGMA = 0.3; // Around the whole particle
 	private static final double GLOW_WIDE_WEIGHT = 1;
 	private static final double GLOW_BRIGTHNESS_POWER = 1.5; // Higher = only the brigthest pixels glow
-	private static final double GLOW_GAIN = 0.018;
+	private static final double GLOW_GAIN = 0.16;
 	private static final double[] GLOW_TINT = {0.6, 0, 1.0}; //Magenta
 	private static final double GLOW_REFERENCE_PIXELS = 64;
 	private static final double GLOW_EDGE_FADE = 0.2;
-	private static final int CORE_TEXELS_PER_PIXEL = 4;
 
 	private static Vec3 pathDirection = new Vec3(0, 0, 1);
 	private static final List<InBetweenBackgroundParticle> glowingParticles = new ArrayList<>();
+	private static long particleTicks = 0;
 	private static final Map<Identifier, Optional<SpriteGlow>> spriteGlows = new HashMap<>();
 	@Nullable
 	private static InBetweenParticle particle;
@@ -153,6 +159,14 @@ public class InBetweenEffectsClient {
 		glowingParticles.add(particle);
 	}
 
+	public static void onParticlesTicked() {
+		particleTicks++;
+	}
+
+	public static long getParticleTicks() {
+		return particleTicks;
+	}
+
 	private static List<InBetweenMesh> buildMeshes(InBetweenCameraView view) {
 		List<InBetweenMesh> meshes = new ArrayList<>();
 		if (!active) return meshes;
@@ -218,10 +232,8 @@ public class InBetweenEffectsClient {
 	}
 
 	private static void buildGlow(InBetweenCameraView view, List<InBetweenMesh> meshes) {
-		ClientLevel level = Minecraft.getInstance().level;
-		if (glowingParticles.isEmpty() || level == null || !InBetweenShaders.glowAvailable()) return;
-		long gameTime = level.getGameTime();
-		glowingParticles.removeIf(particle -> !particle.isStillGlowing(gameTime));
+		if (glowingParticles.isEmpty() || !InBetweenShaders.glowAvailable()) return;
+		glowingParticles.removeIf(particle -> !particle.isStillGlowing());
 
 		Map<Identifier, InBetweenMesh> meshPerTexture = new LinkedHashMap<>();
 		for (InBetweenBackgroundParticle particle : glowingParticles) {
@@ -270,14 +282,8 @@ public class InBetweenEffectsClient {
 			int height = image.getHeight() > width && image.getHeight() % width == 0 ? width : image.getHeight();
 			String path = sprite.getPath().replace(".png", "");
 
-			NativeImage core = new NativeImage(width * CORE_TEXELS_PER_PIXEL, height * CORE_TEXELS_PER_PIXEL, false);
-			for (int ty = 0; ty < core.getHeight(); ty++) {
-				for (int tx = 0; tx < core.getWidth(); tx++) {
-					InBetweenShaders.setPixel(core, tx, ty, InBetweenShaders.getPixel(image, tx / CORE_TEXELS_PER_PIXEL, ty / CORE_TEXELS_PER_PIXEL));
-				}
-			}
 			Identifier coreId = IdentifierHelper.lifeseries("dynamic/in_between_glow_core/" + path);
-			InBetweenShaders.registerLinearTexture(coreId, "In-Between particle core", core);
+			InBetweenShaders.registerLinearTexture(coreId, "In-Between particle core", createCore(image, width, height));
 
 			int size = (int) Math.round((1 + 2 * GLOW_MARGIN) * GLOW_TEXELS_PER_SPRITE);
 			double[] glow = createGlow(image, width, height, size);
@@ -301,6 +307,57 @@ public class InBetweenEffectsClient {
 			InBetweenShaders.registerLinearTexture(glowId, "In-Between particle glow", texture);
 			return new SpriteGlow(coreId, glowId, brigthness);
 		}
+	}
+
+	private static NativeImage createCore(NativeImage image, int width, int height) {
+		double[] energy = new double[width * height * 3];
+		boolean[] lit = new boolean[width * height];
+		for (int py = 0; py < height; py++) {
+			for (int px = 0; px < width; px++) {
+				int argb = InBetweenShaders.getPixel(image, px, py);
+				double alpha = ((argb >>> 24) & 0xFF) / 255.0;
+				int i = py * width + px;
+				lit[i] = alpha > 0;
+				for (int c = 0; c < 3; c++) {
+					energy[i * 3 + c] = alpha * Math.pow(((argb >> (16 - 8 * c)) & 0xFF) / 255.0, CORE_POWER);
+				}
+			}
+		}
+		double[][] bleedX = bleedTable(width);
+		double[][] bleedY = bleedTable(height);
+		NativeImage core = new NativeImage(width * CORE_TEXELS_PER_PIXEL, height * CORE_TEXELS_PER_PIXEL, true);
+		for (int ty = 0; ty < core.getHeight(); ty++) {
+			for (int tx = 0; tx < core.getWidth(); tx++) {
+				int own = (ty / CORE_TEXELS_PER_PIXEL) * width + tx / CORE_TEXELS_PER_PIXEL;
+				if (!lit[own]) continue; // Stays transparent
+				int argb = 0xFF000000;
+				for (int c = 0; c < 3; c++) {
+					double bleed = 0;
+					for (int py = 0; py < height; py++) {
+						for (int px = 0; px < width; px++) {
+							bleed += bleedY[ty][py] * bleedX[tx][px] * energy[(py * width + px) * 3 + c];
+						}
+					}
+					double value = (CORE_OWN_GAIN * energy[own * 3 + c] + CORE_BLEED_GAIN * bleed) / CORE_ENERGY_MAX;
+					argb |= (int) Math.round(Math.sqrt(Math.min(1, value)) * 255) << (16 - 8 * c);
+				}
+				InBetweenShaders.setPixel(core, tx, ty, argb);
+			}
+		}
+		return core;
+	}
+
+	private static double[][] bleedTable(int pixels) {
+		int texels = pixels * CORE_TEXELS_PER_PIXEL;
+		double[][] table = new double[texels][pixels];
+		double norm = 1 / (CORE_TEXELS_PER_PIXEL * CORE_BLEED_SIGMA * Math.sqrt(2 * Math.PI));
+		for (int t = 0; t < texels; t++) {
+			for (int s = 0; s < texels; s++) {
+				double distance = (t - s) / (double) CORE_TEXELS_PER_PIXEL;
+				table[t][s / CORE_TEXELS_PER_PIXEL] += norm * Math.exp(-distance * distance / (2 * CORE_BLEED_SIGMA * CORE_BLEED_SIGMA));
+			}
+		}
+		return table;
 	}
 
 	private static double[] createGlow(NativeImage image, int width, int height, int size) {

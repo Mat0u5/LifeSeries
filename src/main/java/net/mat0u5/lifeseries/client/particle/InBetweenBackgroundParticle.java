@@ -38,7 +38,7 @@ public class InBetweenBackgroundParticle extends SingleQuadParticle {
     private final float maxAlpha;
     private final float wobbleOffset;
     private final Identifier glowSprite;
-    private long lastTickTime;
+    private long lastTick;
     private float brightness = 0;
     private float brightnessO = 0;
 
@@ -61,7 +61,7 @@ public class InBetweenBackgroundParticle extends SingleQuadParticle {
         this.wobbleOffset = this.random.nextFloat() * (float) (Math.PI * 2);
         this.setAlpha(0.0F);
         this.glowSprite = glowSprite;
-        this.lastTickTime = level.getGameTime();
+        this.lastTick = InBetweenEffectsClient.getParticleTicks();
         InBetweenEffectsClient.addGlowingParticle(this);
     }
 
@@ -69,8 +69,8 @@ public class InBetweenBackgroundParticle extends SingleQuadParticle {
         return this.glowSprite;
     }
 
-    public boolean isStillGlowing(long gameTime) {
-        return this.isAlive() && gameTime - this.lastTickTime <= 2;
+    public boolean isStillGlowing() {
+        return this.isAlive() && InBetweenEffectsClient.getParticleTicks() - this.lastTick <= 2;
     }
 
     public float getGlowAlpha(float partialTick) {
@@ -84,7 +84,7 @@ public class InBetweenBackgroundParticle extends SingleQuadParticle {
     @Override
     public void tick() {
         super.tick();
-        this.lastTickTime = this.level.getGameTime();
+        this.lastTick = InBetweenEffectsClient.getParticleTicks();
         int fadeIn = Math.max(1, Math.min(FADE_IN_TICKS, this.lifetime / 2));
         int fadeOut = Math.max(1, Math.min(FADE_OUT_TICKS, this.lifetime / 2));
         float in = Math.min(1, this.age / (float) fadeIn);

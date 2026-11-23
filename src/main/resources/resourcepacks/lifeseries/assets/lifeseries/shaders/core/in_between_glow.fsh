@@ -19,8 +19,7 @@ LS_LOC(2) in float fogFade;
 LS_LOC(0) out vec4 fragColor;
 #endif
 
-const float LS_CORE_GAIN = 24.0; // Higher -> whiter
-const float LS_CORE_SATURATION = 3.5; // Higher -> darker pixels stay more coloured
+const float LS_ENERGY_MAX = 24.0;
 
 // In-Between particle glow
 void main() {
@@ -30,7 +29,7 @@ void main() {
     vec4 sprite = texture(Sampler0, texCoord0);
     vec3 glow;
     if (sprite.a > 0.0) {
-        glow = (1.0 - exp(-LS_CORE_GAIN * pow(sprite.rgb, vec3(LS_CORE_SATURATION)) * vertexColor.a)) * sprite.a;
+        glow = 1.0 - exp(-sprite.rgb * sprite.rgb * LS_ENERGY_MAX * vertexColor.a);
     }
     else {
         glow = sprite.rgb * vertexColor.rgb * vertexColor.a;

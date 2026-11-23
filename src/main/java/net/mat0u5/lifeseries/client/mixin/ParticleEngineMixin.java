@@ -30,6 +30,11 @@ import java.util.Map;
 @MixinEnvironment(value = "client", type = MixinEnvironment.Env.CLIENT)
 public abstract class ParticleEngineMixin {
 
+    @Inject(method = "tick", at = @At("HEAD"))
+    private void countParticleTicks(CallbackInfo ci) {
+        InBetweenEffectsClient.onParticlesTicked();
+    }
+
     //? if >= 1.21.9 {
     @Inject(method = "clearParticles", at = @At("TAIL"))
     private void onClearParticles(CallbackInfo ci) {
