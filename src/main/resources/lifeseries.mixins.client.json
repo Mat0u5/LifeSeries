@@ -39,6 +39,7 @@
     "LevelRendererMixin",
     "LivingEntityMixin",
     "MinecraftMixin",
+    "MusicManagerMixin",
     "ParticleAccessor",
     "ParticleEngineMixin",
     "PlayerEntityRendererMixin",
