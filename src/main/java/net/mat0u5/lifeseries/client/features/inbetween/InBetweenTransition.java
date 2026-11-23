@@ -92,6 +92,10 @@ public class InBetweenTransition {
 		return stage == Stage.SWALLOW || stage == Stage.COVER;
 	}
 
+	public static boolean isCovering() {
+		return shouldCoverLoadingScreen() || isLoadingScreen(RenderUtils.getScreen());
+	}
+
 	public static int getCoverColor() {
 		return black ? 0xFF000000 : 0xFFFFFFFF;
 	}

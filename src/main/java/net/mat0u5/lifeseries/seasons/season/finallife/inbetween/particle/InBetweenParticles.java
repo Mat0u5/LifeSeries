@@ -64,7 +64,7 @@ public class InBetweenParticles {
 
 	private void spawnPathParticles(ServerPlayer player) {
 		ParticleOptions particle = random.nextDouble() < 0.3 ? ParticleRegistry.IN_BETWEEN_PATH : ParticleRegistry.IN_BETWEEN_PATH_SMALL; // 30% large particles, 70% small.
-		int countPerTick = 2;
+		int countPerTick = 4;
 		for (int i = 0; i < countPerTick; i++) {
 			Vec3 point = getPointNearPath(player.position(), 50);
 			if (point == null) return;

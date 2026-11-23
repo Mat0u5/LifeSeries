@@ -9,11 +9,11 @@ import net.minecraft.util.RandomSource;
 
 import java.util.function.DoubleSupplier;
 
-// Always plays at the player, volume chages based on the distance to the window.
-public class InBetweenWindowSound extends AbstractSoundInstance implements TickableSoundInstance {
+// Always plays at the player, the volume follows the supplier (distance to a window, fades).
+public class InBetweenSound extends AbstractSoundInstance implements TickableSoundInstance {
 	private final DoubleSupplier volumeSupplier;
 
-	public InBetweenWindowSound(Identifier location, SoundSource source, boolean looping, DoubleSupplier volumeSupplier) {
+	public InBetweenSound(Identifier location, SoundSource source, boolean looping, DoubleSupplier volumeSupplier) {
 		super(location, source, RandomSource.create());
 		this.volumeSupplier = volumeSupplier;
 		this.looping = looping;

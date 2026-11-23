@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.client.compatibilities.VoicechatClient;
 import net.mat0u5.lifeseries.client.features.inbetween.InBetweenEffectsClient;
 import net.mat0u5.lifeseries.client.features.inbetween.InBetweenMemoryCache;
+import net.mat0u5.lifeseries.client.features.inbetween.InBetweenSoundsClient;
 import net.mat0u5.lifeseries.client.features.inbetween.InBetweenTransition;
 import net.mat0u5.lifeseries.client.features.inbetween.InBetweenTriviaClient;
 import net.mat0u5.lifeseries.client.features.inbetween.InBetweenWindowsClient;
@@ -129,6 +130,9 @@ public class LifeSeriesNetworkHandlerClient implements RegistrableClient {
         });
         SimplePackets.IN_BETWEEN_TRIVIA.setClientReceive(payload -> {
             InBetweenTriviaClient.onPacket(payload.value());
+        });
+        SimplePackets.IN_BETWEEN_SOUNDS.setClientReceive(payload -> {
+            InBetweenSoundsClient.onPacket(payload.value());
         });
         SimplePackets.LVL1_CLAMPED_ENCHANTS.setClientReceive(payload -> {
             LifeSeriesClient.lvl1ClampedEnchants = payload.value();

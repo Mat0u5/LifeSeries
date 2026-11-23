@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.seasons.season.finallife.inbetween;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.choice.InBetweenChoice;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.choice.InBetweenChoiceManager;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.particle.InBetweenParticles;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.sound.InBetweenSounds;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.trivia.InBetweenTriviaManager;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.window.InBetweenWindowManager;
 import net.mat0u5.matlib.utils.world.LevelUtils;
@@ -28,12 +29,14 @@ public class InBetweenInstance {
 	public Vec3 triviaPos = null; // Picked once the lights turn on
 	public boolean finished = false;
 	public int age = 0;
+	public int loadedTicks = -1; // Time since the client finished loading
 	@Nullable
 	private Vec3 lastSafePos;
 	public ServerLevel level;
 	public final InBetweenParticles particleManager;
 	public final InBetweenChoiceManager choiceManager;
 	public final InBetweenWindowManager windowManager;
+	public final InBetweenSounds soundManager;
 	public final InBetweenBuilder inBetweenBuilder;
 
 
@@ -41,6 +44,7 @@ public class InBetweenInstance {
 		this.particleManager = new InBetweenParticles(this);
 		this.choiceManager = new InBetweenChoiceManager(this, choices);
 		this.windowManager = new InBetweenWindowManager(player, deathNumber);
+		this.soundManager = new InBetweenSounds(this);
 		this.inBetweenBuilder = new InBetweenBuilder(this, slices, inBetweenSlot, level);
 		this.inBetweenSlot = inBetweenSlot;
 		this.playerUUID = player.getUUID();
@@ -83,9 +87,11 @@ public class InBetweenInstance {
 	public void tick(ServerPlayer player) {
 		if (finished) return;
 		age++;
+		if (loadedTicks >= 0) loadedTicks++;
 		forceInBounds(player);
 		particleManager.tick(player);
 		choiceManager.tick(player, age);
+		soundManager.tick(player);
 		InBetweenTriviaManager.tick(player, this);
 	}
 

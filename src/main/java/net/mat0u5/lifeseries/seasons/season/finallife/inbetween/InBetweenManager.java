@@ -11,6 +11,7 @@ import net.mat0u5.lifeseries.seasons.season.finallife.FinalLife;
 import net.mat0u5.lifeseries.seasons.season.finallife.FinalLifeConfig;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.choice.InBetweenChoice;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.choice.InBetweenChoiceManager;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.sound.InBetweenSounds;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.trivia.InBetweenTriviaManager;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.window.InBetweenFileSync;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.window.InBetweenWindowManager;
@@ -253,9 +254,16 @@ public class InBetweenManager {
 			player.setGameMode(GameType.ADVENTURE);
 		}
 		instance.windowManager.sendWindowsToClient(player);
+		instance.soundManager.sendToClient(player);
 		sendPathYaw(player, instance);
 		InBetweenFileSync.updatePlayer(player);
 		playDimensionTransition(player, ModifiableSound.FINALLIFE_INBETWEEN_ENTER);
+	}
+
+	// Received from the client once the in-between is visible after loading
+	public static void onClientLoaded(ServerPlayer player) {
+		InBetweenInstance instance = getInstance(player);
+		if (instance != null && instance.loadedTicks < 0 && isInInBetween(player)) instance.loadedTicks = 0;
 	}
 
 	// Info on which way the fog should drift client-side.
@@ -282,6 +290,7 @@ public class InBetweenManager {
 			instance.destroy();
 		}
 		InBetweenWindowManager.sendClientClearWindows(player);
+		InBetweenSounds.sendClientClearSounds(player);
 
 		restoreGameMode(player);
 		startTransition(player);
@@ -301,6 +310,7 @@ public class InBetweenManager {
 	public static void discardInstance(ServerPlayer player) {
 		if (instances.containsKey(player.getUUID())) {
 			InBetweenWindowManager.sendClientClearWindows(player);
+			InBetweenSounds.sendClientClearSounds(player);
 		}
 		discardInstance(player.getUUID());
 	}
@@ -346,7 +356,7 @@ public class InBetweenManager {
 	}
 
 	public static void playDimensionTransition(ServerPlayer player) {
-		playDimensionTransition(player, ModifiableSound.FINALLIFE_DIMENSION_SWAP);
+		playDimensionTransition(player, ModifiableSound.FINALLIFE_INBETWEEN_EXIT);
 	}
 
 	public static void playDimensionTransition(ServerPlayer player, ModifiableSound sound) {

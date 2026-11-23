@@ -36,14 +36,15 @@ public class InBetweenTriviaManager {
 	public static final ConfigRef<Integer> DEATH_MAX = ConfigRef.of(() -> FinalLifeConfig.get().TRIVIA_DEATH_NUM_MAX);
 	public static final ConfigRef<Integer> QUESTION_TIME = ConfigRef.of(() -> FinalLifeConfig.get().TRIVIA_QUESTION_TIME);
 	//Timestamps
-	public static final int INTRO_DELAY = 130; // After entering the In-Between
+	public static final int INTRO_DELAY = 20; // After the client finished loading the In-Between
+	public static final int INTRO_TIMEOUT = 400; // After entering, in case the client never says it finished loading
 	public static final double SPAWN_AHEAD = 20; // Blocks on the path, that distance from the player
-	public static final int LIGHTS_ON = 220;
-	public static final int FIREWORK_BURST = 320;
-	public static final int BOT_SPAWN = 300;
+	public static final int LIGHTS_ON = 220 + 94;
+	public static final int FIREWORK_BURST = 320 + 94;
+	public static final int BOT_SPAWN = 300 + 94;
 	public static final int SPOTLIGHT_BOT_TRACK = BOT_SPAWN + 40;
-	public static final int FIREWORK_LARGE_BALL = 360;
-	public static final int FIREWORK_FACE = 415;
+	public static final int FIREWORK_LARGE_BALL = 360 + 94;
+	public static final int FIREWORK_FACE = 415 + 94;
 	public static final int BOT_DROP_HEIGHT = 31;
 	public static Map<UUID, TriviaBot> bots = new HashMap<>();
 	private static final Random rnd = new Random();
@@ -68,7 +69,7 @@ public class InBetweenTriviaManager {
 		if (player == null || inBetween == null) return;
 		if (inBetween.triviaTicks >= FIREWORK_FACE || !hasTrivia(inBetween.deathNumber)) return;
 		if (inBetween.triviaTicks < 0) {
-			if (inBetween.age < INTRO_DELAY) return;
+			if (inBetween.loadedTicks < INTRO_DELAY && inBetween.age < INTRO_TIMEOUT) return;
 			ModifiableSound.FINALLIFE_TRIVIA_INTRO.play(player, 0.7f, 1);
 		}
 		inBetween.triviaTicks++;
@@ -90,6 +91,12 @@ public class InBetweenTriviaManager {
 			case FIREWORK_LARGE_BALL -> sendPacketInfo(player, "firework", "large_ball");
 			case FIREWORK_FACE -> sendPacketInfo(player, "firework", "face");
 		}
+	}
+
+	public static boolean isOver(InBetweenInstance inBetween) {
+		if (inBetween.triviaTicks < BOT_SPAWN) return false;
+		TriviaBot bot = bots.get(inBetween.playerUUID);
+		return bot == null || !bot.isAlive();
 	}
 
 	public static void sendPacketInfo(ServerPlayer player, String... values) {

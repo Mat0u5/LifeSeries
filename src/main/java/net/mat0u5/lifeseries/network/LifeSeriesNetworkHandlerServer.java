@@ -12,6 +12,7 @@ import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.InBetweenManager;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.trivia.InBetweenTriviaManager;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.window.InBetweenFileSync;
 import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLife;
@@ -184,6 +185,11 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
         SimplePackets.IN_BETWEEN_MEMORY_FILE_REQUEST.setServerReceive((player, payload) -> {
             if (LifeSeries.isSeason(Seasons.FINAL_LIFE)) {
                 InBetweenFileSync.onMemoryRequestPacket(player, payload.value());
+            }
+        });
+        SimplePackets.IN_BETWEEN_LOADED.setServerReceive((player, payload) -> {
+            if (LifeSeries.isSeason(Seasons.FINAL_LIFE)) {
+                InBetweenManager.onClientLoaded(player);
             }
         });
         SimplePackets.SELECTED_WILDCARD.setServerReceive((player, payload) -> {

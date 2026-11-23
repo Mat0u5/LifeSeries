@@ -3,7 +3,7 @@ package net.mat0u5.lifeseries.client.features.inbetween;
 import com.mojang.blaze3d.platform.NativeImage;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.features.inbetween.sound.InBetweenMemorySound;
-import net.mat0u5.lifeseries.client.features.inbetween.sound.InBetweenWindowSound;
+import net.mat0u5.lifeseries.client.features.inbetween.sound.InBetweenSound;
 import net.mat0u5.lifeseries.client.particle.InBetweenParticle;
 import net.mat0u5.lifeseries.client.render.inbetween.InBetweenMesh;
 import net.mat0u5.lifeseries.client.render.inbetween.InBetweenShaders;
@@ -42,7 +42,8 @@ public class InBetweenWindowsClient {
 	private static final int SOUND_REPEAT_DELAY = 100;
 	private static final double WIND_DISTANCE = 20;
 	private static final double WIND_VOLUME = 0.5;
-	private static final Identifier WIND_SOUND = IdentifierHelper.lifeseries("finallife_window_wind");
+	private static final Identifier WIND_SOUND = IdentifierHelper.lifeseries("finallife_inbetween_window_wind");
+	private static final double WHISPER_OVERLAP = 5;
 
 	private static final double RAY_SOURCE_DEPTH = 30;
 	private static final double RAY_FADE_START = 8;
@@ -58,7 +59,7 @@ public class InBetweenWindowsClient {
 
 	private static final List<ClientWindow> windows = new ArrayList<>();
 	@Nullable
-	private static InBetweenWindowSound wind;
+	private static InBetweenSound wind;
 	private static int windCooldown = 0;
 	private static int rayTextureCounter = 0;
 
@@ -114,7 +115,7 @@ public class InBetweenWindowsClient {
 			return;
 		}
 		windCooldown = 0;
-		wind = new InBetweenWindowSound(WIND_SOUND, SoundSource.AMBIENT, true, InBetweenWindowsClient::getWindVolume);
+		wind = new InBetweenSound(WIND_SOUND, SoundSource.AMBIENT, true, InBetweenWindowsClient::getWindVolume);
 		client.getSoundManager().play(wind);
 	}
 
@@ -124,6 +125,14 @@ public class InBetweenWindowsClient {
 			volume = Math.max(volume, window.currentWindVolume);
 		}
 		return WIND_VOLUME * volume;
+	}
+
+	public static double getWhisperVolume(Vec3 pos) {
+		double distance = Double.MAX_VALUE;
+		for (ClientWindow window : windows) {
+			distance = Math.min(distance, pos.distanceTo(window.soundSource));
+		}
+		return Math.max(0, Math.min(1, (distance - WIND_DISTANCE + WHISPER_OVERLAP) / WHISPER_OVERLAP));
 	}
 
 	private static boolean isMemoryPlaying(SoundManager soundManager) {

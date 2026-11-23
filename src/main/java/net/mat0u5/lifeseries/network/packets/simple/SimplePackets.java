@@ -28,6 +28,7 @@ public class SimplePackets {
     public static final SimpleStringListPacket IN_BETWEEN_MEMORY_FILES = new SimpleStringListPacket("IN_BETWEEN_MEMORY_FILES");
     public static final SimpleStringListPacket IN_BETWEEN_MEMORY_FILE_REQUEST = new SimpleStringListPacket("IN_BETWEEN_MEMORY_FILE_REQUEST");
     public static final SimpleStringListPacket IN_BETWEEN_TRIVIA = new SimpleStringListPacket("IN_BETWEEN_TRIVIA");
+    public static final SimpleStringListPacket IN_BETWEEN_SOUNDS = new SimpleStringListPacket("IN_BETWEEN_SOUNDS");
 
     public static final SimpleStringPacket CURRENT_SEASON = new SimpleStringPacket("CURRENT_SEASON");
     public static final SimpleStringPacket SESSION_STATUS = new SimpleStringPacket("SESSION_STATUS");
@@ -91,6 +92,7 @@ public class SimplePackets {
     public static final SimpleEmptyPacket REMOVE_SLEEP_SCREENS = new SimpleEmptyPacket("REMOVE_SLEEP_SCREENS");
     public static final SimpleEmptyPacket SUPERPOWER_SHOW_COOLDOWN = new SimpleEmptyPacket("SUPERPOWER_SHOW_COOLDOWN");
     public static final SimpleEmptyPacket LIFESKINS_RELOAD_START = new SimpleEmptyPacket("LIFESKINS_RELOAD_START");
+    public static final SimpleEmptyPacket IN_BETWEEN_LOADED = new SimpleEmptyPacket("IN_BETWEEN_LOADED");
 
 
     //public static final SimpleLongPacket _______ = new SimpleLongPacket("_______");
