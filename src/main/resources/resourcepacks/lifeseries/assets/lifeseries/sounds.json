@@ -409,26 +409,71 @@
             "lifeseries:finallife/fly_woosh"
         ]
     },
-    "finallife_dimension_swap": {
-        "sounds": [
-            "lifeseries:finallife/dimension_swap"
-        ]
-    },
     "finallife_inbetween_enter": {
         "sounds": [
-            "lifeseries:finallife/inbetween_enter"
+            "lifeseries:finallife/inbetween/inbetween_enter"
         ]
     },
-    "finallife_window_wind": {
+    "finallife_inbetween_exit": {
         "sounds": [
-            "lifeseries:finallife/window_wind"
+            "lifeseries:finallife/inbetween/inbetween_exit"
+        ]
+    },
+    "finallife_inbetween_background": {
+        "sounds": [
+            {
+                "name": "lifeseries:finallife/inbetween/inbetween_background",
+                "stream": true
+            }
+        ]
+    },
+    "finallife_inbetween_background_whisper": {
+        "sounds": [
+            {
+                "name": "lifeseries:finallife/inbetween/inbetween_background_whisper",
+                "stream": true
+            }
+        ]
+    },
+    "finallife_inbetween_whisper_death1": {
+        "sounds": [
+            "lifeseries:finallife/inbetween/whisper/death1/build_up",
+            "lifeseries:finallife/inbetween/whisper/death1/build_up_get_stronger",
+            "lifeseries:finallife/inbetween/whisper/death1/choose",
+            "lifeseries:finallife/inbetween/whisper/death1/choose_choose_choose",
+            "lifeseries:finallife/inbetween/whisper/death1/keep_it_simple",
+            "lifeseries:finallife/inbetween/whisper/death1/look_to_the_past",
+            "lifeseries:finallife/inbetween/whisper/death1/take_them_down",
+            "lifeseries:finallife/inbetween/whisper/death1/take_them_down2",
+            "lifeseries:finallife/inbetween/whisper/death1/trust_no_one",
+            "lifeseries:finallife/inbetween/whisper/death1/trust_no_one2",
+            "lifeseries:finallife/inbetween/whisper/death1/win",
+            "lifeseries:finallife/inbetween/whisper/death1/you_are_here"
+        ]
+    },
+    "finallife_inbetween_whisper_death2": {
+        "sounds": [
+            "lifeseries:finallife/inbetween/whisper/death2/adapt_adapt",
+            "lifeseries:finallife/inbetween/whisper/death2/bring_them_back",
+            "lifeseries:finallife/inbetween/whisper/death2/bring_them_back_surprise_us",
+            "lifeseries:finallife/inbetween/whisper/death2/dont_tell_anyone",
+            "lifeseries:finallife/inbetween/whisper/death2/surprise_us",
+            "lifeseries:finallife/inbetween/whisper/death2/try_this"
+        ]
+    },
+    "finallife_inbetween_whisper_death3": {
+        "sounds": []
+    },
+    "finallife_inbetween_window_wind": {
+        "sounds": [
+            "lifeseries:finallife/inbetween/window_wind"
         ]
     },
     "finallife_trivia_intro": {
         "sounds": [
             {
                 "attenuation_distance": 32,
-                "name": "lifeseries:finallife/triviabot_intro",
+                "name": "lifeseries:finallife/trivia_intro",
                 "stream": true
             }
         ]
