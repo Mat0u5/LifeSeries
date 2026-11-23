@@ -61,6 +61,7 @@
     "SnowballMixin",
     "SnowLayerBlockMixin",
     "SpawnEggItemMixin",
+    "StructureTemplateManagerMixin",
     "TamableAnimalMixin",
     "TargetGoalMixin",
     "TextDisplayAccessor",
