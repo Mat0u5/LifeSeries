@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class InBetweenTransition {
 	private static final double SWALLOW_SECONDS = 4.0;
+	private static final double UNSWALLOW_SPEED = 4;
 	private static final float SWALLOW_WHITE_START = 0.92f;
 	private static final double FADE_SECONDS = 2.0;
 	private static final double MIN_COVER_SECONDS = 0.4;
@@ -27,8 +28,11 @@ public class InBetweenTransition {
 	private static Stage stage = Stage.NONE;
 	private static boolean black = false;
 	private static double fadeSeconds = 0;
+	private static float swallowProgress = 0;
+	private static boolean unswallowing = false;
 	private static long lastUpdate = -1;
 	private static float clockOffset = 0;
+	private static long swallowStart = 0;
 	private static long stageStart = 0;
 	private static boolean fadeQueued = false;
 	private static long readySince = -1;
@@ -40,19 +44,33 @@ public class InBetweenTransition {
 	public static void onPacket(String value) {
 		if (value.startsWith("sound:")) queueFadeSound(value.substring(6));
 		else if (value.equals("swallow")) startSwallow();
+		else if (value.equals("unswallow")) unswallow();
 		else if (value.equals("fade_in")) startFadeIn(false);
 		else if (value.equals("fade_in_black")) startFadeIn(true);
 	}
 
 	private static void startSwallow() {
+		unswallowing = false;
+		if (stage == Stage.SWALLOW || stage == Stage.COVER) return;
 		setStage(Stage.SWALLOW);
+		swallowProgress = 0;
+		swallowStart = System.nanoTime();
 		black = false;
 		clockOffset = (float) (Math.random() * 8);
 		fadeQueued = false;
 	}
 
+	private static void unswallow() {
+		if (stage == Stage.COVER && !fadeQueued) {
+			setStage(Stage.SWALLOW);
+			swallowProgress = 1;
+		}
+		if (stage == Stage.SWALLOW) unswallowing = true;
+	}
+
 	private static void startFadeIn(boolean toBlack) {
-		if (stage != Stage.COVER && stage != Stage.SWALLOW) {
+		if (stage == Stage.SWALLOW) unswallowing = false;
+		else if (stage != Stage.COVER) {
 			setStage(Stage.COVER);
 			black = toBlack;
 		}
@@ -74,6 +92,7 @@ public class InBetweenTransition {
 
 	public static void stopTransition() {
 		setStage(Stage.NONE);
+		unswallowing = false;
 		fadeQueued = false;
 		fadeSound = null;
 	}
@@ -103,18 +122,24 @@ public class InBetweenTransition {
 
 	private static void update() {
 		long now = System.nanoTime();
-		double step = lastUpdate < 0 ? 0 : Math.min((now - lastUpdate) / 1.0E9, MAX_FADE_STEP_SECONDS);
+		double elapsed = lastUpdate < 0 ? 0 : (now - lastUpdate) / 1.0E9;
 		lastUpdate = now;
 		if (stage == Stage.NONE) return;
-		if (stage == Stage.FADE) fadeSeconds += step;
+		if (stage == Stage.FADE) fadeSeconds += Math.min(elapsed, MAX_FADE_STEP_SECONDS);
+		if (stage == Stage.SWALLOW) swallowProgress += (float) ((unswallowing ? -UNSWALLOW_SPEED : 1) * elapsed / SWALLOW_SECONDS);
 		Minecraft client = Minecraft.getInstance();
 		if (client.level != lastLevel) {
 			lastLevel = client.level;
 			readySince = -1;
 		}
 		double seconds = secondsInStage();
-		if (stage == Stage.SWALLOW && seconds >= SWALLOW_SECONDS) {
+		if (stage == Stage.SWALLOW && swallowProgress >= 1) {
+			swallowProgress = 1;
 			setStage(Stage.COVER);
+		}
+		else if (stage == Stage.SWALLOW && swallowProgress <= 0) {
+			swallowProgress = 0;
+			setStage(Stage.NONE);
 		}
 		else if (stage == Stage.COVER) {
 			boolean ready = client.level != null && client.player != null && !isLoadingScreen(RenderUtils.getScreen());
@@ -143,18 +168,18 @@ public class InBetweenTransition {
 	public static void render(GuiGraphicsExtractor graphics) {
 		update();
 		float blur = stage == Stage.FADE ? fadeCover() : 0;
-		float swallow = stage == Stage.SWALLOW ? swallowProgress() : 0;
+		float swallow = stage == Stage.SWALLOW ? swallowProgress : 0;
 		if ((blur <= 0 && swallow <= 0) || !InBetweenShaders.screenAvailable()) return;
 		int color = 0xFF000000 | (channel(blur) << 8) | channel(swallow);
 		Minecraft client = Minecraft.getInstance();
 		float aspect = (float) client.getWindow().getWidth() / Math.max(1, client.getWindow().getHeight());
-		InBetweenShaders.drawScreen(graphics, color, clockOffset + (float) secondsInStage(), aspect);
+		InBetweenShaders.drawScreen(graphics, color, clockOffset + (float) ((System.nanoTime() - swallowStart) / 1.0E9), aspect);
 	}
 
 	// Over the HUD
 	public static void renderCover(GuiGraphicsExtractor graphics) {
 		float cover = switch (stage) {
-			case SWALLOW -> InBetweenShaders.screenAvailable() ? smoothstep(SWALLOW_WHITE_START, 1, swallowProgress()) : swallowProgress() * swallowProgress();
+			case SWALLOW -> InBetweenShaders.screenAvailable() ? smoothstep(SWALLOW_WHITE_START, 1, swallowProgress) : swallowProgress * swallowProgress;
 			case COVER -> 1;
 			case FADE -> fadeCover();
 			case NONE -> 0;
@@ -162,15 +187,11 @@ public class InBetweenTransition {
 		if (cover <= 0) return;
 		//? if <= 1.21.5 {
 		/*graphics.pose().pushPose();
-		graphics.pose().translate(0, 0, 1000);
+		graphics.pose().translate(0, 0, 8000);
 		*///?}
 		graphics.fill(0, 0, graphics.guiWidth(), graphics.guiHeight(), (channel(cover) << 24) | (getCoverColor() & 0xFFFFFF));
 		//? if <= 1.21.5
 		//graphics.pose().popPose();
-	}
-
-	private static float swallowProgress() {
-		return (float) Math.min(1, secondsInStage() / SWALLOW_SECONDS);
 	}
 
 	private static float fadeCover() {

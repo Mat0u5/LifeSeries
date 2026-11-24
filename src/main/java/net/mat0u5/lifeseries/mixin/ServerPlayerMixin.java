@@ -8,7 +8,6 @@ import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
-import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.InBetweenManager;
 import net.mat0u5.lifeseries.seasons.season.nicelife.NiceLifeTriviaManager;
 import net.mat0u5.lifeseries.seasons.util.WatcherManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
@@ -26,7 +25,6 @@ import net.minecraft.util.Unit;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.ChatVisiblity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.scores.PlayerTeam;
 import org.jetbrains.annotations.Nullable;
@@ -240,35 +238,6 @@ public class ServerPlayerMixin implements IPlayer {
                 cir.setReturnValue(Either.left(Player.BedSleepingProblem.OTHER_PROBLEM));
                 ((IPlayer)ls$get()).ls$message(ModifiableText.NICELIFE_SLEEP_FAIL_LATE.get(), true);
             }
-        }
-    }
-
-    @Inject(method = "getChatVisibility", at = @At("HEAD"), cancellable = true)
-    private void inBetweenChatIsolation(CallbackInfoReturnable<ChatVisiblity> cir) {
-        if (LifeSeries.isClientOrDisabled()) return;
-        if (InBetweenManager.shouldIsolateChat(ls$get())) {
-            if (InBetweenManager.isProcessingAllowedCommand(ls$get())) {
-                cir.setReturnValue(ChatVisiblity.SYSTEM);
-            }
-            else {
-                cir.setReturnValue(ChatVisiblity.HIDDEN);
-            }
-        }
-    }
-
-    @Inject(method = "acceptsChatMessages", at = @At("HEAD"), cancellable = true)
-    private void blockChatMessages(CallbackInfoReturnable<Boolean> cir) {
-        if (LifeSeries.isClientOrDisabled()) return;
-        if (InBetweenManager.shouldIsolateChat(ls$get())) {
-            cir.setReturnValue(false);
-        }
-    }
-
-    @Inject(method = "acceptsSystemMessages", at = @At("HEAD"), cancellable = true)
-    private void blockSystemMessages(boolean overlay, CallbackInfoReturnable<Boolean> cir) {
-        if (LifeSeries.isClientOrDisabled()) return;
-        if (InBetweenManager.shouldIsolateChat(ls$get())) {
-            cir.setReturnValue(overlay);
         }
     }
 

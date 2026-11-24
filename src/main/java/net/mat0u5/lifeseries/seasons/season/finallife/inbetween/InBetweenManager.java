@@ -21,7 +21,6 @@ import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.matlib.events.EventResult;
-import net.mat0u5.matlib.utils.player.PermissionManager;
 import net.mat0u5.matlib.utils.player.PlayerReference;
 import net.mat0u5.matlib.utils.world.LevelUtils;
 import net.minecraft.core.particles.ParticleOptions;
@@ -424,33 +423,13 @@ public class InBetweenManager {
 		return isInInBetween(receiver);
 	}
 
-	public static boolean canUseCommandsWhileIsolated(ServerPlayer player) {
-		return PermissionManager.isAdmin(player);
-	}
-
-	private static final ThreadLocal<Boolean> processingCommand = ThreadLocal.withInitial(() -> false);
-	public static void setProcessingCommand(boolean value) {
-		processingCommand.set(value);
-	}
-
-	public static boolean isProcessingAllowedCommand(ServerPlayer player) {
-		return processingCommand.get() && canUseCommandsWhileIsolated(player);
-	}
-
-	public static void onMadeChoice(ServerPlayer player, InBetweenChoice choice) {
-		InBetweenInstance instance = instances.get(player.getUUID());
+	public static void onChoiceEntered(ServerPlayer player) {
 		SimplePackets.IN_BETWEEN_TRANSITION.sendToClient("swallow", player);
 		ModifiableSound.FINALLIFE_DIMENSION_LEAVE.play(player, 0.25f, 1);
-		PlayerReference ref = PlayerReference.of(player);
-		TaskScheduler.scheduleTask(82, () -> { // Cloud transition takes ~4 seconds //TODO wait for the loading screen - make the client play the sounds..
-			ServerPlayer target = ref.get();
-			if (target == null) return;
-			if (instance != null && instances.get(target.getUUID()) != instance) {
-				// Left differently in the meantime
-				SimplePackets.IN_BETWEEN_TRANSITION.sendToClient("fade_in", target);
-				return;
-			}
-			exitInBetween(target, choice);
-		});
+	}
+
+	public static void onChoiceLeft(ServerPlayer player) {
+		SimplePackets.IN_BETWEEN_TRANSITION.sendToClient("unswallow", player);
+		ModifiableSound.FINALLIFE_DIMENSION_LEAVE.stop(player);
 	}
 }

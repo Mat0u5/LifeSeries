@@ -15,11 +15,13 @@ import net.mat0u5.lifeseries.utils.player.ProfileManager;
 import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.mat0u5.matlib.events.EventResult;
 import net.mat0u5.matlib.utils.other.Triple;
+import net.mat0u5.matlib.utils.player.PermissionManager;
 import net.mat0u5.matlib.utils.player.PlayerReference;
 import net.mat0u5.matlib.utils.player.ScoreboardUtils;
 import net.mat0u5.matlib.utils.player.TeamUtils;
 import net.mat0u5.matlib.utils.resource.ResourceHandler;
 import net.mat0u5.matlib.utils.world.LevelUtils;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
@@ -231,6 +233,16 @@ public class FinalLifeBoogeymanManager {
 			else {
 				bm.announceLeave(player);
 			}
+		}
+		return true;
+	}
+
+	public static boolean canMessage(CommandSourceStack source, Collection<ServerPlayer> targets) {
+		if (!(currentSeason instanceof FinalLife finalLife)) return true;
+		ServerPlayer sender = source.getPlayer();
+		if (sender == null || PermissionManager.isAdmin(sender)) return true;
+		for (ServerPlayer target : targets) {
+			if (target != sender && finalLife.finalLifeBoogeymanManager.isBoogeyman(target)) return false;
 		}
 		return true;
 	}

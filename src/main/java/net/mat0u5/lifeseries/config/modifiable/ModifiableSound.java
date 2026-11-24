@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.core.Holder;
+import net.minecraft.network.protocol.game.ClientboundStopSoundPacket;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -271,6 +272,10 @@ public enum ModifiableSound {
 
 	public void playWithSource(Collection<ServerPlayer> players, Entity source, SoundSource soundCategory, float volume, float pitch) {
 		PlayerUtils.playSoundWithSourceToPlayers(players, source, this.get(), soundCategory, volume, pitch);
+	}
+
+	public void stop(ServerPlayer player) {
+		player.connection.send(new ClientboundStopSoundPacket(IdentifierHelper.parse(getCurrentSoundId()), null));
 	}
 
 	public static void registerAllSounds() {

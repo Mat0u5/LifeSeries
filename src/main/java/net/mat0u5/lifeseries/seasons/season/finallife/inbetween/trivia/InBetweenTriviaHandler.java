@@ -144,7 +144,7 @@ public class InBetweenTriviaHandler extends TriviaHandler {
 	@Override
 	public void startTrivia(ServerPlayer boundPlayer) {
 		if (!bot.interactedWith()) {
-			SimplePackets.STOP_TRIVIA_SOUNDS.sendToClient(boundPlayer);
+			ModifiableSound.FINALLIFE_TRIVIA_INTRO.stop(boundPlayer);
 		}
 		super.startTrivia(boundPlayer);
 	}

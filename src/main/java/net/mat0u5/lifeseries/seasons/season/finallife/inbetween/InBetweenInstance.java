@@ -91,6 +91,7 @@ public class InBetweenInstance {
 		forceInBounds(player);
 		particleManager.tick(player);
 		choiceManager.tick(player, age);
+		if (finished) return; // choice manager can change this, needs to be checked again.
 		soundManager.tick(player);
 		InBetweenTriviaManager.tick(player, this);
 	}

@@ -41,6 +41,7 @@
     "MobEffectInstanceAccessor",
     "MobEffectMixin",
     "MobMixin",
+    "MsgCommandMixin",
     "NaturalSpawnerMixin",
     "NbtUtilsMixin",
     "OwnableEntityMixin",

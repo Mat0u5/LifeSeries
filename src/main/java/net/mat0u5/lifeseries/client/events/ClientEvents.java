@@ -21,7 +21,6 @@ import net.mat0u5.lifeseries.client.utils.ClientUtils;
 import net.mat0u5.lifeseries.compatibilities.CompatibilityManager;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
-import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.InBetweenManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.Wildcards;
 import net.mat0u5.matlib.client.render.RenderUtils;
 import net.minecraft.client.Minecraft;
@@ -43,7 +42,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 
 //? if <= 1.20.3 {
@@ -138,7 +136,6 @@ public class ClientEvents {
             if (player != null) {
                 tryTripleJump(player);
                 checkOnGroundFor(player);
-                updateChatIsolation(player);
                 InBetweenEffectsClient.tick(player);
                 InBetweenWindowsClient.tick(player);
                 InBetweenSoundsClient.tick(player);
@@ -155,31 +152,6 @@ public class ClientEvents {
                 VoicechatClient.checkMute();
             }
         }catch(Exception ignored) {}
-    }
-
-    private static boolean lastChatIsolated = false;
-    private static boolean lastChatIsolationAdmin = false;
-    @Nullable
-    private static LocalPlayer lastChatIsolationPlayer = null;
-
-    public static void updateChatIsolation(LocalPlayer player) {
-        boolean isolated = InBetweenManager.shouldIsolateChat(player);
-        boolean admin = LifeSeriesClient.isAdmin;
-        if (isolated == lastChatIsolated && admin == lastChatIsolationAdmin && player == lastChatIsolationPlayer) return; // No Changes
-        boolean entered = isolated && !lastChatIsolated;
-        lastChatIsolated = isolated;
-        lastChatIsolationAdmin = admin;
-        lastChatIsolationPlayer = player;
-        //? if >= 26.1 {
-        player.refreshChatAbilities();
-        //?}
-        if (entered) {
-            //? if <= 26.1 {
-            //Minecraft.getInstance().gui.getChat().clearMessages(false);
-             //?} else {
-            Minecraft.getInstance().gui.hud.getChat().clearMessages(false);
-            //?}
-        }
     }
 
     public static void checkOnGroundFor(LocalPlayer player) {

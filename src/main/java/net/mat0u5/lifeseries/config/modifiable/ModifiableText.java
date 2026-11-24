@@ -644,7 +644,6 @@ public enum ModifiableText {
     ,FINALLIFE_INBETWEEN_COMMAND_EXIT(Seasons.FINAL_LIFE, "Returned {} {} from the In-Between", List.of("amount", "player/s"))
     ,FINALLIFE_INBETWEEN_COMMAND_DEATHS_GET(Seasons.FINAL_LIFE, "{} has {} stored {}", List.of("Player", "amount", "death/s"))
     ,FINALLIFE_INBETWEEN_COMMAND_DEATHS_SET(Seasons.FINAL_LIFE, "Set {}'s stored deaths to {}", List.of("Player", "amount"))
-    ,FINALLIFE_INBETWEEN_CHAT_ACCESS(Seasons.FINAL_LIFE, "§cYou cannot use the chat right now.")
     ,FINALLIFE_TRIVIA_QUESTION_INVALID(Seasons.FINAL_LIFE, "Could not find trivia with that question.")
     ,FINALLIFE_TRIVIA_SET_SINGLE(Seasons.FINAL_LIFE, "Assigned {}'s trivia", List.of("Player"))
     ,FINALLIFE_TRIVIA_SET_MULTIPLE(Seasons.FINAL_LIFE, "Assigned trivia of {} targets", List.of("number of targets"))

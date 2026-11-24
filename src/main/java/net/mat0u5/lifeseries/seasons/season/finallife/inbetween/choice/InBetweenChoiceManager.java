@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.mixin.ItemDisplayAccessor;
 import net.mat0u5.lifeseries.mixin.TextDisplayAccessor;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.InBetweenInstance;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.InBetweenManager;
+import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -29,7 +30,11 @@ import net.minecraft.world.entity.EntityTypes;
 public class InBetweenChoiceManager {
 	public static final String ENTITY_TAG = "lifeseries_in_between";
 	private static final double CHOICE_TRIGGER_RADIUS = 1.3;
+	private static final int CHOICE_EXIT_DELAY = 82; // Cloud transition takes ~4 seconds
+	private static final int CHOICE_DECAY = 4;
 	private final Set<UUID> labelIds = new HashSet<>();
+	private int choosing = -1;
+	private int choiceTicks = 0;
 	public final Map<Integer, Vec3> choicePositions = new TreeMap<>();
 	private final InBetweenInstance inBetween;
 	public final List<InBetweenChoice> choices;
@@ -123,22 +128,38 @@ public class InBetweenChoiceManager {
 	}
 
 	public void checkChoices(ServerPlayer player) {
-		if (player.isSpectator()) return;
+		int inside = getChoiceInside(player);
+		if (inside < 0) {
+			if (choosing >= 0) InBetweenManager.onChoiceLeft(player);
+			choosing = -1;
+			choiceTicks = Math.max(0, choiceTicks - CHOICE_DECAY);
+			return;
+		}
+		if (choosing < 0) InBetweenManager.onChoiceEntered(player);
+		choosing = inside;
+		if (++choiceTicks >= CHOICE_EXIT_DELAY) {
+			inBetween.finished = true;
+			InBetweenManager.exitInBetween(player, choices.get(inside));
+		}
+	}
+
+	private int getChoiceInside(ServerPlayer player) {
+		if (player.isSpectator()) return -1;
 		List<Vec3> centers = getChoiceCenters();
 		for (int i = 0; i < choices.size() && i < centers.size(); i++) {
 			Vec3 center = centers.get(i);
 			double dx = player.getX() - center.x;
 			double dz = player.getZ() - center.z;
 			double dy = player.getY() - center.y;
-			if (dx * dx + dz * dz <= CHOICE_TRIGGER_RADIUS * CHOICE_TRIGGER_RADIUS && dy > -0.75 && dy < 2) {
-				inBetween.finished = true;
-				InBetweenManager.onMadeChoice(player, choices.get(i));
-				return;
-			}
+			if (dx * dx + dz * dz <= CHOICE_TRIGGER_RADIUS * CHOICE_TRIGGER_RADIUS && dy > -0.75 && dy < 2) return i;
 		}
+		return -1;
 	}
 
 	public void destroy() {
 		labelIds.clear();
+		if (choosing < 0 || inBetween.finished) return;
+		ServerPlayer player = PlayerUtils.getPlayer(inBetween.playerUUID);
+		if (player != null) InBetweenManager.onChoiceLeft(player);
 	}
 }
