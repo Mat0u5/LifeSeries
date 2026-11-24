@@ -31,13 +31,13 @@ import java.util.List;
 
 @AutoService(MultiplatformModInitializer.class)
 public class LifeSeries implements MultiplatformModInitializer {
-	public static final String MOD_VERSION = "1.5.11.2-dev";
+	public static final String MOD_VERSION = "1.5.11.2+finallife-beta1";
 	public static final String MOD_ID = "lifeseries";
 	public static final String MOD_FRIENDLY_NAME = "Life Series";
 
 	public static final boolean DEBUG = false;
 	public static final boolean FORCE_DEV = false;
-	public static final boolean ISOLATED_ENVIRONMENT = false;
+	public static final boolean ISOLATED_ENVIRONMENT = true;
 	public static final Seasons DEFAULT_SEASON = Seasons.UNASSIGNED;
 	public static boolean MOD_DISABLED = false;
 
