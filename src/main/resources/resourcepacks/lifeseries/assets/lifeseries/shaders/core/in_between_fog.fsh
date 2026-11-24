@@ -1,13 +1,18 @@
 //? if <= 1.21.5 {
 //#version 150
 //#define LS_LOC(n)
+//#define LS_SCENE_DEPTH
 //
+//uniform mat4 ModelViewMat;
+//uniform mat4 ProjMat;
 //uniform mat4 TextureMat;
 //?} else if <= 26.2 {
 //#version 150
 //#define LS_LOC(n)
+//#define LS_SCENE_DEPTH
 //
 //#moj_import <minecraft:dynamictransforms.glsl>
+//#moj_import <minecraft:projection.glsl>
 //?} else {
 #version 330
 #extension GL_ARB_separate_shader_objects : require
@@ -17,22 +22,6 @@
 #include <minecraft:fog.glsl>
 #include <minecraft:dynamictransforms.glsl>
 #include <minecraft:oit.glsl>
-
-#ifdef LS_SCENE_DEPTH
-uniform sampler2D Sampler1;
-
-float lsGetSceneDistance(vec3 dir) {
-    float depth = texelFetch(Sampler1, ivec2(gl_FragCoord.xy), 0).r;
-    #ifndef RENDERPEARL_DEPTH_IS_ZERO_TO_ONE
-    depth = depth * 2.0 - 1.0;
-    #endif
-    float denomenator = depth + ProjMat[2][2];
-    float viewDepth = abs(denomenator) < 1.0e-7 ? 1.0e9 : ProjMat[3][2] / denomenator;
-    if (viewDepth <= 0.0) viewDepth = 1.0e9;
-    vec3 viewDir = (ModelViewMat * vec4(dir, 0.0)).xyz;
-    return min(viewDepth * length(viewDir) / max(-viewDir.z, 1.0e-4), 1.0e9);
-}
-#endif
 //?}
 
 uniform sampler2D Sampler0;
@@ -42,6 +31,20 @@ LS_LOC(1) in vec4 vertexColor;
 
 #ifndef OIT_ALPHA_ONLY
 LS_LOC(0) out vec4 fragColor;
+#endif
+
+#ifdef LS_SCENE_DEPTH
+uniform sampler2D Sampler1;
+
+float lsGetSceneDistance(vec3 dir) {
+    float depth = texelFetch(Sampler1, ivec2(gl_FragCoord.xy), 0).r;
+    if (abs(ProjMat[2][2]) > 0.5) depth = depth * 2.0 - 1.0;
+    float denomenator = depth + ProjMat[2][2];
+    float viewDepth = abs(denomenator) < 1.0e-7 ? 1.0e9 : ProjMat[3][2] / denomenator;
+    if (viewDepth <= 0.0) viewDepth = 1.0e9;
+    vec3 viewDir = (ModelViewMat * vec4(dir, 0.0)).xyz;
+    return min(viewDepth * length(viewDir) / max(-viewDir.z, 1.0e-4), 1.0e9);
+}
 #endif
 
 const int LS_SAMPLES = 14;
@@ -72,10 +75,11 @@ void main() {
     float nearest = TextureMat[3].y;
     float furthest = TextureMat[3].z;
     float ratio = pow(furthest / nearest, 1.0 / float(LS_SAMPLES - 1));
-    #ifdef LS_SCENE_DEPTH
-    float sceneDistance = lsGetSceneDistance(dir);
-    #else
+    bool overScene = false;
     float sceneDistance = 1.0e9;
+    #ifdef LS_SCENE_DEPTH
+    overScene = vertexColor.a < 0.5;
+    if (overScene) sceneDistance = lsGetSceneDistance(dir);
     #endif
     float distance = nearest;
     float transmittance = 1.0;
@@ -102,11 +106,7 @@ void main() {
     }
     float ahead = pow(max(dot(dir, TextureMat[2].xyz),0.0),8.0) * TextureMat[3].x;
     vec3 shade = vertexColor.rgb * light * (1.0 + ahead) * TextureMat[2].w;
-    #ifdef LS_SCENE_DEPTH
-    vec4 color = vec4(shade, 1.0 - transmittance);
-    #else
-    vec4 color = vec4(shade, 1.0);
-    #endif
+    vec4 color = vec4(shade, overScene ? 1.0 - transmittance : 1.0);
     #ifdef OIT_ALPHA_ONLY
     executeAlphaOnlyPhase(gl_FragCoord.z, color.a);
     #else

@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class InBetweenTransition {
 	private static final double SWALLOW_SECONDS = 4.0;
+	private static final float SWALLOW_WHITE_START = 0.92f;
 	private static final double FADE_SECONDS = 2.0;
 	private static final double MIN_COVER_SECONDS = 0.4;
 	private static final double MAX_COVER_SECONDS = 10;
@@ -138,32 +139,47 @@ public class InBetweenTransition {
 		return false;
 	}
 
+	// Under the HUD
 	public static void render(GuiGraphicsExtractor graphics) {
 		update();
-		if (stage == Stage.NONE) return;
-		double seconds = secondsInStage();
-		float cover = 0;
-		float blur = 0;
-		float swallow = 0;
-		switch (stage) {
-			case SWALLOW -> swallow = (float) Math.min(1, seconds / SWALLOW_SECONDS);
-			case COVER -> cover = 1;
-			case FADE -> {
-				cover = (float) Math.max(0, 1 - fadeSeconds / FADE_SECONDS);
-				blur = cover;
-			}
-		}
-		if (cover <= 0 && swallow <= 0) return;
+		float blur = stage == Stage.FADE ? fadeCover() : 0;
+		float swallow = stage == Stage.SWALLOW ? swallowProgress() : 0;
+		if ((blur <= 0 && swallow <= 0) || !InBetweenShaders.screenAvailable()) return;
+		int color = 0xFF000000 | (channel(blur) << 8) | channel(swallow);
+		Minecraft client = Minecraft.getInstance();
+		float aspect = (float) client.getWindow().getWidth() / Math.max(1, client.getWindow().getHeight());
+		InBetweenShaders.drawScreen(graphics, color, clockOffset + (float) secondsInStage(), aspect);
+	}
 
-		if (cover < 1 && InBetweenShaders.screenAvailable()) {
-			int color = ((black ? 0x80 : 0xFF) << 24) | (channel(cover) << 16) | (channel(blur) << 8) | channel(swallow);
-			Minecraft client = Minecraft.getInstance();
-			float aspect = (float) client.getWindow().getWidth() / Math.max(1, client.getWindow().getHeight());
-			InBetweenShaders.drawScreen(graphics, color, clockOffset + (float) seconds, aspect);
-			return;
-		}
-		float alpha = cover < 1 ? Math.max(cover, swallow * swallow) : 1;
-		graphics.fill(0, 0, graphics.guiWidth(), graphics.guiHeight(), (channel(alpha) << 24) | (getCoverColor() & 0xFFFFFF));
+	// Over the HUD
+	public static void renderCover(GuiGraphicsExtractor graphics) {
+		float cover = switch (stage) {
+			case SWALLOW -> InBetweenShaders.screenAvailable() ? smoothstep(SWALLOW_WHITE_START, 1, swallowProgress()) : swallowProgress() * swallowProgress();
+			case COVER -> 1;
+			case FADE -> fadeCover();
+			case NONE -> 0;
+		};
+		if (cover <= 0) return;
+		//? if <= 1.21.5 {
+		/*graphics.pose().pushPose();
+		graphics.pose().translate(0, 0, 1000);
+		*///?}
+		graphics.fill(0, 0, graphics.guiWidth(), graphics.guiHeight(), (channel(cover) << 24) | (getCoverColor() & 0xFFFFFF));
+		//? if <= 1.21.5
+		//graphics.pose().popPose();
+	}
+
+	private static float swallowProgress() {
+		return (float) Math.min(1, secondsInStage() / SWALLOW_SECONDS);
+	}
+
+	private static float fadeCover() {
+		return (float) Math.max(0, 1 - fadeSeconds / FADE_SECONDS);
+	}
+
+	private static float smoothstep(float edge0, float edge1, float value) {
+		float t = Math.max(0, Math.min(1, (value - edge0) / (edge1 - edge0)));
+		return t * t * (3 - 2 * t);
 	}
 
 	private static int channel(float value) {

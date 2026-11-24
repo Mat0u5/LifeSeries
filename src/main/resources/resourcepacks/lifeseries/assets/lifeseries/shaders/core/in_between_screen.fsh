@@ -109,12 +109,10 @@ vec3 lsSwallowSmoke(vec3 scene, vec2 uv, float progress, float time, float aspec
     vec3 light = mix(vec3(0.56, 0.56, 0.60), vec3(1.0), white);
     float whiten = smoothstep(0.65, 1.0, progress);
     vec3 color = mix(mix(shadow, light, mix(lit, 1.0, whiten)), vec3(1.0), whiten * 0.7);
-    scene = mix(scene, color, smoothstep(0.0, 1.0, density));
-    return mix(scene, vec3(1.0), smoothstep(0.92, 1.0, progress));
+    return mix(scene, color, smoothstep(0.0, 1.0, density));
 }
 
 void main() {
-    float cover = params.r;
     float blur = params.g;
     float swallow = params.b;
     float time = extra.x;
@@ -124,6 +122,5 @@ void main() {
     if (swallow > 0.0) {
         color = lsSwallowSmoke(color, screenUv, swallow, time, aspect);
     }
-    color = mix(color, vec3(params.a > 0.75 ? 1.0 : 0.0), cover);
     fragColor = vec4(color, 1.0);
 }

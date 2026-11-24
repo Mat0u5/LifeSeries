@@ -23,6 +23,7 @@ import java.util.function.Supplier;
 //? if <= 1.21 {
 /*import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.mojang.blaze3d.shaders.BlendMode;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.server.packs.resources.Resource;
@@ -96,6 +97,7 @@ import net.minecraft.client.renderer.oit.OitPipelineSet;
 public class InBetweenShaders {
 	public static final Identifier NOISE_TEXTURE = IdentifierHelper.lifeseries("textures/effect/in_between_noise.png");
 	private static final Identifier SCENE_TEXTURE = IdentifierHelper.lifeseries("dynamic/in_between_scene");
+	private static final Identifier DEPTH_TEXTURE = IdentifierHelper.lifeseries("dynamic/in_between_depth");
 	private static final int BUFFER_SIZE = 1536;
 	private static final Set<Object> failedShaders = new HashSet<>();
 	private static final Map<Identifier, RenderType> glowTypes = new HashMap<>();
@@ -114,21 +116,25 @@ public class InBetweenShaders {
 	}
 
 	//? if <= 1.21 {
-	/*private static final Shader RAYS = new Shader("in_between_rays", Blend.PREMULTIPLIED);
-	private static final Shader FOG = new Shader("in_between_fog", Blend.TRANSLUCENT);
-	private static final Shader GLOW = new Shader("in_between_glow", Blend.ADDITIVE);
-	private static final Shader SCREEN = new Shader("in_between_screen", Blend.SCREEN);
-	private static final Shader SPOTLIGHT = new Shader("in_between_spotlight", Blend.ADDITIVE);
+	/*private static final Shader RAYS = new Shader("in_between_rays", Blend.PREMULTIPLIED, true);
+	private static final Shader FOG = new Shader("in_between_fog", Blend.TRANSLUCENT, true);
+	private static final Shader FOG_DEPTH = new Shader("in_between_fog", Blend.PREMULTIPLIED, false);
+	private static final Shader GLOW = new Shader("in_between_glow", Blend.ADDITIVE, true);
+	private static final Shader SCREEN = new Shader("in_between_screen", Blend.TRANSLUCENT, false);
+	private static final Shader SPOTLIGHT = new Shader("in_between_spotlight", Blend.ADDITIVE, true);
+	private static final BlendMode OPAQUE_BLEND = new BlendMode();
 
 	private static class Shader {
 		private final String name;
 		private final Blend blend;
+		private final boolean depthTest;
 		@Nullable
 		private ShaderInstance instance;
 
-		private Shader(String name, Blend blend) {
+		private Shader(String name, Blend blend, boolean depthTest) {
 			this.name = name;
 			this.blend = blend;
+			this.depthTest = depthTest;
 		}
 
 		private void reload(ResourceProvider resources) {
@@ -159,28 +165,29 @@ public class InBetweenShaders {
 
 	public static void reloadShaders(ResourceProvider resources) {
 		failedShaders.clear();
-		for (Shader shader : List.of(RAYS, FOG, GLOW, SCREEN, SPOTLIGHT)) {
+		for (Shader shader : List.of(RAYS, FOG, FOG_DEPTH, GLOW, SCREEN, SPOTLIGHT)) {
 			shader.reload(resources);
 		}
 	}
 
 	private static boolean isAvailable(Shader shader) {
-		return shader.instance != null;
+		return shader.instance != null && !failedShaders.contains(shader);
 	}
 
 	private static void setShader(Shader shader) {
 		RenderSystem.setShader(() -> shader.instance);
 	}
 	*///?} else if <= 1.21.4 {
-	/*private static final Shader RAYS = new Shader("in_between_rays", Blend.PREMULTIPLIED);
-	private static final Shader FOG = new Shader("in_between_fog", Blend.TRANSLUCENT);
-	private static final Shader GLOW = new Shader("in_between_glow", Blend.ADDITIVE);
-	private static final Shader SCREEN = new Shader("in_between_screen", Blend.SCREEN);
-	private static final Shader SPOTLIGHT = new Shader("in_between_spotlight", Blend.ADDITIVE);
+	/*private static final Shader RAYS = new Shader("in_between_rays", Blend.PREMULTIPLIED, true);
+	private static final Shader FOG = new Shader("in_between_fog", Blend.TRANSLUCENT, true);
+	private static final Shader FOG_DEPTH = new Shader("in_between_fog", Blend.PREMULTIPLIED, false);
+	private static final Shader GLOW = new Shader("in_between_glow", Blend.ADDITIVE, true);
+	private static final Shader SCREEN = new Shader("in_between_screen", Blend.TRANSLUCENT, false);
+	private static final Shader SPOTLIGHT = new Shader("in_between_spotlight", Blend.ADDITIVE, true);
 
-	private record Shader(ShaderProgram program, Blend blend) {
-		private Shader(String name, Blend blend) {
-			this(new ShaderProgram(id("core/" + name), DefaultVertexFormat.POSITION_TEX_COLOR, ShaderDefines.EMPTY), blend);
+	private record Shader(ShaderProgram program, Blend blend, boolean depthTest) {
+		private Shader(String name, Blend blend, boolean depthTest) {
+			this(new ShaderProgram(id("core/" + name), DefaultVertexFormat.POSITION_TEX_COLOR, ShaderDefines.EMPTY), blend, depthTest);
 		}
 	}
 
@@ -209,12 +216,15 @@ public class InBetweenShaders {
 
 	private static final RenderPipeline RAYS = pipeline(builder("in_between_rays", true, 1), PREMULTIPLIED, true);
 	private static final RenderPipeline FOG = pipeline(builder("in_between_fog", true, 1), BlendFunction.TRANSLUCENT, true);
+	//? if <= 26.2 {
+	//private static final RenderPipeline FOG_DEPTH = pipeline(builder("in_between_fog", true, 2).withLocation(id("pipeline/in_between_fog_depth")), PREMULTIPLIED, false);
+	//?} else {
+	private static final RenderPipeline FOG_DEPTH = pipeline(builder("in_between_fog", true, 2).withShaderDefine("LS_SCENE_DEPTH").withLocation(id("pipeline/in_between_fog_depth")), PREMULTIPLIED, false);
+	//?}
 	private static final RenderPipeline GLOW = pipeline(builder("in_between_glow", true, 1), BlendFunction.LIGHTNING, true);
 	private static final RenderPipeline SCREEN = pipeline(builder("in_between_screen", false, 1), BlendFunction.TRANSLUCENT, false);
 	private static final RenderPipeline SPOTLIGHT = pipeline(builder("in_between_spotlight", true, 1), BlendFunction.LIGHTNING, true);
 	//? if >= 26.3 {
-	private static final RenderPipeline FOG_DEPTH = pipeline(builder("in_between_fog", true, 2).withShaderDefine("LS_SCENE_DEPTH").withLocation(id("pipeline/in_between_fog_depth")), PREMULTIPLIED, false);
-
 	static {
 		OIT.put(RAYS, OitPipelineSet.builder("lifeseries_in_between_rays", builder("in_between_rays", true, 1)).build());
 		OIT.put(FOG, OitPipelineSet.builder("lifeseries_in_between_fog", builder("in_between_fog", true, 1)).build());
@@ -320,12 +330,17 @@ public class InBetweenShaders {
 	}
 
 	public static boolean depthCloudsAvailable() {
-		//? if <= 26.2 {
-		//return false;
-		//?} else {
+		//? if >= 26.3
 		if (Minecraft.getInstance().gameRenderer.useImprovedTransparency()) return false;
+		if (!isAvailable(FOG_DEPTH)) return false;
+		//? if <= 26.1 {
+		/*return true;
+		*///?} else {
+		boolean copied = depthCopied;
+		depthCopied = false;
 		depthWanted = true;
-		return depthFrames > 0 && isAvailable(FOG_DEPTH);
+		matchDepthCopy();
+		return copied;
 		//?}
 	}
 
@@ -333,10 +348,17 @@ public class InBetweenShaders {
 		return renderType("lifeseries_in_between_rays", RAYS, frame, texture);
 	}
 
-	public static RenderType clouds(Supplier<Matrix4f> parameters, boolean overDepth) {
-		//? if >= 26.3
-		if (overDepth) return renderType("lifeseries_in_between_clouds_depth", FOG_DEPTH, parameters, NOISE_TEXTURE, DEPTH_TEXTURE);
-		return renderType("lifeseries_in_between_clouds", FOG, parameters, NOISE_TEXTURE);
+	public static RenderType clouds(Supplier<Matrix4f> parameters, boolean overScene) {
+		if (!overScene) return renderType("lifeseries_in_between_clouds", FOG, parameters, NOISE_TEXTURE);
+		//? if <= 26.1 {
+		/*Supplier<Matrix4f> afterCopy = () -> {
+			copySceneDepth();
+			return parameters.get();
+		};
+		return renderType("lifeseries_in_between_clouds_depth", FOG_DEPTH, afterCopy, NOISE_TEXTURE, DEPTH_TEXTURE);
+		*///?} else {
+		return renderType("lifeseries_in_between_clouds_depth", FOG_DEPTH, parameters, NOISE_TEXTURE, DEPTH_TEXTURE);
+		//?}
 	}
 
 	public static RenderType glow(Identifier texture) {
@@ -348,17 +370,21 @@ public class InBetweenShaders {
 	}
 
 	//? if <= 1.21.4 {
-	/*private enum Blend {ADDITIVE, TRANSLUCENT, PREMULTIPLIED, SCREEN}
+	/*private enum Blend {ADDITIVE, TRANSLUCENT, PREMULTIPLIED}
 
 	private static RenderType renderType(String name, Shader shader, @Nullable Supplier<Matrix4f> parameters, Identifier... textures) {
-		return customType(name, shader, () -> RenderSystem.setShaderTexture(0, textures[0]), parameters);
+		return customType(name, shader, () -> {
+			for (int i = 0; i < textures.length; i++) bindTexture(i, textures[i]);
+		}, parameters);
 	}
 
-	private static RenderType customType(String name, Shader shader, Runnable bindTexture, @Nullable Supplier<Matrix4f> parameters) {
+	private static RenderType customType(String name, Shader shader, Runnable bindTextures, @Nullable Supplier<Matrix4f> parameters) {
 		return new RenderType(name, DefaultVertexFormat.POSITION_TEX_COLOR, VertexFormat.Mode.QUADS, BUFFER_SIZE, false, false, () -> {
-			setShader(shader);
-			bindTexture.run();
 			if (parameters != null) RenderSystem.setTextureMatrix(parameters.get());
+			setShader(shader);
+			bindTextures.run();
+			//? if <= 1.21
+			//OPAQUE_BLEND.apply();
 			RenderSystem.depthMask(false);
 			RenderSystem.disableCull();
 			RenderSystem.enableBlend();
@@ -367,12 +393,12 @@ public class InBetweenShaders {
 				case PREMULTIPLIED -> RenderSystem.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 				default -> RenderSystem.defaultBlendFunc();
 			}
-			if (shader.blend == Blend.SCREEN) {
-				RenderSystem.disableDepthTest();
-			}
-			else {
+			if (shader.depthTest) {
 				RenderSystem.enableDepthTest();
 				RenderSystem.depthFunc(515);
+			}
+			else {
+				RenderSystem.disableDepthTest();
 			}
 		}, () -> {
 			RenderSystem.resetTextureMatrix();
@@ -387,12 +413,8 @@ public class InBetweenShaders {
 	/*private static RenderType renderType(String name, RenderPipeline pipeline, @Nullable Supplier<Matrix4f> parameters, Identifier... textures) {
 		return RenderType.create(name, BUFFER_SIZE, pipeline, RenderType.CompositeState.builder()
 				.setTextureState(new RenderStateShard.EmptyTextureStateShard(() -> {
-					//? if <= 1.21.5 {
-					//RenderSystem.setShaderTexture(0, Minecraft.getInstance().getTextureManager().getTexture(textures[0]).getTexture());
-					//?} else {
-					RenderSystem.setShaderTexture(0, Minecraft.getInstance().getTextureManager().getTexture(textures[0]).getTextureView());
-					//?}
 					if (parameters != null) RenderSystem.setTextureMatrix(parameters.get());
+					for (int i = 0; i < textures.length; i++) bindTexture(i, textures[i]);
 				}, RenderSystem::resetTextureMatrix))
 				.createCompositeState(false));
 	}
@@ -409,7 +431,20 @@ public class InBetweenShaders {
 	}
 	//?}
 
-	//? if >= 1.21.5 {
+	//? if <= 1.21.9 {
+	/*private static void bindTexture(int sampler, Identifier texture) {
+		//? if <= 1.21.4 {
+		/^if (texture != DEPTH_TEXTURE) RenderSystem.setShaderTexture(sampler, texture);
+		else if (depthTarget != null) RenderSystem.setShaderTexture(sampler, depthTarget.getDepthTextureId());
+		^///?} else if <= 1.21.5 {
+		/^if (texture != DEPTH_TEXTURE) RenderSystem.setShaderTexture(sampler, Minecraft.getInstance().getTextureManager().getTexture(texture).getTexture());
+		else if (depthTexture != null) RenderSystem.setShaderTexture(sampler, depthTexture);
+		^///?} else {
+		RenderSystem.setShaderTexture(sampler, Minecraft.getInstance().getTextureManager().getTexture(texture).getTextureView());
+		//?}
+	}
+	*///?}
+
 	private static RenderTarget mainTarget() {
 		//? if <= 26.1 {
 		//return Minecraft.getInstance().getMainRenderTarget();
@@ -417,7 +452,6 @@ public class InBetweenShaders {
 		return Minecraft.getInstance().gameRenderer.mainRenderTarget();
 		//?}
 	}
-	//?}
 
 	//? if >= 1.21.6 {
 	private static final TargetCopy sceneCopy = new TargetCopy(SCENE_TEXTURE, "Life Series In-Between transition", GpuTexture.USAGE_COPY_DST | GpuTexture.USAGE_TEXTURE_BINDING, FilterMode.LINEAR);
@@ -512,21 +546,25 @@ public class InBetweenShaders {
 	private static TextureTarget sceneTarget;
 
 	private static boolean copySceneNow() {
-		RenderTarget main = Minecraft.getInstance().getMainRenderTarget();
-		if (sceneTarget == null || sceneTarget.width != main.width || sceneTarget.height != main.height) {
-			if (sceneTarget != null) sceneTarget.destroyBuffers();
-			//? if <= 1.21 {
-			//sceneTarget = new TextureTarget(main.width, main.height, false, Minecraft.ON_OSX);
-			//?} else {
-			sceneTarget = new TextureTarget(main.width, main.height, false);
-			//?}
-			sceneTarget.setFilterMode(9729); // LINEAR
-		}
+		RenderTarget main = mainTarget();
+		sceneTarget = matchTarget(sceneTarget, main, false);
 		GlStateManager._glBindFramebuffer(36008, main.frameBufferId); // READ_FRAMEBUFFER
 		GlStateManager._glBindFramebuffer(36009, sceneTarget.frameBufferId); // DRAW_FRAMEBUFFER
 		GlStateManager._glBlitFrameBuffer(0, 0, main.width, main.height, 0, 0, main.width, main.height, 16384, 9728); // COLOR_BUFFER_BIT, NEAREST
 		main.bindWrite(false);
 		return true;
+	}
+
+	private static TextureTarget matchTarget(@Nullable TextureTarget copy, RenderTarget main, boolean depth) {
+		if (copy != null && copy.width == main.width && copy.height == main.height) return copy;
+		if (copy != null) copy.destroyBuffers();
+		//? if <= 1.21 {
+		//copy = new TextureTarget(main.width, main.height, depth, Minecraft.ON_OSX);
+		//?} else {
+		copy = new TextureTarget(main.width, main.height, depth);
+		//?}
+		copy.setFilterMode(9729); // LINEAR
+		return copy;
 	}
 	*///?} else if <= 1.21.5 {
 	/*@Nullable
@@ -536,51 +574,83 @@ public class InBetweenShaders {
 		RenderTarget target = mainTarget();
 		GpuTexture source = target.getColorTexture();
 		if (source == null) return false;
-		if (sceneTexture == null || sceneTexture.getWidth(0) != target.width || sceneTexture.getHeight(0) != target.height || sceneTexture.getFormat() != source.getFormat()) {
-			if (sceneTexture != null) sceneTexture.close();
-			sceneTexture = RenderSystem.getDevice().createTexture(() -> "Life Series In-Between transition", source.getFormat(), target.width, target.height, 1);
-			sceneTexture.setAddressMode(AddressMode.CLAMP_TO_EDGE);
-			sceneTexture.setTextureFilter(FilterMode.LINEAR, false);
-		}
+		sceneTexture = matchTexture(sceneTexture, source, target, "Life Series In-Between transition", FilterMode.LINEAR);
 		RenderSystem.getDevice().createCommandEncoder().copyTextureToTexture(source, sceneTexture, 0, 0, 0, 0, 0, target.width, target.height);
 		return true;
 	}
+
+	private static GpuTexture matchTexture(@Nullable GpuTexture copy, GpuTexture source, RenderTarget target, String label, FilterMode filter) {
+		if (copy != null && copy.getWidth(0) == target.width && copy.getHeight(0) == target.height && copy.getFormat() == source.getFormat()) return copy;
+		if (copy != null) copy.close();
+		copy = RenderSystem.getDevice().createTexture(() -> label, source.getFormat(), target.width, target.height, 1);
+		copy.setAddressMode(AddressMode.CLAMP_TO_EDGE);
+		copy.setTextureFilter(filter, false);
+		return copy;
+	}
 	*///?}
 
-	//? if >= 26.3 {
-	public static final Identifier DEPTH_TEXTURE = IdentifierHelper.lifeseries("dynamic/in_between_depth");
+	//? if <= 1.21.4 {
+	/*@Nullable
+	private static TextureTarget depthTarget;
+	*///?} else if <= 1.21.5 {
+	/*@Nullable
+	private static GpuTexture depthTexture;
+	*///?} else {
 	private static final TargetCopy depthCopy = new TargetCopy(DEPTH_TEXTURE, "Life Series In-Between depth", GpuTexture.USAGE_COPY_DST | GpuTexture.USAGE_TEXTURE_BINDING | GpuTexture.USAGE_RENDER_ATTACHMENT, FilterMode.NEAREST);
+	//?}
+	//? if >= 26.2 {
 	private static boolean depthWanted = false;
-	private static int depthFrames = 0;
+	private static boolean depthCopied = false;
+
+	private static void matchDepthCopy() {
+		RenderTarget target = mainTarget();
+		GpuTexture source = target.getDepthTexture();
+		if (source != null) depthCopy.match(source, target.width, target.height);
+	}
+	//?}
 
 	public static void copySceneDepth() {
-		if (!depthWanted) {
-			depthFrames = 0;
-			return;
-		}
+		//? if >= 26.2 {
+		if (!depthWanted) return;
 		depthWanted = false;
+		//?}
 		try {
 			RenderTarget target = mainTarget();
+			//? if <= 1.21.4 {
+			/*int readFramebuffer = GlStateManager._getInteger(36010); // READ_FRAMEBUFFER_BINDING
+			int drawFramebuffer = GlStateManager._getInteger(36006); // DRAW_FRAMEBUFFER_BINDING
+			depthTarget = matchTarget(depthTarget, target, true);
+			depthTarget.copyDepthFrom(target);
+			GlStateManager._glBindFramebuffer(36008, readFramebuffer); // READ_FRAMEBUFFER
+			GlStateManager._glBindFramebuffer(36009, drawFramebuffer); // DRAW_FRAMEBUFFER
+			*///?} else {
 			GpuTexture source = target.getDepthTexture();
-			if (source == null) {
-				depthFrames = 0;
-				return;
-			}
+			if (source == null) return;
+			//? if <= 1.21.5 {
+			/*depthTexture = matchTexture(depthTexture, source, target, "Life Series In-Between depth", FilterMode.NEAREST);
+			GpuTexture destination = depthTexture;
+			*///?} else {
 			depthCopy.match(source, target.width, target.height);
+			GpuTexture destination = depthCopy.getTexture();
+			//?}
+			//? if <= 26.2 {
+			//RenderSystem.getDevice().createCommandEncoder().copyTextureToTexture(source, destination, 0, 0, 0, 0, 0, target.width, target.height);
+			//?} else {
 			CommandEncoder encoder = RenderSystem.getDevice().createCommandEncoder();
 			if (encoder instanceof FrontendCommandEncoder frontend) {
-				frontend.backend().copyTextureToTexture(source, depthCopy.getTexture(), 0, 0, 0, 0, 0, target.width, target.height);
+				frontend.backend().copyTextureToTexture(source, destination, 0, 0, 0, 0, 0, target.width, target.height);
 			}
 			else {
-				encoder.copyTextureToTexture(source, depthCopy.getTexture(), 0, 0, 0, 0, 0, target.width, target.height);
+				encoder.copyTextureToTexture(source, destination, 0, 0, 0, 0, 0, target.width, target.height);
 			}
-			depthFrames++;
+			//?}
+			//?}
+			//? if >= 26.2
+			depthCopied = true;
 		} catch (Exception e) {
-			depthFrames = 0;
 			markFailed(FOG_DEPTH, e);
 		}
 	}
-	//?}
 
 	// Pixel as 0xAARRGGBB
 	public static int getPixel(NativeImage image, int x, int y) {
@@ -623,6 +693,13 @@ public class InBetweenShaders {
 			super(() -> label, image);
 			//?}
 			setFilter(true, false);
+			// Repeating would blend each edge with the opposite one
+			//? if <= 1.21.2 {
+			/^GlStateManager._texParameter(3553, 10242, 33071); // WRAP_S, CLAMP_TO_EDGE
+			GlStateManager._texParameter(3553, 10243, 33071); // WRAP_T
+			^///?} else {
+			setClamp(true);
+			//?}
 		}
 
 		@Override

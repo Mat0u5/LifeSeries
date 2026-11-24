@@ -45,6 +45,7 @@
     "PlayerEntityRendererMixin",
     "PlayerMixin",
     "PlayerTabOverlayMixin",
+    "PreparedFrameMixin",
     "ShaderManagerMixin",
     "SkyRendererMixin",
     "SoundBufferLibraryMixin",

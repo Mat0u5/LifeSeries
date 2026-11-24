@@ -139,9 +139,9 @@ public class ClientEvents {
                 tryTripleJump(player);
                 checkOnGroundFor(player);
                 updateChatIsolation(player);
+                InBetweenEffectsClient.tick(player);
                 InBetweenWindowsClient.tick(player);
                 InBetweenSoundsClient.tick(player);
-                InBetweenEffectsClient.tick(player);
                 InBetweenMemoryCache.tick();
                 if (!player.isSleeping() && (RenderUtils.getScreen() instanceof EmptySleepScreen || (RenderUtils.getScreen() instanceof NewQuizScreen quizScreen && !quizScreen.shouldCloseOnEsc()) || (RenderUtils.getScreen() instanceof QuizScreen quizScreenOld && !quizScreenOld.shouldCloseOnEsc()) || (RenderUtils.getScreen() instanceof VotingScreen votingScreen && votingScreen.requiresSleep))) {
                     RenderUtils.setScreen(null);

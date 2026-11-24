@@ -36,6 +36,7 @@
     "ItemStackMixin",
     "LivingEntityMixin",
     "MannequinAccessor",
+    "MinecraftServerMixin",
     "MobCategoryMixin",
     "MobEffectInstanceAccessor",
     "MobEffectMixin",

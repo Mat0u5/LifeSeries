@@ -56,6 +56,7 @@ public class ClientRenderer {
 
     public static void postRender(GuiGraphicsExtractor graphics) {
         TextHud.renderTextPost(graphics);
+        if (!LifeSeries.modDisabled()) InBetweenTransition.renderCover(graphics);
     }
 
     //? if >= 1.20.3 {

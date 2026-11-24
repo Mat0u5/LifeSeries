@@ -42,6 +42,16 @@ import net.minecraft.client.DeltaTracker;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 //? if >= 26.1
 import net.minecraft.client.renderer.fog.FogData;
+//? if <= 1.21.5 {
+/*import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
+*///?} else if <= 1.21.9 {
+/*import net.minecraft.client.renderer.fog.FogData;
+import net.minecraft.client.renderer.fog.environment.DimensionOrBossFogEnvironment;
+import net.minecraft.client.renderer.fog.environment.FogEnvironment;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
+*///?}
 
 @Mixin(value = FogRenderer.class, priority = 1)
 @MixinEnvironment(value = "client", type = MixinEnvironment.Env.CLIENT)
@@ -138,5 +148,37 @@ public class FogRendererMixin {
     *///?}
 //?}
 
+    //? if <= 1.21 {
+    /*@Inject(method = "setupFog", at = @At("TAIL"))
+    private static void inBetweenFog(CallbackInfo ci) {
+        if (!ls$hasInBetweenFog()) return;
+        RenderSystem.setShaderFogStart(InBetweenEffectsClient.FOG_START);
+        RenderSystem.setShaderFogEnd(InBetweenEffectsClient.FOG_END);
+    }
+    *///?} else if <= 1.21.5 {
+    /*@ModifyReturnValue(method = "setupFog", at = @At("RETURN"))
+    private static FogParameters inBetweenFog(FogParameters fog) {
+        if (fog == FogParameters.NO_FOG || !ls$hasInBetweenFog()) return fog;
+        return new FogParameters(InBetweenEffectsClient.FOG_START, InBetweenEffectsClient.FOG_END, fog.shape(), fog.red(), fog.green(), fog.blue(), fog.alpha());
+    }
+    *///?} else if <= 1.21.9 {
+    /*@WrapOperation(method = "setupFog", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/fog/environment/FogEnvironment;setupFog(Lnet/minecraft/client/renderer/fog/FogData;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/core/BlockPos;Lnet/minecraft/client/multiplayer/ClientLevel;FLnet/minecraft/client/DeltaTracker;)V"))
+    private static void inBetweenFog(FogEnvironment environment, FogData fog, Entity entity, BlockPos pos, ClientLevel level, float renderDistance, DeltaTracker deltaTracker, Operation<Void> original) {
+        original.call(environment, fog, entity, pos, level, renderDistance, deltaTracker);
+        if (!(environment instanceof DimensionOrBossFogEnvironment) || !InBetweenEffectsClient.isActive()) return;
+        fog.environmentalStart = InBetweenEffectsClient.FOG_START;
+        fog.environmentalEnd = InBetweenEffectsClient.FOG_END;
+        fog.skyEnd = InBetweenEffectsClient.FOG_END;
+        fog.cloudEnd = InBetweenEffectsClient.FOG_END;
+    }
+    *///?}
 
+    //? if <= 1.21.5 {
+    /*@Unique
+    private static boolean ls$hasInBetweenFog() {
+        Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
+        if (!InBetweenEffectsClient.isActive() || camera.getFluidInCamera() != FogType.NONE) return false;
+        return !(camera.getEntity() instanceof LivingEntity living) || (!living.hasEffect(MobEffects.BLINDNESS) && !living.hasEffect(MobEffects.DARKNESS));
+    }
+    *///?}
 }

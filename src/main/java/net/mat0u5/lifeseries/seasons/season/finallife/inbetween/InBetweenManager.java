@@ -39,6 +39,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.border.WorldBorder;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -213,6 +214,7 @@ public class InBetweenManager {
 			LifeSeries.LOGGER.error("[In-Between] Dimension not found.");
 			return null;
 		}
+		removeWorldBorder(level);
 
 		discardInstance(player); // Remove any old instances
 
@@ -224,6 +226,12 @@ public class InBetweenManager {
 		}
 		instance.inBetweenBuilder.build();
 		return instance;
+	}
+
+	private static void removeWorldBorder(ServerLevel level) {
+		WorldBorder border = level.getWorldBorder();
+		if (border.getCenterX() != 0 || border.getCenterZ() != 0) border.setCenter(0, 0);
+		if (border.getSize() < WorldBorder.MAX_SIZE || border.getLerpTarget() < WorldBorder.MAX_SIZE) border.setSize(WorldBorder.MAX_SIZE);
 	}
 
 	private static List<InBetweenChoice> getChoices(ServerPlayer player, int deathNumber) {

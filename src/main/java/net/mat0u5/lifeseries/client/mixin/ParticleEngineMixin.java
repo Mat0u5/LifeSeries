@@ -35,13 +35,13 @@ public abstract class ParticleEngineMixin {
         InBetweenEffectsClient.onParticlesTicked();
     }
 
-    //? if >= 1.21.9 {
     @Inject(method = "clearParticles", at = @At("TAIL"))
     private void onClearParticles(CallbackInfo ci) {
         InBetweenWindowsClient.onParticlesCleared();
         InBetweenEffectsClient.onParticlesCleared();
     }
 
+    //? if >= 1.21.9 {
     @Accessor("particles")
     abstract Map<ParticleRenderType, ParticleGroup<?>> ls$particles();
 

@@ -30,6 +30,8 @@ import java.util.Optional;
 
 public class InBetweenEffectsClient {
 	//Clouds / Fog
+	public static final float FOG_START = 0;
+	public static final float FOG_END = 75;
 	private static final float CLOUD_NEAR = 1;
 	private static final float CLOUD_FAR = 48;
 	private static final float CLOUD_DENSITY = 0.04f;
@@ -184,10 +186,10 @@ public class InBetweenEffectsClient {
 		if (!cloudsShown) return null;
 		updateClouds(camera);
 		if (cloudsOverDepth) {
-			if (depthClouds == null) depthClouds = createCloudSphere(InBetweenShaders.clouds(() -> cloudParameters, true));
+			if (depthClouds == null) depthClouds = createCloudSphere(InBetweenShaders.clouds(() -> cloudParameters, true), CLOUD_COLOR & 0xFFFFFF);
 			return depthClouds;
 		}
-		if (clouds == null) clouds = createCloudSphere(InBetweenShaders.clouds(() -> cloudParameters, false));
+		if (clouds == null) clouds = createCloudSphere(InBetweenShaders.clouds(() -> cloudParameters, false), CLOUD_COLOR);
 		return clouds;
 	}
 
@@ -212,23 +214,23 @@ public class InBetweenEffectsClient {
 		return new Vec3(value.x - period * Math.floor(value.x / period),value.y - period * Math.floor(value.y / period),  value.z - period * Math.floor(value.z / period));
 	}
 
-	private static InBetweenMesh createCloudSphere(RenderType renderType) {
+	private static InBetweenMesh createCloudSphere(RenderType renderType, int color) {
 		InBetweenMesh mesh = new InBetweenMesh(renderType, InBetweenMesh.ORDER_CLOUDS, false);
 		for (int ring = 0; ring < CLOUD_RINGS; ring++) {
 			for (int segment = 0; segment < CLOUD_SEGMENTS; segment++) {
-				addSpherePoint(mesh, ring, segment);
-				addSpherePoint(mesh, ring + 1, segment);
-				addSpherePoint(mesh, ring + 1, segment + 1);
-				addSpherePoint(mesh, ring, segment + 1);
+				addSpherePoint(mesh, ring, segment, color);
+				addSpherePoint(mesh, ring + 1, segment, color);
+				addSpherePoint(mesh, ring + 1, segment + 1, color);
+				addSpherePoint(mesh, ring, segment + 1, color);
 			}
 		}
 		return mesh;
 	}
 
-	private static void addSpherePoint(InBetweenMesh mesh, int ring, int segment) {
+	private static void addSpherePoint(InBetweenMesh mesh, int ring, int segment, int color) {
 		double polar = Math.PI * ring / CLOUD_RINGS;
 		double azimuth = Math.PI * 2 * segment / CLOUD_SEGMENTS;
-		mesh.add(Math.sin(polar) * Math.cos(azimuth) * CLOUD_SPHERE_RADIUS, Math.cos(polar) * CLOUD_SPHERE_RADIUS, Math.sin(polar) * Math.sin(azimuth) * CLOUD_SPHERE_RADIUS, 0, 0, CLOUD_COLOR);
+		mesh.add(Math.sin(polar) * Math.cos(azimuth) * CLOUD_SPHERE_RADIUS, Math.cos(polar) * CLOUD_SPHERE_RADIUS, Math.sin(polar) * Math.sin(azimuth) * CLOUD_SPHERE_RADIUS, 0, 0, color);
 	}
 
 	private static void buildGlow(InBetweenCameraView view, List<InBetweenMesh> meshes) {
