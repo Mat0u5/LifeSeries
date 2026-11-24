@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.seasons.season.finallife.boogeyman.BoogeymanWeaponM
 import net.mat0u5.lifeseries.seasons.season.finallife.boogeyman.FinalLifeBoogeymanManager;
 import net.mat0u5.lifeseries.seasons.season.finallife.boogeyman.ThrownBoogeymanWeapon;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.InBetweenManager;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.AbilityManager;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.trivia.InBetweenTriviaHandler;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.trivia.InBetweenTriviaManager;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.window.InBetweenFileSync;
@@ -47,13 +48,16 @@ public class FinalLife extends Season {
 		super.initialize();
 		InBetweenTriviaHandler.initializeItemSpawners();
 		InBetweenTriviaManager.initialize();
+		AbilityManager.loadStoredAbilities();
 	}
+
 	@Override
 	public void reload() {
 		super.reload();
 		finalLifeBoogeymanManager.onReload();
 		if (InBetweenManager.ENABLED.get()) InBetweenFileSync.onReload();
 		TriviaHandler.guiType = FinalLifeConfig.get().TRIVIA_GUI_TYPE.get();
+		AbilityManager.onReload();
 	}
 
 	@Override
@@ -87,6 +91,7 @@ public class FinalLife extends Season {
 			InBetweenManager.startTransition(player);
 			InBetweenManager.playDimensionTransition(player);
 		}
+		AbilityManager.onPlayerJoin(player);
 	}
 
 	@Override
@@ -123,6 +128,7 @@ public class FinalLife extends Season {
 		InBetweenFileSync.switchOutOfSeason();
 		InBetweenTriviaManager.killAllBots();
 		finalLifeBoogeymanManager.switchOutOfSeason();
+		AbilityManager.resetAllAbilities();
 	}
 
 	@Override
@@ -132,6 +138,7 @@ public class FinalLife extends Season {
 		BoogeymanWeaponManager.onTick();
 		InBetweenManager.tick();
 		InBetweenFileSync.tick();
+		AbilityManager.tick();
 	}
 
 	@Override

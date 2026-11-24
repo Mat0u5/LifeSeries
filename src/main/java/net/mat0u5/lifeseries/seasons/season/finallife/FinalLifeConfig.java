@@ -152,6 +152,13 @@ public class FinalLifeConfig extends SeasonConfig {
 			.group("season.inbetween.trivia");
 	public final ConfigHeader GROUP_TRIVIA_QUESTIONS = ConfigHeader.register(this, "group_trivia_questions", "Trivia Questions")
 			.group("season.inbetween.trivia.questions").groupHeader(true);
+	public final ConfigHeader GROUP_ABILITIES = ConfigHeader.register(this, "group_abilities", "Abilities")
+			.group("season.abilities").groupHeader(true);
+	public final ConfigurableValue<Integer> ABILITY_SPEED_HEALTH = ConfigurableValue.register(this, "ability_speed_health", 6, ConfigTypes.HEARTS)
+			.name("Speed Ability Health")
+			.description("Controls how much health this ability will add/subtract.")
+			.group("season.abilities.speed");
+
 
 	protected FinalLifeConfig() {
 		super(Seasons.FINAL_LIFE);

@@ -9,8 +9,10 @@ import net.mat0u5.lifeseries.registries.ParticleRegistry;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.finallife.FinalLife;
 import net.mat0u5.lifeseries.seasons.season.finallife.FinalLifeConfig;
-import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.choice.InBetweenChoice;
-import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.choice.InBetweenChoiceManager;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.InBetweenChoice;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.AbilityManager;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.InBetweenChoiceManager;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.InBetweenChoices;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.sound.InBetweenSounds;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.trivia.InBetweenTriviaManager;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.window.InBetweenFileSync;
@@ -237,7 +239,7 @@ public class InBetweenManager {
 		// Get saved choices or create new ones
 		SavedChoices saved = savedChoices.get(player.getUUID());
 		if (saved != null && saved.deathNumber() == deathNumber) return saved.choices();
-		List<InBetweenChoice> choices = InBetweenChoiceManager.createChoices(player);
+		List<InBetweenChoice> choices = InBetweenChoices.getPossibleChoices(player, deathNumber);
 		savedChoices.put(player.getUUID(), new SavedChoices(deathNumber, choices));
 		return choices;
 	}
@@ -285,11 +287,12 @@ public class InBetweenManager {
 	}
 
 	public static void exitInBetween(ServerPlayer player, @Nullable InBetweenChoice choice) {
+		if (player == null) return;
 		UUID uuid = player.getUUID();
 		savedChoices.remove(uuid);
 		InBetweenInstance instance = instances.remove(uuid);
 		if (choice != null) {
-			choice.onChosen(player);
+			AbilityManager.onChosen(player, choice);
 		}
 		List<ItemStack> droppedItems = new ArrayList<>();
 		if (instance != null) {

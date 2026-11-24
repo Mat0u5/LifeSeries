@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.finallife.inbetween;
 
-import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.choice.InBetweenChoice;
-import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.choice.InBetweenChoiceManager;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.InBetweenChoice;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.InBetweenChoiceManager;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.particle.InBetweenParticles;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.sound.InBetweenSounds;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.trivia.InBetweenTriviaManager;

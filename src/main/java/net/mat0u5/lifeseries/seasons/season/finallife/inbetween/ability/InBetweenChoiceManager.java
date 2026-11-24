@@ -1,4 +1,4 @@
-package net.mat0u5.lifeseries.seasons.season.finallife.inbetween.choice;
+package net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability;
 
 import com.mojang.math.Transformation;
 import net.mat0u5.lifeseries.mixin.DisplayAccessor;
@@ -13,8 +13,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Brightness;
 import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -41,20 +39,14 @@ public class InBetweenChoiceManager {
 
 	public InBetweenChoiceManager(InBetweenInstance inBetween, List<InBetweenChoice> choices) {
 		this.inBetween = inBetween;
-		this.choices = choices;
-	}
-
-	public static List<InBetweenChoice> createChoices(ServerPlayer player) {
-		//TODO
-		return List.of(
-				new InBetweenChoice("knockback_resistance", Component.literal("KNOCKBACK RESISTANCE"), Component.literal("+3 HEARTS"), new ItemStack(Items.IRON_CHESTPLATE)),
-				new InBetweenChoice("feather_falling", Component.literal("FEATHER FALLING"), Component.literal("+1 HEART"), new ItemStack(Items.FEATHER))
-		);
+		this.choices = new ArrayList<>(choices);
 	}
 
 	public void spawnChoiceLabels() {
 		List<Vec3> choiceCenters = getChoiceCenters();
-		for (int i = 0; i < choices.size() && i < choiceCenters.size(); i++) {
+		while (choices.size() > choiceCenters.size()) choices.remove(choices.size() - 1);
+		while (choices.size() < choiceCenters.size()) choices.add(InBetweenChoice.empty());
+		for (int i = 0; i < choices.size(); i++) {
 			spawnChoiceLabel(choices.get(i), choiceCenters.get(i));
 		}
 	}
@@ -82,6 +74,7 @@ public class InBetweenChoiceManager {
 	}
 
 	private void spawnChoiceLabel(InBetweenChoice choice, Vec3 ringCenter) {
+		if (choice.isEmpty()) return;
 		double x = ringCenter.x;
 		double z = ringCenter.z;
 		double y = ringCenter.y + 2.2;

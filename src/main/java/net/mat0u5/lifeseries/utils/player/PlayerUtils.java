@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.finallife.FinalLife;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.AbilityManager;
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
@@ -61,6 +62,10 @@ public class PlayerUtils extends net.mat0u5.matlib.utils.player.PlayerUtils {
             return;
         }
         if (LifeSeries.isSeason(Seasons.SECRET_LIFE)) return;
+        if (LifeSeries.isSeason(Seasons.FINAL_LIFE)) {
+            AbilityManager.resetPlayerMaxHealth(player);
+            return;
+        }
         double currentMaxHealth = AttributeUtils.MAX_HEALTH.of(player).get();
         if (currentMaxHealth == 13 && WildLifeTriviaHandler.cursedHeartPlayers.contains(player.getUUID())) return;
         if (currentMaxHealth == SuperpowersWildcard.ZOMBIES_HEALTH.get() && Necromancy.isRessurectedPlayer(player)) return;
