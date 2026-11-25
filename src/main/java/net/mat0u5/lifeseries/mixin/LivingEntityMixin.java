@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.entity.angrysnowman.AngrySnowman;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.AbilityManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.superpower.SuperPunch;
@@ -83,6 +84,18 @@ public abstract class LivingEntityMixin {
         //?} else
         cir.setReturnValue(entity.hurtServer(level, source, WindCharge.MAX_MACE_DAMAGE.get()));
         //?}
+    }
+
+    //? if <= 1.21 {
+    /*@ModifyVariable(method = "hurt", at = @At("HEAD"), argsOnly = true)
+    private float abilityDamage(float amount, DamageSource source, float originalAmount) {
+    *///?} else {
+    @ModifyVariable(method = "hurtServer", at = @At("HEAD"), argsOnly = true)
+    private float abilityDamage(float amount, ServerLevel level, DamageSource source, float originalAmount) {
+    //?}
+        if (LifeSeries.isClientOrDisabled()) return amount;
+        if (!((Object) this instanceof ServerPlayer player)) return amount;
+        return AbilityManager.modifyDamage(player, source, amount);
     }
 
     //? if = 1.21.2 {

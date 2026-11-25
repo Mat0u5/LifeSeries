@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.matlib.utils.player.AttributeUtils;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
 
 import java.util.*;
 
@@ -55,6 +56,13 @@ public class AbilityManager {
 
 	public static void onPlayerDisconnect(ServerPlayer player) {
 		getPlayerAbilities(player).forEach(Ability::onEnd);
+	}
+
+	public static float modifyDamage(ServerPlayer player, DamageSource source, float amount) {
+		for (Ability ability : getPlayerAbilities(player)) {
+			amount = ability.modifyDamage(source, amount);
+		}
+		return amount;
 	}
 
 	public static void onChosen(ServerPlayer player, InBetweenChoice choice) {

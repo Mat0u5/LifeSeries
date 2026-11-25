@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability;
 
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
 
 import java.util.UUID;
 
@@ -51,6 +52,10 @@ public abstract class Ability {
 	}
 
 	public void tick() {
+	}
+
+	public float modifyDamage(DamageSource source, float amount) {
+		return amount;
 	}
 
 	public enum AbilityType {
