@@ -1,7 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability;
 
-import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.abilities.EmptyAbility;
-import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.abilities.SpeedAbility;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.abilities.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.world.item.Items;
 
@@ -16,15 +15,15 @@ public enum Abilities {
 	,DASH(EmptyAbility::new, AbilityIcon.effect("speed"), "Dash", ChatFormatting.AQUA, ACTIVE, "Double-tap a movement key to dash 4 blocks in that direction.", "")
 	,EXTRA_REACH(EmptyAbility::new, AbilityIcon.item(Items.RABBIT_FOOT), "Extra Reach", ChatFormatting.DARK_RED, PASSIVE, "+0.5 blocks of attack reach.", "")
 	,FEATHER_FALLING(EmptyAbility::new, AbilityIcon.custom("slow_falling"), "Feather Falling", ChatFormatting.WHITE, PASSIVE, "Permanent Feather Falling IV.", "• This is in addition to your armour enchantments.")
-	,FIRE_RESISTANCE(EmptyAbility::new, AbilityIcon.effect("fire_resistance"), "Fire Resistance", ChatFormatting.GOLD, PASSIVE, "Permanent Fire Resistance I.", "• This is in addition to your armour enchantments.")
-	,HASTE(EmptyAbility::new, AbilityIcon.effect("haste"), "Haste", ChatFormatting.GOLD, PASSIVE, "Permanent Haste II.", "")
+	,FIRE_RESISTANCE(FireResistanceAbility::new, AbilityIcon.effect("fire_resistance"), "Fire Resistance", ChatFormatting.GOLD, PASSIVE, "Permanent Fire Resistance I.", "• This is in addition to your armour enchantments.")
+	,HASTE(HasteAbility::new, AbilityIcon.effect("haste"), "Haste", ChatFormatting.GOLD, PASSIVE, "Permanent Haste II.", "")
 	,HEALTH_VISION(EmptyAbility::new, AbilityIcon.custom("health_vision"), "Health Vision", ChatFormatting.RED, ACTIVE, "See other players' health underneath their name tags.", "")
 	,KNOCKBACK_RESISTANCE(EmptyAbility::new, AbilityIcon.item(Items.IRON_CHESTPLATE), "Knockback Resistance", ChatFormatting.GRAY, PASSIVE, "Take 75% less knockback.", "")
 	,MORE_DROPS(EmptyAbility::new, AbilityIcon.effect("luck"), "More Drops", ChatFormatting.GREEN, PASSIVE, "Permanent Luck I, for more mob and block drops.", "")
 	,PROJECTILE_PROTECTION(EmptyAbility::new, AbilityIcon.item(Items.BOW), "Projectile Protection", ChatFormatting.DARK_RED, PASSIVE, "Take 50% less projectile damage.", "• This is in addition to your armour enchantments.")
-	,RESISTANCE(EmptyAbility::new, AbilityIcon.effect("resistance"), "Resistance", ChatFormatting.GRAY, PASSIVE, "Permanent Resistance I.", "• This is in addition to your armour enchantments.")
+	,RESISTANCE(ResistanceAbility::new, AbilityIcon.effect("resistance"), "Resistance", ChatFormatting.GRAY, PASSIVE, "Permanent Resistance I.", "• This is in addition to your armour enchantments.")
 	,SATURATION(EmptyAbility::new, AbilityIcon.effect("saturation"), "Saturation", ChatFormatting.GOLD, PASSIVE, "Regenerate health twice as fast when your hunger bar is nearly full.", "")
-	,SECOND_WIND(EmptyAbility::new, AbilityIcon.custom("second_wind"), "Second Wind", ChatFormatting.YELLOW, ACTIVE, "TODO", "")
+	//,SECOND_WIND(EmptyAbility::new, AbilityIcon.custom("second_wind"), "Second Wind", ChatFormatting.YELLOW, ACTIVE, "TODO", "") //TODO
 	,SHIELD_BASH(EmptyAbility::new, AbilityIcon.custom("shield_bash"), "Shield Bash", ChatFormatting.DARK_RED, ACTIVE, "Launch back nearby players with a shield attack. ", "• Attack while blocking with a shield to activate.")
 	,SMALLER(EmptyAbility::new, AbilityIcon.item(Items.CAKE), "Smaller", ChatFormatting.DARK_RED, PASSIVE, "Your model and hitbox are slightly smaller and harder to hit. ", "")
 	,SPEED(SpeedAbility::new, AbilityIcon.effect("speed"), "Speed", ChatFormatting.AQUA, PASSIVE, "Permanent Speed I.", "")
