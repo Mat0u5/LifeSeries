@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.matlib.utils.player.AttributeUtils;
+import net.mat0u5.matlib.utils.player.PlayerReference;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 
@@ -50,8 +51,12 @@ public class AbilityManager {
 	}
 
 	public static void onPlayerJoin(ServerPlayer player) {
-		getPlayerAbilities(player).forEach(Ability::onStart);
 		sendUpdatePacket(player);
+		PlayerReference ref = PlayerReference.of(player);
+		TaskScheduler.scheduleTask(1, () -> {
+			ServerPlayer joined = ref.get();
+			if (joined != null) getPlayerAbilities(joined).forEach(Ability::onStart);
+		});
 	}
 
 	public static void onPlayerDisconnect(ServerPlayer player) {

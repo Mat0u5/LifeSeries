@@ -1,0 +1,311 @@
+{
+    "providers": [
+        {
+            "type": "bitmap",
+            "file": "lifeseries:font/heart_container.png",
+            "ascent": 8,
+            "height": 9,
+            "chars": [
+                "\ue000"
+            ]
+        },
+        {
+            "type": "space",
+            "advances": {
+                "\ue001": -10
+            }
+        },
+        {
+            "type": "bitmap",
+            "file": "lifeseries:gui/sprites/aqua_full.png",
+            "ascent": 8,
+            "height": 9,
+            "chars": [
+                "\ue010"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "lifeseries:gui/sprites/aqua_hardcore_full.png",
+            "ascent": 8,
+            "height": 9,
+            "chars": [
+                "\ue011"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "lifeseries:gui/sprites/black_full.png",
+            "ascent": 8,
+            "height": 9,
+            "chars": [
+                "\ue012"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "lifeseries:gui/sprites/black_hardcore_full.png",
+            "ascent": 8,
+            "height": 9,
+            "chars": [
+                "\ue013"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "lifeseries:gui/sprites/blue_full.png",
+            "ascent": 8,
+            "height": 9,
+            "chars": [
+                "\ue014"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "lifeseries:gui/sprites/blue_hardcore_full.png",
+            "ascent": 8,
+            "height": 9,
+            "chars": [
+                "\ue015"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "lifeseries:gui/sprites/dark_aqua_full.png",
+            "ascent": 8,
+            "height": 9,
+            "chars": [
+                "\ue016"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "lifeseries:gui/sprites/dark_aqua_hardcore_full.png",
+            "ascent": 8,
+            "height": 9,
+            "chars": [
+                "\ue017"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "lifeseries:gui/sprites/dark_blue_full.png",
+            "ascent": 8,
+            "height": 9,
+            "chars": [
+                "\ue018"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "lifeseries:gui/sprites/dark_blue_hardcore_full.png",
+            "ascent": 8,
+            "height": 9,
+            "chars": [
+                "\ue019"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "lifeseries:gui/sprites/dark_gray_full.png",
+            "ascent": 8,
+            "height": 9,
+            "chars": [
+                "\ue01a"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "lifeseries:gui/sprites/dark_gray_hardcore_full.png",
+            "ascent": 8,
+            "height": 9,
+            "chars": [
+                "\ue01b"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "lifeseries:gui/sprites/dark_green_full.png",
+            "ascent": 8,
+            "height": 9,
+            "chars": [
+                "\ue01c"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "lifeseries:gui/sprites/dark_green_hardcore_full.png",
+            "ascent": 8,
+            "height": 9,
+            "chars": [
+                "\ue01d"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "lifeseries:gui/sprites/dark_purple_full.png",
+            "ascent": 8,
+            "height": 9,
+            "chars": [
+                "\ue01e"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "lifeseries:gui/sprites/dark_purple_hardcore_full.png",
+            "ascent": 8,
+            "height": 9,
+            "chars": [
+                "\ue01f"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "lifeseries:gui/sprites/dark_red_full.png",
+            "ascent": 8,
+            "height": 9,
+            "chars": [
+                "\ue020"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "lifeseries:gui/sprites/dark_red_hardcore_full.png",
+            "ascent": 8,
+            "height": 9,
+            "chars": [
+                "\ue021"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "lifeseries:gui/sprites/gold_full.png",
+            "ascent": 8,
+            "height": 9,
+            "chars": [
+                "\ue022"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "lifeseries:gui/sprites/gold_hardcore_full.png",
+            "ascent": 8,
+            "height": 9,
+            "chars": [
+                "\ue023"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "lifeseries:gui/sprites/gray_full.png",
+            "ascent": 8,
+            "height": 9,
+            "chars": [
+                "\ue024"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "lifeseries:gui/sprites/gray_hardcore_full.png",
+            "ascent": 8,
+            "height": 9,
+            "chars": [
+                "\ue025"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "lifeseries:gui/sprites/green_full.png",
+            "ascent": 8,
+            "height": 9,
+            "chars": [
+                "\ue026"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "lifeseries:gui/sprites/green_hardcore_full.png",
+            "ascent": 8,
+            "height": 9,
+            "chars": [
+                "\ue027"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "lifeseries:gui/sprites/light_purple_full.png",
+            "ascent": 8,
+            "height": 9,
+            "chars": [
+                "\ue028"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "lifeseries:gui/sprites/light_purple_hardcore_full.png",
+            "ascent": 8,
+            "height": 9,
+            "chars": [
+                "\ue029"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "lifeseries:gui/sprites/white_full.png",
+            "ascent": 8,
+            "height": 9,
+            "chars": [
+                "\ue02a"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "lifeseries:gui/sprites/white_hardcore_full.png",
+            "ascent": 8,
+            "height": 9,
+            "chars": [
+                "\ue02b"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "lifeseries:gui/sprites/yellow_full.png",
+            "ascent": 8,
+            "height": 9,
+            "chars": [
+                "\ue02c"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "lifeseries:gui/sprites/yellow_hardcore_full.png",
+            "ascent": 8,
+            "height": 9,
+            "chars": [
+                "\ue02d"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "lifeseries:gui/sprites/red_full.png",
+            "ascent": 8,
+            "height": 9,
+            "chars": [
+                "\ue02e"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "lifeseries:gui/sprites/red_hardcore_full.png",
+            "ascent": 8,
+            "height": 9,
+            "chars": [
+                "\ue02f"
+            ]
+        },
+        {
+            "type": "reference",
+            "id": "minecraft:default"
+        }
+    ]
+}

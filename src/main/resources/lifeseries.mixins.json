@@ -11,6 +11,7 @@
   "mixins": [
     "AnvilMenuMixin",
     "BiomeMixin",
+    "BlockMixin",
     "ItemStackBoogeymanMixin",
     "ChunkMapAccessor",
     "ChunkStatusTasksMixin",

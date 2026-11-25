@@ -38,6 +38,7 @@
     "LevelMixin",
     "LevelRendererMixin",
     "LivingEntityMixin",
+    "LivingEntityRendererMixin",
     "MinecraftMixin",
     "MusicManagerMixin",
     "OpenChatScreenMixin",

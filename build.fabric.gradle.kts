@@ -24,7 +24,6 @@ platform {
 
 loom {
 	accessWidenerPath = rootProject.file("src/main/resources/aw/${stonecutter.current.version}.accesswidener")
-	val isJbr = System.getProperty("java.vendor")?.contains("JetBrains", ignoreCase = true) == true
 	runs.named("client") {
 		client()
 		ideConfigGenerated(false)
@@ -32,7 +31,6 @@ loom {
 		environment = "client"
 		programArgs("--username=Player")
 		configName = "Fabric Client"
-		if (isJbr) vmArg("-XX:+AllowEnhancedClassRedefinition")
 	}
 	runs.named("server") {
 		server()
@@ -40,8 +38,15 @@ loom {
 		runDir = "run/"
 		environment = "server"
 		configName = "Fabric Server"
-		if (isJbr) vmArg("-XX:+AllowEnhancedClassRedefinition")
 	}
+}
+
+tasks.withType<net.fabricmc.loom.task.RunGameTask>().configureEach {
+	javaLauncher = javaToolchains.launcherFor {
+		languageVersion = JavaLanguageVersion.of(25)
+		vendor = JvmVendorSpec.JETBRAINS
+	}
+	jvmArgs("-XX:+AllowEnhancedClassRedefinition")
 }
 
 repositories {

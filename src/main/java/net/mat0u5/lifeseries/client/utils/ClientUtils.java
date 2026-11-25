@@ -75,23 +75,28 @@ public class ClientUtils extends net.mat0u5.matlib.client.utils.ClientUtils {
 
     @Nullable
     public static Identifier customHeart(String texturePath) {
-        String playerTeamColor = getPlayerTeamColorOrPacket();
-        String playerTeamName = getPlayerTeamNameOrPacket();
-        if (LifeSeries.modFullyDisabled() || playerTeamColor == null || playerTeamName == null) return null;
-        if (!ClientRenderer.lifeSkinsAllowedColors.contains(playerTeamColor.toLowerCase(Locale.ROOT))) return null;
         if (!ClientRenderer.lifeSkinsAllowedHearts.contains(texturePath)) return null;
+        HeartStyle style = heartStyle(getPlayerTeamColorOrPacket(), getPlayerTeamNameOrPacket());
+        if (style == null) return null;
 
-        boolean hardcore = LifeSeriesClient.HARDCORE_HEARTS_ALL_LIVES || (LifeSeriesClient.HARDCORE_HEARTS_LAST_LIFE && playerTeamName.equals("lives_1"));
-        if (!LifeSeriesClient.COLORED_HEARTS && !hardcore) return null;
-
-        String color = LifeSeriesClient.COLORED_HEARTS ? playerTeamColor.toLowerCase(Locale.ROOT) : "red";
         String heartType = texturePath.replaceFirst("hud/heart/", "");
-        if (hardcore && !heartType.startsWith("hardcore_")) heartType = "hardcore_" + heartType;
+        if (style.hardcore() && !heartType.startsWith("hardcore_")) heartType = "hardcore_" + heartType;
         //? if <= 1.20 {
-        //return IdentifierHelper.lifeseries("textures/gui/sprites/" + color + "_" + heartType + ".png");
+        //return IdentifierHelper.lifeseries("textures/gui/sprites/" + style.color() + "_" + heartType + ".png");
         //?} else {
-        return IdentifierHelper.lifeseries(color + "_" + heartType);
+        return IdentifierHelper.lifeseries(style.color() + "_" + heartType);
         //?}
+    }
+
+    public record HeartStyle(String color, boolean hardcore) {}
+
+    @Nullable
+    public static HeartStyle heartStyle(@Nullable String teamColor, @Nullable String teamName) {
+        if (LifeSeries.modFullyDisabled() || teamColor == null || teamName == null) return null;
+        if (!ClientRenderer.lifeSkinsAllowedColors.contains(teamColor.toLowerCase(Locale.ROOT))) return null;
+        boolean hardcore = LifeSeriesClient.HARDCORE_HEARTS_ALL_LIVES || (LifeSeriesClient.HARDCORE_HEARTS_LAST_LIFE && teamName.equals("lives_1"));
+        if (!LifeSeriesClient.COLORED_HEARTS && !hardcore) return null;
+        return new HeartStyle(LifeSeriesClient.COLORED_HEARTS ? teamColor.toLowerCase(Locale.ROOT) : "red", hardcore);
     }
 
     //? if > 1.20.3 {

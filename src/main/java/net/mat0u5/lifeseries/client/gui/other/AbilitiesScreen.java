@@ -283,7 +283,7 @@ public class AbilitiesScreen extends Screen {
 			tooltip.addAll(font.split(Component.literal(ability.description().trim()), TOOLTIP_WIDTH));
 			if (!ability.additionalDescription().isBlank()) {
 				tooltip.add(FormattedCharSequence.EMPTY);
-				tooltip.addAll(font.split(Component.literal(ability.additionalDescription().trim()), TOOLTIP_WIDTH));
+				tooltip.addAll(font.split(Component.literal(ability.additionalDescription().trim()).withStyle(ChatFormatting.GRAY), TOOLTIP_WIDTH));
 			}
 		}
 

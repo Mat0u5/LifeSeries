@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.mixin;
 import com.google.common.collect.Lists;
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.abilities.MoreDropsAbility;
 import net.mat0u5.matlib.utils.world.ItemStackUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
@@ -10,6 +11,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
+import net.minecraft.world.item.enchantment.Enchantments;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -23,19 +25,19 @@ import static net.mat0u5.lifeseries.LifeSeries.blacklist;
 import static net.mat0u5.lifeseries.LifeSeries.seasonConfig;
 import static net.mat0u5.matlib.MatLib.server;
 
-//? if >= 1.21.2
-import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 //? if <= 1.20.5 {
 /*import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.entity.LivingEntity;
 *///?} else {
 import net.minecraft.core.Holder;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.damagesource.DamageSource;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 //?}
+//? if > 1.20.5
+import net.minecraft.world.entity.LivingEntity;
+//? if >= 26.1
+import net.minecraft.world.item.ItemInstance;
 //? if > 1.20 && <= 1.20.5 {
 /*import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.flag.FeatureFlagSet;
@@ -239,6 +241,32 @@ public class EnchantmentHelperMixin {
             }
         });
         cir.setReturnValue(list);
+    }
+    //?}
+
+    //? if <= 1.20.5 {
+    /*@Inject(method = "getMobLooting", at = @At("RETURN"), cancellable = true)
+    private static void modifyLooting(LivingEntity entity, CallbackInfoReturnable<Integer> cir) {
+        if (MoreDropsAbility.hasMoreDrops(entity)) cir.setReturnValue(cir.getReturnValue() + MoreDropsAbility.getLootingLevelAdd());
+    }
+
+    @Inject(method = "getItemEnchantmentLevel", at = @At("RETURN"), cancellable = true)
+    private static void modifyFortune(Enchantment enchantment, ItemStack stack, CallbackInfoReturnable<Integer> cir) {
+        if (enchantment == Enchantments.FORTUNE && MoreDropsAbility.hasMoreDrops(MoreDropsAbility.capturedEntity)) cir.setReturnValue(cir.getReturnValue() + MoreDropsAbility.getFortuneLevelAdd());
+    }
+    *///?} else {
+    @Inject(method = "getEnchantmentLevel(Lnet/minecraft/core/Holder;Lnet/minecraft/world/entity/LivingEntity;)I", at = @At("RETURN"), cancellable = true)
+    private static void modifyLooting(Holder<Enchantment> enchantment, LivingEntity entity, CallbackInfoReturnable<Integer> cir) {
+        if (enchantment.is(Enchantments.LOOTING) && MoreDropsAbility.hasMoreDrops(entity)) cir.setReturnValue(cir.getReturnValue() + MoreDropsAbility.getLootingLevelAdd());
+    }
+
+    @Inject(method = "getItemEnchantmentLevel", at = @At("RETURN"), cancellable = true)
+    //? if <= 1.21.11 {
+    //private static void moreDropsFortune(Holder<Enchantment> enchantment, ItemStack stack, CallbackInfoReturnable<Integer> cir) {
+    //?} else {
+    private static void modifyFortune(Holder<Enchantment> enchantment, ItemInstance stack, CallbackInfoReturnable<Integer> cir) {
+    //?}
+        if (enchantment.is(Enchantments.FORTUNE) && MoreDropsAbility.hasMoreDrops(MoreDropsAbility.capturedEntity)) cir.setReturnValue(cir.getReturnValue() + MoreDropsAbility.getFortuneLevelAdd());
     }
     //?}
 }

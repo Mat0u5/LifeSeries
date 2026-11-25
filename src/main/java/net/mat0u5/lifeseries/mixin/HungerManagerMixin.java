@@ -4,6 +4,7 @@ import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.abilities.SaturationAbility;
 import net.mat0u5.lifeseries.utils.interfaces.IHungerManager;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.food.FoodData;
@@ -27,6 +28,8 @@ public class HungerManagerMixin implements IHungerManager {
     private int foodLevel;
     @Shadow
     private float saturationLevel;
+    @Shadow
+    private int tickTimer;
 
     @Unique
     private ServerPlayer ls$player;
@@ -85,6 +88,7 @@ public class HungerManagerMixin implements IHungerManager {
     private void updateTail(ServerPlayer player, CallbackInfo ci) {
     //?}
         if (LifeSeries.isClientOrDisabled()) return;
+        if (ls$player != null) tickTimer = SaturationAbility.modifyTickTimer(ls$player, foodLevel, tickTimer);
         if (ls$prevFoodLevel != foodLevel || ls$prevSaturationLevel != saturationLevel) {
             ls$emitUpdate();
         }

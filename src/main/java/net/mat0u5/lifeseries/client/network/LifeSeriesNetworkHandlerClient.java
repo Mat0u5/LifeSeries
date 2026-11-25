@@ -99,6 +99,7 @@ public class LifeSeriesNetworkHandlerClient implements RegistrableClient {
 
         //String list payload
         SimplePackets.ACTIVE_ABILITIES.setClientReceive(payload -> AbilitiesClient.onActiveAbilitiesPayload(payload.value()));
+        SimplePackets.HEALTH_VISION.setClientReceive(payload -> AbilitiesClient.onHealthVisionPayload(payload.value()));
         SimplePackets.NICELIFE_LIVE_VOTING.setClientReceive(payload -> {
             LifeSeriesClient.liveVoting.clear();
             for (String string : payload.value()) {

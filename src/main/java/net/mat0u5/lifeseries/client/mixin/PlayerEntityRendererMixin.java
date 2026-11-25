@@ -51,6 +51,26 @@ import net.mat0u5.lifeseries.client.utils.ClientUtils;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 *///?}
 
+import net.mat0u5.lifeseries.client.features.abilities.AbilitiesClient;
+//? if <= 1.21 {
+/*import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import net.minecraft.client.Minecraft;
+import net.minecraft.world.entity.Entity;
+*///?} else {
+import net.minecraft.world.entity.EntityAttachment;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+//?}
+//? if >= 1.21.2 && <= 1.21.6
+//import net.minecraft.client.player.AbstractClientPlayer;
+//? if >= 1.21.9
+import net.minecraft.world.entity.Avatar;
+//? if >= 26.1 {
+import net.minecraft.client.renderer.entity.state.AvatarRenderState;
+import net.minecraft.network.chat.Component;
+//?}
+
 //? if <= 1.21.6 {
 /*import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 @Mixin(value = PlayerRenderer.class, priority = 1)
@@ -152,6 +172,48 @@ public abstract class PlayerEntityRendererMixin {
     }
     *///?}
     //^ In EntityRender from 26.1+
+
+    //? if <= 1.20.3 {
+    /*@WrapOperation(method = "renderNameTag(Lnet/minecraft/client/player/AbstractClientPlayer;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/LivingEntityRenderer;renderNameTag(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", ordinal = 1))
+    private void healthVision(PlayerRenderer instance, Entity entity, Component name, PoseStack poseStack, MultiBufferSource buffer, int light, Operation<Void> original) {
+        Component health = AbilitiesClient.healthVisionText(entity, Minecraft.getInstance().getEntityRenderDispatcher().distanceToSqr(entity));
+        if (health != null) {
+            original.call(instance, entity, health, poseStack, buffer, light);
+            if (AbilitiesClient.healthOnlyEntity == entity) return;
+            poseStack.translate(0.0F, 9.0F * 1.15F * 0.025F, 0.0F);
+        }
+        original.call(instance, entity, name, poseStack, buffer, light);
+    }
+    *///?} else if <= 1.21 {
+    /*@WrapOperation(method = "renderNameTag(Lnet/minecraft/client/player/AbstractClientPlayer;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;IF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/LivingEntityRenderer;renderNameTag(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/network/chat/Component;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;IF)V", ordinal = 1))
+    private void healthVision(PlayerRenderer instance, Entity entity, Component name, PoseStack poseStack, MultiBufferSource buffer, int light, float partialTick, Operation<Void> original) {
+        Component health = AbilitiesClient.healthVisionText(entity, Minecraft.getInstance().getEntityRenderDispatcher().distanceToSqr(entity));
+        if (health != null) {
+            original.call(instance, entity, health, poseStack, buffer, light, partialTick);
+            if (AbilitiesClient.healthOnlyEntity == entity) return;
+            poseStack.translate(0.0F, 9.0F * 1.15F * 0.025F, 0.0F);
+        }
+        original.call(instance, entity, name, poseStack, buffer, light, partialTick);
+    }
+    *///?} else if <= 1.21.6 {
+    /*@Inject(method = "extractRenderState(Lnet/minecraft/client/player/AbstractClientPlayer;Lnet/minecraft/client/renderer/entity/state/PlayerRenderState;F)V", at = @At("TAIL"))
+    private void healthVision(AbstractClientPlayer entity, PlayerRenderState state, float partialTick, CallbackInfo ci) {
+    *///?} else {
+    @Inject(method = "extractRenderState(Lnet/minecraft/world/entity/Avatar;Lnet/minecraft/client/renderer/entity/state/AvatarRenderState;F)V", at = @At("TAIL"))
+    private void healthVision(Avatar entity, AvatarRenderState state, float partialTick, CallbackInfo ci) {
+    //?}
+    //? if >= 1.21.2 {
+        Component health = AbilitiesClient.healthVisionText(entity, state.distanceToCameraSq);
+        if (health == null) return;
+        if (state.nameTag != null) {
+            state.scoreText = health;
+            return;
+        }
+        state.nameTag = health;
+        state.scoreText = null;
+        state.nameTagAttachment = entity.getAttachments().getNullable(EntityAttachment.NAME_TAG, 0, entity.getYRot(partialTick));
+    }
+    //?}
 
 
     @ModifyReturnValue(method = "getArmPose*", at = @At("RETURN"))

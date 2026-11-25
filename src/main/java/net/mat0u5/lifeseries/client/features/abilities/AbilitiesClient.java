@@ -4,6 +4,8 @@ import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.events.ClientKeybinds;
 import net.mat0u5.lifeseries.client.gui.other.AbilitiesScreen;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.client.render.ClientRenderer;
+import net.mat0u5.lifeseries.client.utils.ClientUtils;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.Abilities;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.matlib.client.render.RenderUtils;
@@ -13,25 +15,37 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
 
 //? if >= 1.21.9
 import net.minecraft.network.chat.FontDescription;
+//? if >= 26.2
+import net.minecraft.world.scores.TeamColor;
 import net.minecraft.sounds.SoundEvents;
 
 public class AbilitiesClient {
 	//? if <= 1.21.6 {
-	//private static final Identifier SMALL_CAPS = IdentifierHelper.lifeseries("small_caps");
-	//?} else {
+	/*private static final Identifier SMALL_CAPS = IdentifierHelper.lifeseries("small_caps");
+	private static final Identifier ICONS = IdentifierHelper.lifeseries("icons");
+	*///?} else {
 	private static final FontDescription SMALL_CAPS = new FontDescription.Resource(IdentifierHelper.lifeseries("small_caps"));
+	private static final FontDescription ICONS = new FontDescription.Resource(IdentifierHelper.lifeseries("icons"));
 	//?}
+	private static final double HEALTH_VISION_DISTANCE_SQ = 4096; // Vanilla name tag distance
+	// Set while a player renderer shows only the health of a player with a hidden name (<= 1.21)
+	@Nullable
+	public static Entity healthOnlyEntity;
 
 	public record ActiveAbility(Abilities ability, double hearts) {}
 	public record HeartTexture(Identifier texture, int width, int height) {}
@@ -46,6 +60,18 @@ public class AbilitiesClient {
 			}catch(Exception ignored) {}
 		}
 		activeAbilities = newAbilities;
+	}
+
+	private static Map<Integer, Integer> healthVisionHealths = new HashMap<>(); // Entity id -> health
+	public static void onHealthVisionPayload(List<String> payload) {
+		Map<Integer, Integer> healths = new HashMap<>();
+		for (String str : payload) {
+			try {
+				String[] split = str.split(";", 2);
+				healths.put(Integer.parseInt(split[0]), Integer.parseInt(split[1]));
+			}catch(Exception ignored) {}
+		}
+		healthVisionHealths = healths;
 	}
 
 	public static void onAbilityGainMessagePacket(String abilityStr) {
@@ -109,8 +135,42 @@ public class AbilitiesClient {
 		return activeAbilities;
 	}
 
+	@Nullable
+	public static Component healthVisionText(Entity entity, double distanceSq) {
+		Minecraft client = Minecraft.getInstance();
+		if (distanceSq >= HEALTH_VISION_DISTANCE_SQ || !isActive(Abilities.HEALTH_VISION)) return null;
+		if (!(entity instanceof Player player) || client.player == null || player == client.getCameraEntity()) return null;
+		//? if <= 26.1 {
+		//if (!Minecraft.renderNames()) return null;
+		//?} else {
+		if (client.gui.hud.isHidden()) return null;
+		//?}
+		if (player.isSpectator() || player.isInvisibleTo(client.player)) return null;
+		Integer health = healthVisionHealths.get(player.getId());
+		if (health == null) return null;
+
+		String teamColor = null;
+		String teamName = null;
+		var team = player.getTeam();
+		if (team != null) {
+			//~ if >= 26.2 'team.getColor().getName()' -> 'team.getColor().orElse(TeamColor.WHITE).getSerializedName()' {
+			teamColor = team.getColor().orElse(TeamColor.WHITE).getSerializedName();
+			//~}
+			teamName = team.getName();
+		}
+		ClientUtils.HeartStyle style = ClientUtils.heartStyle(teamColor, teamName);
+		int colorIndex = ClientRenderer.lifeSkinsAllowedColors.indexOf(style == null ? "red" : style.color());
+		boolean hardcore = (style != null && style.hardcore()) || player.level().getLevelData().isHardcore();
+		// font/icons.json: heart container, a step back, then <color>_full / <color>_hardcore_full
+		String heart = String.valueOf(new char[]{(char) 0xE000, (char) 0xE001, (char) (0xE010 + colorIndex * 2 + (hardcore ? 1 : 0))});
+		return Component.empty()
+				.append(Component.literal(heart).withStyle(style1 -> style1.withFont(ICONS)))
+				.append(Component.literal(" " + health).withStyle(ChatFormatting.WHITE));
+	}
+
 	public static void reset() {
 		activeAbilities = new ArrayList<>();
+		healthVisionHealths = new HashMap<>();
 	}
 
 	// textures/gui/menu/heart_texture/hearts_<hearts>.png, null when theres none

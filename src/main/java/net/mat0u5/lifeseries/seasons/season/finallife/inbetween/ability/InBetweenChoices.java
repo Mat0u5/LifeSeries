@@ -14,7 +14,9 @@ public class InBetweenChoices {
 		register(Abilities.AIR_JUMP, null, 3);
 		register(Abilities.BLAST_RESISTANCE, null, 3);
 		register(Abilities.DASH, null, 3);
+		//? if > 1.20.3 {
 		register(Abilities.EXTRA_REACH, null, 3);
+		//?}
 		register(Abilities.FEATHER_FALLING, null, 3);
 		register(Abilities.FIRE_RESISTANCE, null, 3);
 		register(Abilities.HASTE, null, 3);
