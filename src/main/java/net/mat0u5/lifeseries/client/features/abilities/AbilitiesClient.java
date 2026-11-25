@@ -3,7 +3,6 @@ package net.mat0u5.lifeseries.client.features.abilities;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.events.ClientKeybinds;
 import net.mat0u5.lifeseries.client.gui.other.AbilitiesScreen;
-import net.mat0u5.lifeseries.client.utils.ClientTaskScheduler;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.Abilities;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
@@ -49,7 +48,7 @@ public class AbilitiesClient {
 		activeAbilities = newAbilities;
 	}
 
-	public static void onAbilityGainPacket(String abilityStr) {
+	public static void onAbilityGainMessagePacket(String abilityStr) {
 		try {
 			Abilities ability = Abilities.valueOf(abilityStr);
 			onAbilityGain(ability);
@@ -57,7 +56,7 @@ public class AbilitiesClient {
 	}
 
 	public static void onAbilityGain(Abilities ability) {
-		ClientTaskScheduler.schedulePriorityTask(100, () -> sendAbilityInfoText(ability));
+		sendAbilityInfoText(ability);
 	}
 
 	public static void sendAbilityInfoText(Abilities ability) {
@@ -90,7 +89,6 @@ public class AbilitiesClient {
 		player.sendSystemMessage(infoText);
 		player.sendSystemMessage(Component.empty());
 		//?}
-		player.playSound(SoundEvents.EXPERIENCE_ORB_PICKUP);
 	}
 
 	public static void onPressOpenScreenKey() {

@@ -1,8 +1,10 @@
 package net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability;
 
 import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
+import net.mat0u5.lifeseries.utils.other.TaskScheduler;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.matlib.utils.player.AttributeUtils;
 import net.minecraft.server.level.ServerPlayer;
@@ -55,15 +57,13 @@ public class AbilityManager {
 		if (choice.isEmpty()) return;
 		Ability abilityInstance = choice.ability();
 		addAbility(player, abilityInstance, true);
-		String name = abilityInstance.ability().name();
-		SimplePackets.ABILITY_GAIN.sendToClient(name, player);
 	}
 
-	public static void addAbility(ServerPlayer player, Abilities ability, boolean addHealth) {
-		addAbility(player, ability.createAbility(), addHealth);
+	public static void addAbility(ServerPlayer player, Abilities ability, boolean delayedMessage) {
+		addAbility(player, ability.createAbility(), delayedMessage);
 	}
 
-	public static void addAbility(ServerPlayer player, Ability abilityInstance, boolean addHealth) {
+	public static void addAbility(ServerPlayer player, Ability abilityInstance, boolean delayedMessage) {
 		if (hasAbility(player, abilityInstance.ability())) return;
 		abilityInstance.reloadHealthChange();
 
@@ -74,18 +74,31 @@ public class AbilityManager {
 		abilities.get(uuid).add(abilityInstance);
 		saveStoredAbilities();
 		resetPlayerMaxHealth(player);
-		if (addHealth) player.heal(abilityInstance.getHealthChange());
+		player.heal(abilityInstance.getHealthChange());
 		abilityInstance.bindPlayer(player);
 		abilityInstance.onStart();
 		sendUpdatePacket(player);
+
+		Abilities ability = abilityInstance.ability();
+		if (delayedMessage) {
+			TaskScheduler.schedulePriorityTask(100, () -> {
+				addAbilityMessage(player, ability);
+			});
+		}
+		else {
+			addAbilityMessage(player, ability);
+		}
 	}
 
 	public static void clearAbilities(ServerPlayer player) {
-		getPlayerAbilities(player).forEach(Ability::onEnd);
+		var playerAbilities = getPlayerAbilities(player);
+		boolean hadAbilities = !playerAbilities.isEmpty();
+		playerAbilities.forEach(Ability::onEnd);
 		abilities.put(player.getUUID(), new ArrayList<>());
 		saveStoredAbilities();
 		resetPlayerMaxHealth(player);
 		sendUpdatePacket(player);
+		if (hadAbilities) removeAbilityMessage(player);
 	}
 
 	public static void removeAbility(ServerPlayer player, Abilities ability) {
@@ -96,6 +109,16 @@ public class AbilityManager {
 		saveStoredAbilities();
 		resetPlayerMaxHealth(player);
 		sendUpdatePacket(player);
+		removeAbilityMessage(player);
+	}
+
+	private static void addAbilityMessage(ServerPlayer player, Abilities ability) {
+		SimplePackets.ABILITY_GAIN_MESSAGE.sendToClient(ability.name(), player);
+		ModifiableSound.FINALLIFE_ABILITY_GAIN.play(player);
+	}
+
+	private static void removeAbilityMessage(ServerPlayer player) {
+		ModifiableSound.FINALLIFE_ABILITY_LOSE.play(player);
 	}
 
 	public static List<Ability> getPlayerAbilities(ServerPlayer player) {

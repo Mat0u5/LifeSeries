@@ -132,14 +132,9 @@ public class FinalLifeConfig extends SeasonConfig {
 			.description("Controls whether the trivia bot shows up in the In-Between.")
 			.setNew(true)
 			.group("season.inbetween.trivia").groupHeader(true);
-	public final ConfigurableValue<Integer> TRIVIA_DEATH_NUM_MIN = ConfigurableValue.register(this, "trivia_death_num_min", 3)
-			.name("Trivia Death Number Min")
-			.description("Controls on which death the trivia bot starts showing up in the in-between.")
-			.setNew(true)
-			.group("season.inbetween.trivia");
-	public final ConfigurableValue<Integer> TRIVIA_DEATH_NUM_MAX = ConfigurableValue.register(this, "trivia_death_num_max", 3)
-			.name("Trivia Death Number Max")
-			.description("Controls on which death the trivia bot stops showing up in the in-between.")
+	public final ConfigurableValue<List<String>> TRIVIA_DEATH_NUMBERS = ConfigurableValue.register(this, "trivia_death_numbers", List.of("3"), ConfigTypes.STRING_LIST)
+			.name("Trivia Death Numbers")
+			.description("Controls on which deaths the trivia bot shows up in the In-Between.")
 			.setNew(true)
 			.group("season.inbetween.trivia");
 	public final ConfigurableValue<TriviaGuiType> TRIVIA_GUI_TYPE = ConfigurableValue.register(this, "gui_type", TriviaGuiType.NICE_LIFE)
@@ -154,10 +149,80 @@ public class FinalLifeConfig extends SeasonConfig {
 			.group("season.inbetween.trivia.questions").groupHeader(true);
 	public final ConfigHeader GROUP_ABILITIES = ConfigHeader.register(this, "group_abilities", "Abilities")
 			.group("season.abilities").groupHeader(true);
+	public final ConfigurableValue<Integer> ABILITY_AIR_JUMP_HEALTH = ConfigurableValue.register(this, "ability_air_jump_health", 0, ConfigTypes.HEARTS)
+			.name("Air Jump Ability Health")
+			.description("Controls how much health this ability will add/subtract.")
+			.group("season.abilities");
+	public final ConfigurableValue<Integer> ABILITY_BLAST_RESISTANCE_HEALTH = ConfigurableValue.register(this, "ability_blast_resistance_health", 2, ConfigTypes.HEARTS)
+			.name("Blast Resistance Ability Health")
+			.description("Controls how much health this ability will add/subtract.")
+			.group("season.abilities");
+	public final ConfigurableValue<Integer> ABILITY_DASH_HEALTH = ConfigurableValue.register(this, "ability_dash_health", 2, ConfigTypes.HEARTS)
+			.name("Dash Ability Health")
+			.description("Controls how much health this ability will add/subtract.")
+			.group("season.abilities");
+	public final ConfigurableValue<Integer> ABILITY_EXTRA_REACH_HEALTH = ConfigurableValue.register(this, "ability_extra_reach_health", 2, ConfigTypes.HEARTS)
+			.name("Extra Reach Ability Health")
+			.description("Controls how much health this ability will add/subtract.")
+			.group("season.abilities");
+	public final ConfigurableValue<Integer> ABILITY_FEATHER_FALLING_HEALTH = ConfigurableValue.register(this, "ability_feather_falling_health", 2, ConfigTypes.HEARTS)
+			.name("Feather Falling Ability Health")
+			.description("Controls how much health this ability will add/subtract.")
+			.group("season.abilities");
+	public final ConfigurableValue<Integer> ABILITY_FIRE_RESISTANCE_HEALTH = ConfigurableValue.register(this, "ability_fire_resistance_health", 4, ConfigTypes.HEARTS)
+			.name("Fire Resistance Ability Health")
+			.description("Controls how much health this ability will add/subtract.")
+			.group("season.abilities");
+	public final ConfigurableValue<Integer> ABILITY_HASTE_HEALTH = ConfigurableValue.register(this, "ability_haste_health", 6, ConfigTypes.HEARTS)
+			.name("Haste Ability Health")
+			.description("Controls how much health this ability will add/subtract.")
+			.group("season.abilities");
+	public final ConfigurableValue<Integer> ABILITY_HEALTH_VISION_HEALTH = ConfigurableValue.register(this, "ability_health_vision_health", 8, ConfigTypes.HEARTS)
+			.name("Health Vision Ability Health")
+			.description("Controls how much health this ability will add/subtract.")
+			.group("season.abilities");
+	public final ConfigurableValue<Integer> ABILITY_KNOCKBACK_RESISTANCE_HEALTH = ConfigurableValue.register(this, "ability_knockback_resistance_health", 6, ConfigTypes.HEARTS)
+			.name("Knockback Resistance Ability Health")
+			.description("Controls how much health this ability will add/subtract.")
+			.group("season.abilities");
+	public final ConfigurableValue<Integer> ABILITY_MORE_DROPS_HEALTH = ConfigurableValue.register(this, "ability_more_drops_health", 6, ConfigTypes.HEARTS)
+			.name("More Drops Ability Health")
+			.description("Controls how much health this ability will add/subtract.")
+			.group("season.abilities");
+	public final ConfigurableValue<Integer> ABILITY_PROJECTILE_PROTECTION_HEALTH = ConfigurableValue.register(this, "ability_projectile_protection_health", 4, ConfigTypes.HEARTS)
+			.name("Projectile Protection Ability Health")
+			.description("Controls how much health this ability will add/subtract.")
+			.group("season.abilities");
+	public final ConfigurableValue<Integer> ABILITY_RESISTANCE_HEALTH = ConfigurableValue.register(this, "ability_resistance_health", 2, ConfigTypes.HEARTS)
+			.name("Resistance Ability Health")
+			.description("Controls how much health this ability will add/subtract.")
+			.group("season.abilities");
+	public final ConfigurableValue<Integer> ABILITY_SATURATION_HEALTH = ConfigurableValue.register(this, "ability_saturation_health", 2, ConfigTypes.HEARTS)
+			.name("Saturation Ability Health")
+			.description("Controls how much health this ability will add/subtract.")
+			.group("season.abilities");
+	public final ConfigurableValue<Integer> ABILITY_SECOND_WIND_HEALTH = ConfigurableValue.register(this, "ability_second_wind_health", 6, ConfigTypes.HEARTS)
+			.name("Second Wind Ability Health")
+			.description("Controls how much health this ability will add/subtract.")
+			.group("season.abilities");
+	public final ConfigurableValue<Integer> ABILITY_SHIELD_BASH_HEALTH = ConfigurableValue.register(this, "ability_shield_bash_health", 6, ConfigTypes.HEARTS)
+			.name("Shield Bash Ability Health")
+			.description("Controls how much health this ability will add/subtract.")
+			.group("season.abilities");
+	public final ConfigurableValue<Integer> ABILITY_SMALLER_HEALTH = ConfigurableValue.register(this, "ability_smaller_health", 6, ConfigTypes.HEARTS)
+			.name("Smaller Ability Health")
+			.description("Controls how much health this ability will add/subtract.")
+			.group("season.abilities");
 	public final ConfigurableValue<Integer> ABILITY_SPEED_HEALTH = ConfigurableValue.register(this, "ability_speed_health", 6, ConfigTypes.HEARTS)
 			.name("Speed Ability Health")
 			.description("Controls how much health this ability will add/subtract.")
-			.group("season.abilities.speed");
+			.group("season.abilities");
+	/*
+	public final ConfigurableValue<Integer> ABILITY_TRIDENT_HEALTH = ConfigurableValue.register(this, "ability_trident_health", 2, ConfigTypes.HEARTS)
+			.name("Trident Ability Health")
+			.description("Controls how much health this ability will add/subtract.")
+			.group("season.abilities");
+	 */
 
 
 	protected FinalLifeConfig() {
@@ -175,8 +240,7 @@ public class FinalLifeConfig extends SeasonConfig {
 		});
 		IN_BETWEEN_WINDOWS.onChange((oldValue, newValue) -> { if (isActive()) InBetweenFileSync.onReload(); });
 		IN_BETWEEN_TRIVIA.onChange((oldValue, newValue) -> { if (isActive()) InBetweenFileSync.onReload(); });
-		TRIVIA_DEATH_NUM_MIN.onChange((oldValue, newValue) -> { if (isActive()) InBetweenFileSync.onReload(); });
-		TRIVIA_DEATH_NUM_MAX.onChange((oldValue, newValue) -> { if (isActive()) InBetweenFileSync.onReload(); });
+		TRIVIA_DEATH_NUMBERS.onChange((oldValue, newValue) -> { if (isActive()) InBetweenFileSync.onReload(); });
 	}
 
 	public static FinalLifeConfig get() {

@@ -43,7 +43,7 @@ public class SimplePackets {
     public static final SimpleStringPacket TEAM_COLOR = new SimpleStringPacket("TEAM_COLOR");
     public static final SimpleStringPacket TRIVIA_GUI_TYPE = new SimpleStringPacket("TRIVIA_GUI_TYPE");
     public static final SimpleStringPacket IN_BETWEEN_TRANSITION = new SimpleStringPacket("IN_BETWEEN_TRANSITION");
-    public static final SimpleStringPacket ABILITY_GAIN = new SimpleStringPacket("ABILITY_GAIN");
+    public static final SimpleStringPacket ABILITY_GAIN_MESSAGE = new SimpleStringPacket("ABILITY_GAIN_MESSAGE");
 
     public static final SimpleBooleanPacket PREVENT_GLIDING = new SimpleBooleanPacket("PREVENT_GLIDING");
     public static final SimpleBooleanPacket TABLIST_SHOW_EXACT = new SimpleBooleanPacket("TABLIST_SHOW_EXACT");

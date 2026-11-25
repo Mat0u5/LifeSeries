@@ -243,7 +243,7 @@ public class LifeSeriesNetworkHandlerClient implements RegistrableClient {
         });
 
         //String payload
-        SimplePackets.ABILITY_GAIN.setClientReceive(payload -> AbilitiesClient.onAbilityGainPacket(payload.value()));
+        SimplePackets.ABILITY_GAIN_MESSAGE.setClientReceive(payload -> AbilitiesClient.onAbilityGainMessagePacket(payload.value()));
         SimplePackets.TEAM_NAME.setClientReceive(payload -> LifeSeriesClient.teamName = payload.value());
         SimplePackets.TEAM_COLOR.setClientReceive(payload -> LifeSeriesClient.teamColor = payload.value());
         SimplePackets.CURRENT_SEASON.setClientReceive(payload -> {
