@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.client.features.inbetween;
 
+import net.mat0u5.lifeseries.client.features.abilities.AbilitiesClient;
 import net.mat0u5.lifeseries.client.particle.InBetweenParticle;
 import net.mat0u5.lifeseries.client.render.inbetween.InBetweenMesh;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.InBetweenManager;
@@ -11,31 +12,17 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
-import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
-import java.io.InputStream;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
-
-//? if >= 1.21.9
-import net.minecraft.network.chat.FontDescription;
 
 public class InBetweenChoicesClient {
-	//? if <= 1.21.6 {
-	//private static final Identifier SMALL_CAPS = IdentifierHelper.lifeseries("small_caps");
-	//?} else {
-	private static final FontDescription SMALL_CAPS = new FontDescription.Resource(IdentifierHelper.lifeseries("small_caps"));
-	//?}
 	private static final float HEART_TEXTURE_PIXEL = 0.024F;
 	private static final float TITLE_FONT = 0.035F; // Font pixel
 	private static final float SUBTITLE_FONT = 0.022F; // Without a heart texture
@@ -56,7 +43,7 @@ public class InBetweenChoicesClient {
 			try {
 				Vec3 anchor = new Vec3(Double.parseDouble(split[0]), Double.parseDouble(split[1]), Double.parseDouble(split[2]));
 				Identifier icon = split[3].equals("-") ? null : IdentifierHelper.parse(split[3]);
-				labels.add(new ChoiceLabel(anchor, icon, findHeartTexture(Double.parseDouble(split[4])), split[5], split[6]));
+				labels.add(new ChoiceLabel(anchor, icon, AbilitiesClient.findHeartTexture(Double.parseDouble(split[4])), split[5], split[6]));
 			} catch (Exception ignored) {}
 		}
 	}
@@ -83,27 +70,6 @@ public class InBetweenChoicesClient {
 	public static void clear() {
 		labels.forEach(ChoiceLabel::hide);
 		labels.clear();
-	}
-
-	private record HeartTexture(Identifier texture, int width, int height) {}
-
-	// textures/gui/menu/heart_texture/hearts_<hearts>.png, null when theres none
-	@Nullable
-	private static HeartTexture findHeartTexture(double hearts) {
-		if (hearts < 0 || hearts % 1 != 0) return null;
-		Identifier texture = IdentifierHelper.lifeseries("textures/gui/menu/heart_texture/hearts_" + (int) hearts + ".png");
-		Optional<Resource> resource = Minecraft.getInstance().getResourceManager().getResource(texture);
-		if (resource.isEmpty()) return null;
-		try (InputStream stream = resource.get().open()) {
-			ByteBuffer header = ByteBuffer.wrap(stream.readNBytes(24));
-			return new HeartTexture(texture, header.getInt(16), header.getInt(20));
-		} catch (Exception e) {
-			return null;
-		}
-	}
-
-	private static MutableComponent smallCaps(String text) {
-		return Component.literal(text.toLowerCase(Locale.ROOT)).withStyle(style -> style.withFont(SMALL_CAPS));
 	}
 
 	private static Matrix4f labelPose(InBetweenCameraView view, Vec3 anchor) {
@@ -143,7 +109,7 @@ public class InBetweenChoicesClient {
 		@Nullable
 		private final Identifier icon;
 		@Nullable
-		private final HeartTexture heartTexture;
+		private final AbilitiesClient.HeartTexture heartTexture;
 		private final Component title;
 		private final Component fallbackSubtitle;
 		private final AABB boundingBox;
@@ -153,12 +119,12 @@ public class InBetweenChoicesClient {
 		private ClientLevel particleLevel;
 		private boolean active = true;
 
-		private ChoiceLabel(Vec3 anchor, @Nullable Identifier icon, @Nullable HeartTexture heartTexture, String title, String subtitle) {
+		private ChoiceLabel(Vec3 anchor, @Nullable Identifier icon, @Nullable AbilitiesClient.HeartTexture heartTexture, String title, String subtitle) {
 			this.anchor = anchor;
 			this.icon = icon;
 			this.heartTexture = heartTexture;
-			this.title = smallCaps(title).withStyle(ChatFormatting.BOLD);
-			this.fallbackSubtitle = smallCaps(subtitle);
+			this.title = AbilitiesClient.smallCaps(title);
+			this.fallbackSubtitle = AbilitiesClient.smallCaps(subtitle);
 			double top = InBetweenChoiceManager.ICON_OFFSET + InBetweenChoiceManager.ICON_SIZE;
 			this.boundingBox = new AABB(anchor.x - 3, anchor.y - 1, anchor.z - 3, anchor.x + 3, anchor.y + top, anchor.z + 3);
 		}

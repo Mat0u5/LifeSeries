@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability;
 
 import net.mat0u5.matlib.utils.other.TextUtils;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,16 +36,23 @@ public class InBetweenChoice {
 	}
 
 	public Component subtitleFallback() {
-		double hearts = getHearts();
+		return heartsText(getHearts());
+	}
+
+	public static Component heartsText(double hearts) {
 		if (hearts == 0) {
 			return Component.literal("No Extra Hearts");
 		}
+		return Component.literal(formattedHearts(hearts) + TextUtils.pluralize(" Heart", hearts));
+	}
+
+	public static String formattedHearts(double hearts) {
 		String amount = hearts % 1 == 0 ? String.valueOf((int) hearts) : String.valueOf(hearts);
-		return Component.literal((hearts > 0 ? "+" : "") + amount + TextUtils.pluralize(" Heart", hearts));
+		return (hearts > 0 ? "+" : "") + amount;
 	}
 
 	public Component title() {
-		return this.ability == null ? Component.empty() : Component.literal(this.ability.ability().title()).withStyle(this.ability.ability().choiceColor());
+		return this.ability == null ? Component.empty() : Component.literal(this.ability.ability().title()).withStyle(this.ability.ability().choiceColor()).withStyle(ChatFormatting.BOLD);
 	}
 
 	public double getHearts() {

@@ -579,7 +579,6 @@ abstract class ModPlatformPlugin @Inject constructor() : Plugin<Project> {
 		}
 		stonecutter.replacements.string(stonecutter.eval(stonecutter.current.version, ">=26.1"), "!renames_26_1") {
 			replace ("GuiGraphics", "GuiGraphicsExtractor")
-			replace (".renderItem(", ".item(")
 			replace ("renderEntityInInventoryFollowsMouse(", "extractEntityInInventoryFollowsMouse(")
 			replace ("ClientCommandManager.argument", "ClientCommands.argument")
 			replace ("ClientCommandManager.literal", "ClientCommands.literal")
@@ -596,6 +595,7 @@ abstract class ModPlatformPlugin @Inject constructor() : Plugin<Project> {
 		}
 		stonecutter.replacements.string(stonecutter.eval(stonecutter.current.version, ">=26.1"), "renames_26_1_volatile") {
 			replace ("render(", "extractRenderState(")
+			replace (".renderItem(", ".item(")
 			replace ("renderListItems(", "extractListItems(")
 			replace ("renderContent(", "extractContent(")
 			replace ("renderBackground(", "extractBackground(")

@@ -7,6 +7,9 @@ public class EmptyAbility extends Ability {
 	public EmptyAbility() {
 		super(Abilities.EMPTY);
 	}
+	public EmptyAbility(Abilities ability) {
+		super(ability);
+	}
 
 	@Override
 	protected int loadHealthChange() {

@@ -1,6 +1,8 @@
 package net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability;
 
 import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
+import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.matlib.utils.player.AttributeUtils;
 import net.minecraft.server.level.ServerPlayer;
@@ -21,6 +23,7 @@ public class AbilityManager {
 			ability.bindPlayer(uuid);
 			ability.onStart();
 		}));
+		sendUpdatePacket(PlayerUtils.getAllPlayers());
 	}
 
 	public static void tick() {
@@ -33,21 +36,27 @@ public class AbilityManager {
 	public static void onReload() {
 		abilities.values().forEach(abilityList -> abilityList.forEach(Ability::reloadHealthChange));
 		PlayerUtils.getAllPlayers().forEach(AbilityManager::resetPlayerMaxHealth);
+		sendUpdatePacket(PlayerUtils.getAllPlayers());
 	}
 
 	public static void resetAllAbilities() {
 		PlayerUtils.getAllPlayers().forEach(AbilityManager::clearAbilities);
 		abilities.clear();
 		saveStoredAbilities();
+		sendUpdatePacket(PlayerUtils.getAllPlayers());
 	}
 
 	public static void onPlayerJoin(ServerPlayer player) {
 		getPlayerAbilities(player).forEach(Ability::onStart);
+		sendUpdatePacket(player);
 	}
 
 	public static void onChosen(ServerPlayer player, InBetweenChoice choice) {
 		if (choice.isEmpty()) return;
-		addAbility(player, choice.ability(), true);
+		Ability abilityInstance = choice.ability();
+		addAbility(player, abilityInstance, true);
+		String name = abilityInstance.ability().name();
+		SimplePackets.ABILITY_GAIN.sendToClient(name, player);
 	}
 
 	public static void addAbility(ServerPlayer player, Abilities ability, boolean addHealth) {
@@ -68,6 +77,7 @@ public class AbilityManager {
 		if (addHealth) player.heal(abilityInstance.getHealthChange());
 		abilityInstance.bindPlayer(player);
 		abilityInstance.onStart();
+		sendUpdatePacket(player);
 	}
 
 	public static void clearAbilities(ServerPlayer player) {
@@ -75,6 +85,7 @@ public class AbilityManager {
 		abilities.put(player.getUUID(), new ArrayList<>());
 		saveStoredAbilities();
 		resetPlayerMaxHealth(player);
+		sendUpdatePacket(player);
 	}
 
 	public static void removeAbility(ServerPlayer player, Abilities ability) {
@@ -84,6 +95,7 @@ public class AbilityManager {
 		abilities.get(player.getUUID()).remove(abilityInstance);
 		saveStoredAbilities();
 		resetPlayerMaxHealth(player);
+		sendUpdatePacket(player);
 	}
 
 	public static List<Ability> getPlayerAbilities(ServerPlayer player) {
@@ -111,6 +123,24 @@ public class AbilityManager {
 			health += ability.getHealthChange();
 		}
 		AttributeUtils.MAX_HEALTH.of(player).set(health);
+	}
+
+	public static void sendUpdatePacket(ServerPlayer player) {
+		sendUpdatePacket(List.of(player));
+	}
+
+	public static void sendUpdatePacket(List<ServerPlayer> players) {
+		if (!LifeSeries.isSeason(Seasons.FINAL_LIFE)) {
+			SimplePackets.ACTIVE_ABILITIES.sendToClient(List.of(), players);
+			return;
+		}
+		for (ServerPlayer player : players) {
+			List<String> abilities = new ArrayList<>();
+			for (Ability ability : getPlayerAbilities(player)) {
+				abilities.add(ability.ability().name() + ";" + ability.getHealthChange() / 2.0);
+			}
+			SimplePackets.ACTIVE_ABILITIES.sendToClient(abilities, player);
+		}
 	}
 }
 

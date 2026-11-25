@@ -13,6 +13,7 @@ import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.InBetweenManager;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.AbilityManager;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.trivia.InBetweenTriviaManager;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.window.InBetweenFileSync;
 import net.mat0u5.lifeseries.seasons.season.limitedlife.LimitedLife;
@@ -585,6 +586,7 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
         }
 
         SimplePackets.NICELIFE_LIVE_VOTING_ENABLED.sendToClient(NiceLifeVotingManager.PUBLIC_VOTING.get(), players);
+        AbilityManager.sendUpdatePacket(players);
     }
 
     public static void sendUpdatePackets() {

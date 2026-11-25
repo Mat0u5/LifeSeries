@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.client.events;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import net.mat0u5.lifeseries.client.features.abilities.AbilitiesClient;
 import net.mat0u5.lifeseries.client.network.LifeSeriesNetworkHandlerClient;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.lifeseries.utils.versions.VersionControl;
@@ -11,6 +12,7 @@ public class ClientKeybinds {
     public static KeyMapping superpower;
     public static KeyMapping openConfig;
     public static KeyMapping runCommand;
+    public static KeyMapping openAbilityScreen;
 
     //? if <= 1.21.6 {
     //public static final String KEYBIND_ID = "key.category.lifeseries.general";
@@ -28,10 +30,12 @@ public class ClientKeybinds {
         while (openConfig != null && openConfig.consumeClick()) {
             LifeSeriesNetworkHandlerClient.pressOpenConfigKey();
         }
+        while (openAbilityScreen != null && openAbilityScreen.consumeClick()) {
+            AbilitiesClient.onPressOpenScreenKey();
+        }
     }
 
     public static void register() {
-
         //? if <= 26.2 {
         //var type = InputConstants.Type.KEYSYM;
         //?} else {
@@ -54,6 +58,12 @@ public class ClientKeybinds {
                 InputConstants.UNKNOWN.getValue(),
                 KEYBIND_ID
         );
+        openAbilityScreen = new KeyMapping(
+                "key.lifeseries.openabilities",
+                type,
+                InputConstants.KEY_J,
+                KEYBIND_ID
+        );
         if (VersionControl.isDevVersion()) {
             runCommand = new KeyMapping(
                     "key.lifeseries.runcommand",
@@ -66,6 +76,7 @@ public class ClientKeybinds {
             if (!list.contains(superpower)) {
                 list.add(superpower);
                 list.add(openConfig);
+                list.add(openAbilityScreen);
                 if (VersionControl.isDevVersion()) {
                     list.add(runCommand);
                 }

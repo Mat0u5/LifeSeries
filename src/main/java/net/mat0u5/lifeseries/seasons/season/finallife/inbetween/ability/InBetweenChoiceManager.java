@@ -7,6 +7,7 @@ import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.InBetweenInstance;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.InBetweenManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
+import net.mat0u5.matlib.utils.other.TextUtils;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Brightness;
 import net.minecraft.world.entity.Display;
@@ -83,7 +84,7 @@ public class InBetweenChoiceManager {
 		String texture = icon != null && icon.isTexture() ? String.valueOf(icon.texture()) : "-";
 		labelEntries.add(String.format(Locale.ROOT, "%.4f;%.4f;%.4f;%s;%s;%s;%s",
 				anchor.x, anchor.y, anchor.z, texture, choice.getHearts(),
-				choice.title().getString().replace(';', ','), choice.subtitleFallback().getString()));
+				TextUtils.textToLegacyString(choice.title()).replace(';', ','), TextUtils.textToLegacyString(choice.subtitleFallback())));
 
 		if (icon != null && !icon.isTexture() && !icon.itemStack().isEmpty()) {
 			Display.ItemDisplay item = new Display.ItemDisplay(EntityTypes.ITEM_DISPLAY, inBetween.level);

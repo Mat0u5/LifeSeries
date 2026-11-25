@@ -30,6 +30,7 @@ public class SimplePackets {
     public static final SimpleStringListPacket IN_BETWEEN_TRIVIA = new SimpleStringListPacket("IN_BETWEEN_TRIVIA");
     public static final SimpleStringListPacket IN_BETWEEN_SOUNDS = new SimpleStringListPacket("IN_BETWEEN_SOUNDS");
     public static final SimpleStringListPacket IN_BETWEEN_CHOICE_LABELS = new SimpleStringListPacket("IN_BETWEEN_CHOICE_LABELS");
+    public static final SimpleStringListPacket ACTIVE_ABILITIES = new SimpleStringListPacket("ACTIVE_ABILITIES");
 
     public static final SimpleStringPacket CURRENT_SEASON = new SimpleStringPacket("CURRENT_SEASON");
     public static final SimpleStringPacket SESSION_STATUS = new SimpleStringPacket("SESSION_STATUS");
@@ -42,6 +43,7 @@ public class SimplePackets {
     public static final SimpleStringPacket TEAM_COLOR = new SimpleStringPacket("TEAM_COLOR");
     public static final SimpleStringPacket TRIVIA_GUI_TYPE = new SimpleStringPacket("TRIVIA_GUI_TYPE");
     public static final SimpleStringPacket IN_BETWEEN_TRANSITION = new SimpleStringPacket("IN_BETWEEN_TRANSITION");
+    public static final SimpleStringPacket ABILITY_GAIN = new SimpleStringPacket("ABILITY_GAIN");
 
     public static final SimpleBooleanPacket PREVENT_GLIDING = new SimpleBooleanPacket("PREVENT_GLIDING");
     public static final SimpleBooleanPacket TABLIST_SHOW_EXACT = new SimpleBooleanPacket("TABLIST_SHOW_EXACT");

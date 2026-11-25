@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.client.network;
 import com.google.auto.service.AutoService;
 import io.netty.buffer.Unpooled;
 import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.client.features.abilities.AbilitiesClient;
 import net.mat0u5.lifeseries.client.utils.ClientSeasonChanger;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.client.compatibilities.VoicechatClient;
@@ -97,6 +98,7 @@ public class LifeSeriesNetworkHandlerClient implements RegistrableClient {
         SimplePackets.CURSE_SLIDING.setClientReceive(payload -> LifeSeriesClient.CURSE_SLIDING = payload.number());
 
         //String list payload
+        SimplePackets.ACTIVE_ABILITIES.setClientReceive(payload -> AbilitiesClient.onActiveAbilitiesPayload(payload.value()));
         SimplePackets.NICELIFE_LIVE_VOTING.setClientReceive(payload -> {
             LifeSeriesClient.liveVoting.clear();
             for (String string : payload.value()) {
@@ -241,6 +243,7 @@ public class LifeSeriesNetworkHandlerClient implements RegistrableClient {
         });
 
         //String payload
+        SimplePackets.ABILITY_GAIN.setClientReceive(payload -> AbilitiesClient.onAbilityGainPacket(payload.value()));
         SimplePackets.TEAM_NAME.setClientReceive(payload -> LifeSeriesClient.teamName = payload.value());
         SimplePackets.TEAM_COLOR.setClientReceive(payload -> LifeSeriesClient.teamColor = payload.value());
         SimplePackets.CURRENT_SEASON.setClientReceive(payload -> {
