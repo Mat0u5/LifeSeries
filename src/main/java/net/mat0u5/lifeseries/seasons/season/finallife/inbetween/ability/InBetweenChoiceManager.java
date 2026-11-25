@@ -3,12 +3,10 @@ package net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability;
 import com.mojang.math.Transformation;
 import net.mat0u5.lifeseries.mixin.DisplayAccessor;
 import net.mat0u5.lifeseries.mixin.ItemDisplayAccessor;
-import net.mat0u5.lifeseries.mixin.TextDisplayAccessor;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.InBetweenInstance;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.InBetweenManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Brightness;
 import net.minecraft.world.entity.Display;
@@ -30,7 +28,11 @@ public class InBetweenChoiceManager {
 	private static final double CHOICE_TRIGGER_RADIUS = 1.3;
 	private static final int CHOICE_EXIT_DELAY = 82; // Cloud transition takes ~4 seconds
 	private static final int CHOICE_DECAY = 4;
+	public static final double LABEL_HEIGHT = 2.35; // Badge center above the ring
+	public static final double ICON_OFFSET = 1.2; // Icon center above the badge center
+	public static final float ICON_SIZE = 0.6F;
 	private final Set<UUID> labelIds = new HashSet<>();
+	private final List<String> labelEntries = new ArrayList<>(); // Drawn client-side
 	private int choosing = -1;
 	private int choiceTicks = 0;
 	public final Map<Integer, Vec3> choicePositions = new TreeMap<>();
@@ -43,6 +45,7 @@ public class InBetweenChoiceManager {
 	}
 
 	public void spawnChoiceLabels() {
+		labelEntries.clear();
 		List<Vec3> choiceCenters = getChoiceCenters();
 		while (choices.size() > choiceCenters.size()) choices.remove(choices.size() - 1);
 		while (choices.size() < choiceCenters.size()) choices.add(InBetweenChoice.empty());
@@ -75,35 +78,27 @@ public class InBetweenChoiceManager {
 
 	private void spawnChoiceLabel(InBetweenChoice choice, Vec3 ringCenter) {
 		if (choice.isEmpty()) return;
-		double x = ringCenter.x;
-		double z = ringCenter.z;
-		double y = ringCenter.y + 2.2;
+		Vec3 anchor = ringCenter.add(0, LABEL_HEIGHT, 0);
+		AbilityIcon icon = choice.icon();
+		String texture = icon != null && icon.isTexture() ? String.valueOf(icon.texture()) : "-";
+		labelEntries.add(String.format(Locale.ROOT, "%.4f;%.4f;%.4f;%s;%s;%s;%s",
+				anchor.x, anchor.y, anchor.z, texture, choice.getHearts(),
+				choice.title().getString().replace(';', ','), choice.subtitleFallback().getString()));
 
-		Display.TextDisplay subtitle = createTextDisplay(
-				Component.literal(" ").append(choice.subtitle()).append(" ").withStyle(ChatFormatting.WHITE),
-				0xE0A3212B, 0.6F);
-		addDisplay(subtitle, x, y, z);
-
-		Display.TextDisplay title = createTextDisplay(choice.title().copy().withStyle(ChatFormatting.WHITE, ChatFormatting.BOLD), 0, 1.0F);
-		addDisplay(title, x, y + 0.25, z);
-
-		if (!choice.icon().isEmpty()) {
-			Display.ItemDisplay icon = new Display.ItemDisplay(EntityTypes.ITEM_DISPLAY, inBetween.level);
-			((ItemDisplayAccessor) icon).ls$setItemStack(choice.icon().copy());
-			setupDisplay(icon, 0.55F);
-			addDisplay(icon, x, y + 0.95, z);
+		if (icon != null && !icon.isTexture() && !icon.itemStack().isEmpty()) {
+			Display.ItemDisplay item = new Display.ItemDisplay(EntityTypes.ITEM_DISPLAY, inBetween.level);
+			((ItemDisplayAccessor) item).ls$setItemStack(icon.itemStack());
+			setupDisplay(item, ICON_SIZE);
+			addDisplay(item, anchor.x, anchor.y + ICON_OFFSET, anchor.z);
 		}
 	}
 
-	private Display.TextDisplay createTextDisplay(Component text, int backgroundColor, float scale) {
-		Display.TextDisplay display = new Display.TextDisplay(EntityTypes.TEXT_DISPLAY, inBetween.level);
-		TextDisplayAccessor accessor = (TextDisplayAccessor) display;
-		accessor.ls$setText(text);
-		accessor.ls$setBackgroundColor(backgroundColor);
-		accessor.ls$setLineWidth(400);
-		accessor.ls$setFlags((byte) 1); // Shadow
-		setupDisplay(display, scale);
-		return display;
+	public void sendLabelsToClient(ServerPlayer player) {
+		SimplePackets.IN_BETWEEN_CHOICE_LABELS.sendToClient(labelEntries, player);
+	}
+
+	public static void sendClientClearLabels(ServerPlayer player) {
+		SimplePackets.IN_BETWEEN_CHOICE_LABELS.sendToClient(List.of(), player);
 	}
 
 	private void setupDisplay(Display display, float scale) {

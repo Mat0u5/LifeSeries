@@ -2,7 +2,6 @@ package net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability;
 
 import net.mat0u5.matlib.utils.other.TextUtils;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 public class InBetweenChoice {
@@ -30,21 +29,25 @@ public class InBetweenChoice {
 		return this.ability;
 	}
 
-	public ItemStack icon() {
-		return this.ability == null ? ItemStack.EMPTY : this.ability.ability().icon();
+	@Nullable
+	public AbilityIcon icon() {
+		return this.ability == null ? null : this.ability.ability().icon();
 	}
 
-	public Component subtitle() {
-		//TODO make modifiable
-		double hearts = this.ability == null ? 0 : this.ability.getHealthChange() / 2.0;
+	public Component subtitleFallback() {
+		double hearts = getHearts();
 		if (hearts == 0) {
 			return Component.literal("No Extra Hearts");
 		}
 		String amount = hearts % 1 == 0 ? String.valueOf((int) hearts) : String.valueOf(hearts);
-		return Component.literal(amount + TextUtils.pluralize(" Heart", hearts));
+		return Component.literal((hearts > 0 ? "+" : "") + amount + TextUtils.pluralize(" Heart", hearts));
 	}
 
 	public Component title() {
 		return this.ability == null ? Component.empty() : Component.literal(this.ability.ability().title());
+	}
+
+	public double getHearts() {
+		return this.ability == null ? 0 : this.ability.getHealthChange() / 2.0;
 	}
 }

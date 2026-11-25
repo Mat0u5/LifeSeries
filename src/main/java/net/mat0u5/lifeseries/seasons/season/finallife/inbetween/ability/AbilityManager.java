@@ -11,12 +11,16 @@ public class AbilityManager {
 	private static final Map<UUID, List<Ability>> abilities = new HashMap<>();
 
 	public static void saveStoredAbilities() {
-		//TODO save to file
+		AbilityStorage.save(abilities);
 	}
 
 	public static void loadStoredAbilities() {
-		//TODO load from file &
-		//abilities = ..
+		abilities.clear();
+		abilities.putAll(AbilityStorage.load());
+		abilities.forEach((uuid, list) -> list.forEach(ability -> {
+			ability.bindPlayer(uuid);
+			ability.onStart();
+		}));
 	}
 
 	public static void tick() {

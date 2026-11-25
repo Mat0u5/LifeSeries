@@ -166,7 +166,7 @@ public class InBetweenWindowsClient {
 		}
 	}
 
-	private static RenderType imageRenderType(Identifier texture) {
+	static RenderType imageRenderType(Identifier texture) {
 		//? if <= 1.21.9 {
 		//return RenderType.text(texture);
 		//?} else {

@@ -1,0 +1,17 @@
+{
+    "providers": [
+        {
+            "type": "bitmap",
+            "file": "lifeseries:font/small_caps.png",
+            "ascent": 7,
+            "chars": [
+                "abcdefghijklmnop",
+                "qrstuvwxyz\u0000\u0000\u0000\u0000\u0000\u0000"
+            ]
+        },
+        {
+            "type": "reference",
+            "id": "minecraft:default"
+        }
+    ]
+}

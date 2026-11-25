@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.seasons.season.doublelife.DoubleLife;
 import net.mat0u5.lifeseries.seasons.season.finallife.boogeyman.ThrownBoogeymanWeapon;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.InBetweenManager;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.AbilityManager;
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretKeeper;
 import net.mat0u5.lifeseries.seasons.season.secretlife.SecretLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.morph.MorphManager;
@@ -117,6 +118,7 @@ public class Events {
             ThrownBoogeymanWeapon.returnAllWeapons();
             InBetweenManager.onServerStopping();
             if (LifeSeries.modDisabled()) return;
+            if (LifeSeries.isSeason(Seasons.FINAL_LIFE)) AbilityManager.saveStoredAbilities();
             currentSession.sessionEnd();
         } catch (Exception e) {
             e.printStackTrace();

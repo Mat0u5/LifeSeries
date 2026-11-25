@@ -4,6 +4,7 @@ import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.utils.ClientSeasonChanger;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.client.compatibilities.VoicechatClient;
+import net.mat0u5.lifeseries.client.features.inbetween.InBetweenChoicesClient;
 import net.mat0u5.lifeseries.client.features.inbetween.InBetweenEffectsClient;
 import net.mat0u5.lifeseries.client.features.inbetween.InBetweenMemoryCache;
 import net.mat0u5.lifeseries.client.features.inbetween.InBetweenSoundsClient;
@@ -97,6 +98,7 @@ public class ClientEvents {
         LifeSeries.LOGGER.info("Client disconnected from server, clearing some client data.");
         LifeSeriesClient.resetClientData();
         InBetweenWindowsClient.clear();
+        InBetweenChoicesClient.clear();
         InBetweenEffectsClient.clear();
         InBetweenSoundsClient.clear();
         InBetweenTransition.stopTransition();
@@ -138,6 +140,7 @@ public class ClientEvents {
                 checkOnGroundFor(player);
                 InBetweenEffectsClient.tick(player);
                 InBetweenWindowsClient.tick(player);
+                InBetweenChoicesClient.tick(player);
                 InBetweenSoundsClient.tick(player);
                 InBetweenMemoryCache.tick();
                 if (!player.isSleeping() && (RenderUtils.getScreen() instanceof EmptySleepScreen || (RenderUtils.getScreen() instanceof NewQuizScreen quizScreen && !quizScreen.shouldCloseOnEsc()) || (RenderUtils.getScreen() instanceof QuizScreen quizScreenOld && !quizScreenOld.shouldCloseOnEsc()) || (RenderUtils.getScreen() instanceof VotingScreen votingScreen && votingScreen.requiresSleep))) {

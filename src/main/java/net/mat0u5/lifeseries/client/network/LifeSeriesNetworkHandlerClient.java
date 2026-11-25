@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.utils.ClientSeasonChanger;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.client.compatibilities.VoicechatClient;
+import net.mat0u5.lifeseries.client.features.inbetween.InBetweenChoicesClient;
 import net.mat0u5.lifeseries.client.features.inbetween.InBetweenEffectsClient;
 import net.mat0u5.lifeseries.client.features.inbetween.InBetweenMemoryCache;
 import net.mat0u5.lifeseries.client.features.inbetween.InBetweenSoundsClient;
@@ -133,6 +134,9 @@ public class LifeSeriesNetworkHandlerClient implements RegistrableClient {
         });
         SimplePackets.IN_BETWEEN_SOUNDS.setClientReceive(payload -> {
             InBetweenSoundsClient.onPacket(payload.value());
+        });
+        SimplePackets.IN_BETWEEN_CHOICE_LABELS.setClientReceive(payload -> {
+            InBetweenChoicesClient.onLabelsPacket(payload.value());
         });
         SimplePackets.LVL1_CLAMPED_ENCHANTS.setClientReceive(payload -> {
             LifeSeriesClient.lvl1ClampedEnchants = payload.value();

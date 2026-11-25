@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.client.mixin;
 
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
+import net.mat0u5.lifeseries.client.features.inbetween.InBetweenChoicesClient;
 import net.mat0u5.lifeseries.client.features.inbetween.InBetweenEffectsClient;
 import net.mat0u5.lifeseries.client.features.inbetween.InBetweenWindowsClient;
 import net.minecraft.client.particle.ParticleEngine;
@@ -38,6 +39,7 @@ public abstract class ParticleEngineMixin {
     @Inject(method = "clearParticles", at = @At("TAIL"))
     private void onClearParticles(CallbackInfo ci) {
         InBetweenWindowsClient.onParticlesCleared();
+        InBetweenChoicesClient.onParticlesCleared();
         InBetweenEffectsClient.onParticlesCleared();
     }
 

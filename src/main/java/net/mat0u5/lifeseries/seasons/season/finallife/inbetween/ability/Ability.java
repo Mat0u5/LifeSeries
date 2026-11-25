@@ -1,5 +1,6 @@
 package net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability;
 
+import com.google.gson.JsonObject;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -25,8 +26,16 @@ public abstract class Ability {
 	}
 
 	public void bindPlayer(ServerPlayer player) {
-		this.playerUUID = player.getUUID();
+		bindPlayer(player.getUUID());
 	}
+
+	public void bindPlayer(UUID playerUUID) {
+		this.playerUUID = playerUUID;
+	}
+	/*
+	public void saveExtraData(JsonObject json) {}
+	public void loadExtraData(JsonObject json) {}
+	 */
 
 	public ServerPlayer getPlayer() {
 		return PlayerUtils.getPlayer(playerUUID);

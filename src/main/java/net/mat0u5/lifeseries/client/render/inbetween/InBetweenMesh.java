@@ -3,16 +3,25 @@ package net.mat0u5.lifeseries.client.render.inbetween;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.mat0u5.lifeseries.client.features.inbetween.InBetweenCameraView;
 import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 import java.util.Arrays;
 
+//? if <= 1.21.6 {
+/*import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.renderer.MultiBufferSource;
+*///?}
+
 public class InBetweenMesh {
 	public static final int ORDER_CLOUDS = -1;
 	public static final int ORDER_IMAGES = 0;
+	public static final int ORDER_TEXT = 1;
 	public static final int ORDER_LIGHT = 2;
-	private static final int FULL_BRIGHT = 0xF000F0;
+	public static final int FULL_BRIGHT = 0xF000F0;
 	private static final int VARS = 5; // x, y, z, u, v
 	private static final float SCREEN_QUAD_DISTANCE = 0.3f;
 	private static final float SCREEN_QUAD_SIZE = 2f;
@@ -20,15 +29,35 @@ public class InBetweenMesh {
 	public final RenderType renderType;
 	public final int order;
 	private final boolean text;
+	@Nullable
+	public final FontText fontText;
 	private float[] vertices = new float[VARS * 64];
 	private int[] colors = new int[64];
 	private int count = 0;
 
+	public record FontText(Component component, Matrix4f pose, int color) {}
+
 	public InBetweenMesh(RenderType renderType, int order, boolean text) {
+		this(renderType, order, text, null);
+	}
+
+	private InBetweenMesh(RenderType renderType, int order, boolean text, @Nullable FontText fontText) {
 		this.renderType = renderType;
 		this.order = order;
 		this.text = text;
+		this.fontText = fontText;
 	}
+
+	public static InBetweenMesh fontText(Component component, Matrix4f pose, int color) {
+		return new InBetweenMesh(null, ORDER_TEXT, true, new FontText(component, pose, color));
+	}
+
+	//? if <= 1.21.6 {
+	/*public void drawFontText(Matrix4f pose, MultiBufferSource bufferSource) {
+		if (fontText == null) return;
+		Minecraft.getInstance().font.drawInBatch(fontText.component(), 0, 0, fontText.color(), true, new Matrix4f(pose).mul(fontText.pose()), bufferSource, Font.DisplayMode.NORMAL, 0, FULL_BRIGHT);
+	}
+	*///?}
 
 	// Color - 0xAARRGGBB format
 	public void add(double x, double y, double z, double u, double v, int color) {

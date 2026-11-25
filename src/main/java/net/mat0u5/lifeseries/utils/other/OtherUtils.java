@@ -47,6 +47,7 @@ public class OtherUtils extends net.mat0u5.matlib.utils.other.OtherUtils {
         }catch(Exception e) {}
         return null;
     }
+
     public static String formatTimeArgumentFromSeconds(int totalSeconds) {
         if (totalSeconds == 0) {
             return "0";

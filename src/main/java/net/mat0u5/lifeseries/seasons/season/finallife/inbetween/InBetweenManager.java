@@ -264,6 +264,7 @@ public class InBetweenManager {
 		}
 		instance.windowManager.sendWindowsToClient(player);
 		instance.soundManager.sendToClient(player);
+		instance.choiceManager.sendLabelsToClient(player);
 		sendPathYaw(player, instance);
 		InBetweenFileSync.updatePlayer(player);
 		playDimensionTransition(player, ModifiableSound.FINALLIFE_INBETWEEN_ENTER);
@@ -301,6 +302,7 @@ public class InBetweenManager {
 		}
 		InBetweenWindowManager.sendClientClearWindows(player);
 		InBetweenSounds.sendClientClearSounds(player);
+		InBetweenChoiceManager.sendClientClearLabels(player);
 
 		restoreGameMode(player);
 		startTransition(player);
@@ -321,6 +323,7 @@ public class InBetweenManager {
 		if (instances.containsKey(player.getUUID())) {
 			InBetweenWindowManager.sendClientClearWindows(player);
 			InBetweenSounds.sendClientClearSounds(player);
+			InBetweenChoiceManager.sendClientClearLabels(player);
 		}
 		discardInstance(player.getUUID());
 	}

@@ -8,6 +8,7 @@ package net.mat0u5.lifeseries.client.particle;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.mat0u5.lifeseries.client.render.inbetween.InBetweenMesh;
 import net.minecraft.client.Camera;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.particle.ParticleGroup;
 import net.minecraft.client.renderer.SubmitNodeCollector;
@@ -38,6 +39,13 @@ public class InBetweenParticleGroup extends ParticleGroup<InBetweenParticle> {
 		public void submit(SubmitNodeCollector submitNodeCollector, CameraRenderState camera) {
 			PoseStack poseStack = new PoseStack();
 			for (InBetweenMesh mesh : meshes) {
+				InBetweenMesh.FontText text = mesh.fontText;
+				if (text != null) {
+					PoseStack textPose = new PoseStack();
+					textPose.last().pose().mul(text.pose());
+					submitNodeCollector.order(mesh.order).submitText(textPose, 0, 0, text.component().getVisualOrderText(), true, Font.DisplayMode.NORMAL, InBetweenMesh.FULL_BRIGHT, text.color(), 0, 0);
+					continue;
+				}
 				submitNodeCollector.order(mesh.order).submitCustomGeometry(poseStack, mesh.renderType, (pose, consumer) -> mesh.render(pose.pose(), consumer));
 			}
 		}

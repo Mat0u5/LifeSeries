@@ -66,6 +66,11 @@ public class InBetweenParticle extends Particle {
 	public void render(VertexConsumer consumer, Camera camera, float partialTick) {
 		MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
 		for (InBetweenMesh mesh : buildMeshes(camera, partialTick)) {
+			if (mesh.fontText != null) {
+				mesh.drawFontText(new Matrix4f(), bufferSource);
+				bufferSource.endBatch();
+				continue;
+			}
 			mesh.render(new Matrix4f(), bufferSource.getBuffer(mesh.renderType));
 			bufferSource.endBatch(mesh.renderType);
 		}
@@ -78,7 +83,8 @@ public class InBetweenParticle extends Particle {
 	@Override
 	public void renderCustom(PoseStack poseStack, MultiBufferSource bufferSource, Camera camera, float partialTick) {
 		for (InBetweenMesh mesh : buildMeshes(camera, partialTick)) {
-			mesh.render(poseStack.last().pose(), bufferSource.getBuffer(mesh.renderType));
+			if (mesh.fontText != null) mesh.drawFontText(poseStack.last().pose(), bufferSource);
+			else mesh.render(poseStack.last().pose(), bufferSource.getBuffer(mesh.renderType));
 		}
 	}
 	*///?}
