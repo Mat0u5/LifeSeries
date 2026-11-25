@@ -16,8 +16,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @MixinEnvironment(value = "client", type = MixinEnvironment.Env.CLIENT)
 public class ChatComponentMixin {
     //? if <= 1.21.11 {
-    /*@Inject(method = "render", at = @At("HEAD"), cancellable = true)
-    *///?} else {
+    //@Inject(method = "render", at = @At("HEAD"), cancellable = true)
+    //?} else {
     @Inject(method = "extractRenderState", at = @At("HEAD"), cancellable = true)
     //?}
     private void inBetweenChatIsolation(CallbackInfo ci) {

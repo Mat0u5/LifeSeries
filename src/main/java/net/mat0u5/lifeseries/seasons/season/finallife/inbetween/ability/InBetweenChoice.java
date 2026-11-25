@@ -44,7 +44,7 @@ public class InBetweenChoice {
 	}
 
 	public Component title() {
-		return this.ability == null ? Component.empty() : Component.literal(this.ability.ability().title());
+		return this.ability == null ? Component.empty() : Component.literal(this.ability.ability().title()).withStyle(this.ability.ability().choiceColor());
 	}
 
 	public double getHearts() {

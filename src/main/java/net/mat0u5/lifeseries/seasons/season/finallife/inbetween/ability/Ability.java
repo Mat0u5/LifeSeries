@@ -1,6 +1,5 @@
 package net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability;
 
-import com.google.gson.JsonObject;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -52,5 +51,10 @@ public abstract class Ability {
 	}
 
 	public void tick() {
+	}
+
+	public enum AbilityType {
+		PASSIVE,
+		ACTIVE;
 	}
 }

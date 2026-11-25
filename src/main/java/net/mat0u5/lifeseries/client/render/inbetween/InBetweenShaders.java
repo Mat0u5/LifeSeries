@@ -334,8 +334,8 @@ public class InBetweenShaders {
 		if (Minecraft.getInstance().gameRenderer.useImprovedTransparency()) return false;
 		if (!isAvailable(FOG_DEPTH)) return false;
 		//? if <= 26.1 {
-		/*return true;
-		*///?} else {
+		//return true;
+		//?} else {
 		boolean copied = depthCopied;
 		depthCopied = false;
 		depthWanted = true;

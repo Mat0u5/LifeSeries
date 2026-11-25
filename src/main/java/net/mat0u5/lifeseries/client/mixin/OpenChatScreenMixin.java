@@ -11,8 +11,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 //? if <= 26.1 {
-/*@Mixin(value = Minecraft.class)
-*///?} else {
+//@Mixin(value = Minecraft.class)
+//?} else {
 import net.minecraft.client.gui.Gui;
 @Mixin(value = Gui.class)
 //?}

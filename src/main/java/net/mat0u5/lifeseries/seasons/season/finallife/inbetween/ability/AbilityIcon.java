@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability;
 
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.Nullable;
@@ -15,6 +16,10 @@ public class AbilityIcon {
 	private AbilityIcon(ItemStack itemStack, @Nullable Identifier texture) {
 		this.itemStack = itemStack;
 		this.texture = texture;
+	}
+
+	public static AbilityIcon item(Item item) {
+		return new AbilityIcon(item.getDefaultInstance(), null);
 	}
 
 	public static AbilityIcon item(ItemLike item) {

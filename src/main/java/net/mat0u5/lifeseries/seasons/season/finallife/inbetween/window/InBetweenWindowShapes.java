@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.seasons.season.finallife.inbetween.window;
 
 import java.util.List;
+import java.util.Random;
 
 public class InBetweenWindowShapes {
 	public static final float CELL_SIZE = 0.75f; // Size of a single cell in blocks
@@ -49,12 +50,24 @@ public class InBetweenWindowShapes {
 			"..######.......",
 	};
 
-	//TODO more window shapes
+	private static final String[] SHAPE_5 = { // Jimmy Death 1 Window 2
+			"...###..",
+			"..#####.",
+			".######.",
+			"#######.",
+			"#######.",
+			"#######.",
+			"..######",
+			"....###.",
+	};
 
-	private static final List<String[]> SHAPES = List.of(SHAPE_1, SHAPE_2, SHAPE_3, SHAPE_4);
-
+	private static final List<String[]> SHAPES = List.of(SHAPE_1, SHAPE_2, SHAPE_3, SHAPE_4, SHAPE_5);
+	private static final Random rnd = new Random();
 	public static String[] get(int deathNumber, int windowNumber) {
+		/*
 		int index = ((deathNumber - 1) * 2 + (windowNumber - 1)) % SHAPES.size();
 		return SHAPES.get(index);
+		 */
+		return SHAPES.get(rnd.nextInt(SHAPES.size()));
 	}
 }
