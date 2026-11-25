@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.client;
 import com.google.auto.service.AutoService;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.config.ClientConfig;
+import net.mat0u5.lifeseries.client.features.abilities.AbilitiesClient;
 import net.mat0u5.lifeseries.client.network.LifeSeriesNetworkHandlerClient;
 import net.mat0u5.lifeseries.client.registries.ClientRegistries;
 import net.mat0u5.lifeseries.client.render.TextHud;
@@ -208,5 +209,6 @@ public class LifeSeriesClient implements MultiplatformClientModInitializer, Life
         liveVotingEnabled = false;
 
         MorphManager.resetMorphs();
+        AbilitiesClient.reset();
     }
 }

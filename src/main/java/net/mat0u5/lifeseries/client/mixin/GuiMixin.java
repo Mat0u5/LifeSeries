@@ -80,27 +80,8 @@ public class GuiMixin {
         *///?} else {
         String texturePath = identifier.getPath();
         //?}
-        String playerTeamColor = ClientUtils.getPlayerTeamColorOrPacket();
-        String playerTeamName = ClientUtils.getPlayerTeamNameOrPacket();
-
-        boolean shouldRenderHearts = false;
-
-        boolean isValidState = !LifeSeries.modFullyDisabled()
-                && playerTeamColor != null
-                && playerTeamName != null
-                && ClientRenderer.lifeSkinsAllowedColors.contains(playerTeamColor.toLowerCase(Locale.ROOT))
-                && ClientRenderer.lifeSkinsAllowedHearts.contains(texturePath);
-
-        if (isValidState) {
-            if (LifeSeriesClient.COLORED_HEARTS || LifeSeriesClient.HARDCORE_HEARTS_ALL_LIVES) {
-                shouldRenderHearts = true;
-            }
-            else if (LifeSeriesClient.HARDCORE_HEARTS_LAST_LIFE && playerTeamName.equals("lives_1")) {
-                shouldRenderHearts = true;
-            }
-        }
-
-        if (!shouldRenderHearts) {
+        Identifier customHeart = ClientUtils.customHeart(texturePath);
+        if (customHeart == null) {
             if (LifeSeries.isSeason(Seasons.SECRET_LIFE) && texturePath.startsWith("hud/heart/container")) {
                 return;
             }
@@ -117,22 +98,6 @@ public class GuiMixin {
             //?}
             return;
         }
-
-        String color = LifeSeriesClient.COLORED_HEARTS ? playerTeamColor.toLowerCase(Locale.ROOT) : "red";
-
-        String heartTypeStr = texturePath.replaceFirst("hud/heart/", "");
-
-        if (!heartTypeStr.startsWith("hardcore_")) {
-            if (LifeSeriesClient.HARDCORE_HEARTS_ALL_LIVES || (playerTeamName.equals("lives_1") && LifeSeriesClient.HARDCORE_HEARTS_LAST_LIFE)) {
-                heartTypeStr = "hardcore_"+heartTypeStr;
-            }
-        }
-
-        //? if <= 1.20 {
-        //var customHeart = IdentifierHelper.lifeseries("textures/gui/sprites/"+color+"_"+heartTypeStr+".png");
-         //?} else {
-        var customHeart = IdentifierHelper.lifeseries(color+"_"+heartTypeStr);
-        //?}
 
         //? if <= 1.20 {
         /*guiGraphics.blit(customHeart, x, y, 0, 0, 9, 9, 9, 9);

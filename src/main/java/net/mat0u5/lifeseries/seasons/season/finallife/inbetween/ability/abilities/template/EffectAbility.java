@@ -33,7 +33,7 @@ public abstract class EffectAbility extends Ability {
 		ServerPlayer player = getPlayer();
 		if (player == null || player.isSpectator()) return;
 		MobEffectInstance effect = player.getEffect(this.effect);
-		if (effect != null && (effect.getAmplifier() > 0 || !effect.endsWithin(20))) return;
+		if (effect != null && (effect.getAmplifier() > amplifier || !effect.endsWithin(20))) return;
 		player.addEffect(new MobEffectInstance(this.effect, 100, this.amplifier, false, false, false));
 	}
 
@@ -42,7 +42,7 @@ public abstract class EffectAbility extends Ability {
 		ServerPlayer player = getPlayer();
 		if (player == null) return;
 		MobEffectInstance effect = player.getEffect(this.effect);
-		if (effect != null && effect.getAmplifier() == 0 && effect.endsWithin(100) && !effect.showIcon()) {
+		if (effect != null && effect.getAmplifier() == amplifier && effect.endsWithin(100) && !effect.showIcon()) {
 			player.removeEffect(this.effect);
 		}
 	}

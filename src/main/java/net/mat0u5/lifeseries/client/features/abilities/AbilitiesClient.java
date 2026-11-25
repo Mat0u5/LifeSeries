@@ -90,7 +90,7 @@ public class AbilitiesClient {
 		player.sendSystemMessage(infoText);
 		player.sendSystemMessage(Component.empty());
 		//?}
-		player.playSound(SoundEvents.NOTE_BLOCK_PLING.value());
+		player.playSound(SoundEvents.EXPERIENCE_ORB_PICKUP);
 	}
 
 	public static void onPressOpenScreenKey() {
