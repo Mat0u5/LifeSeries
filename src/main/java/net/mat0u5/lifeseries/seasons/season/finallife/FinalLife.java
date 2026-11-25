@@ -115,6 +115,7 @@ public class FinalLife extends Season {
 		ThrownBoogeymanWeapon.returnWeapons(player);
 		InBetweenManager.onPlayerDisconnect(player);
 		InBetweenFileSync.onPlayerDisconnect(player);
+		AbilityManager.onPlayerDisconnect(player);
 	}
 
 	@Override

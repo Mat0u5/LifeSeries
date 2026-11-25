@@ -23,7 +23,7 @@ public class AbilityManager {
 		abilities.putAll(AbilityStorage.load());
 		abilities.forEach((uuid, list) -> list.forEach(ability -> {
 			ability.bindPlayer(uuid);
-			ability.onStart();
+			if (PlayerUtils.getPlayer(uuid) != null) ability.onStart();
 		}));
 		sendUpdatePacket(PlayerUtils.getAllPlayers());
 	}
@@ -51,6 +51,10 @@ public class AbilityManager {
 	public static void onPlayerJoin(ServerPlayer player) {
 		getPlayerAbilities(player).forEach(Ability::onStart);
 		sendUpdatePacket(player);
+	}
+
+	public static void onPlayerDisconnect(ServerPlayer player) {
+		getPlayerAbilities(player).forEach(Ability::onEnd);
 	}
 
 	public static void onChosen(ServerPlayer player, InBetweenChoice choice) {

@@ -68,9 +68,11 @@ public class AbilitiesClient {
 		if (ability == Abilities.RESISTANCE || ability == Abilities.FIRE_RESISTANCE || ability == Abilities.KNOCKBACK_RESISTANCE || ability == Abilities.PROJECTILE_PROTECTION || ability == Abilities.BLAST_RESISTANCE) {
 			infoText.append("§7You have gained ").append(smallCaps(ability.title()).withStyle(ability.choiceColor())).append("§7!");
 		}
+		//? if > 1.20.3 {
 		else if (ability == Abilities.SMALLER) {
 			infoText.append("§7You are now ").append(smallCaps(ability.title()).withStyle(ability.choiceColor())).append("§7!");
 		}
+		//?}
 		else if (ability == Abilities.DASH) {
 			infoText.append("§7You have gained the ability to ").append(smallCaps(ability.title()).withStyle(ability.choiceColor())).append("§7!");
 		}

@@ -39,6 +39,7 @@ public abstract class EffectAbility extends Ability {
 
 	@Override
 	public void onEnd() {
+		super.onEnd();
 		ServerPlayer player = getPlayer();
 		if (player == null) return;
 		MobEffectInstance effect = player.getEffect(this.effect);
