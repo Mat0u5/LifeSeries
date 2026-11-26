@@ -32,6 +32,7 @@ public class SimplePackets {
     public static final SimpleStringListPacket IN_BETWEEN_CHOICE_LABELS = new SimpleStringListPacket("IN_BETWEEN_CHOICE_LABELS");
     public static final SimpleStringListPacket ACTIVE_ABILITIES = new SimpleStringListPacket("ACTIVE_ABILITIES");
     public static final SimpleStringListPacket HEALTH_VISION = new SimpleStringListPacket("HEALTH_VISION");
+    public static final SimpleStringListPacket SECOND_WIND = new SimpleStringListPacket("SECOND_WIND");
 
     public static final SimpleStringPacket CURRENT_SEASON = new SimpleStringPacket("CURRENT_SEASON");
     public static final SimpleStringPacket SESSION_STATUS = new SimpleStringPacket("SESSION_STATUS");

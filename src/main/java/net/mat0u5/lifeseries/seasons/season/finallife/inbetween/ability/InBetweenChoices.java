@@ -26,7 +26,7 @@ public class InBetweenChoices {
 		register(Abilities.PROJECTILE_PROTECTION, null, 3);
 		register(Abilities.RESISTANCE, null, 3);
 		register(Abilities.SATURATION, null, 3);
-		//register(Abilities.SECOND_WIND, null, 3);
+		register(Abilities.SECOND_WIND, null, 3);
 		register(Abilities.SHIELD_BASH, null, 3);
 		//? if > 1.20.3 {
 		register(Abilities.SMALLER, null, 3);

@@ -201,12 +201,10 @@ public class FinalLifeConfig extends SeasonConfig {
 			.name("Saturation Ability Health")
 			.description("Controls how much health this ability will add/subtract.")
 			.group("season.abilities");
-	/*
 	public final ConfigurableValue<Integer> ABILITY_SECOND_WIND_HEALTH = ConfigurableValue.register(this, "ability_second_wind_health", 6, ConfigTypes.HEARTS)
 			.name("Second Wind Ability Health")
 			.description("Controls how much health this ability will add/subtract.")
 			.group("season.abilities");
-	 */
 	public final ConfigurableValue<Integer> ABILITY_SHIELD_BASH_HEALTH = ConfigurableValue.register(this, "ability_shield_bash_health", 6, ConfigTypes.HEARTS)
 			.name("Shield Bash Ability Health")
 			.description("Controls how much health this ability will add/subtract.")

@@ -3,23 +3,22 @@ package net.mat0u5.lifeseries.client.mixin;
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
-import net.mat0u5.lifeseries.client.render.ClientRenderer;
+import net.mat0u5.lifeseries.client.features.abilities.SecondWindClient;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.client.utils.ClientUtils;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.matlib.client.render.RenderUtils;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.InBedChatScreen;
+import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 //? if > 1.20
 import org.spongepowered.asm.mixin.injection.Redirect;
-
-import java.util.Locale;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 //? if <= 1.20.3 {
 /*import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
@@ -68,6 +67,12 @@ public class GuiMixin {
     //?}
 
         //? if <= 1.20 {
+        /*if (heartType == Gui.HeartType.CONTAINER) SecondWindClient.onHeartContainer(x, y);
+        *///?} else {
+        if (identifier.getPath().startsWith("hud/heart/container")) SecondWindClient.onRenderHeartContainer(x, y);
+        //?}
+
+        //? if <= 1.20 {
         /*String texturePath = "hud/heart/";
         boolean isHardcore = k > 0;
         if (isHardcore) texturePath += "hardcore_";
@@ -113,6 +118,24 @@ public class GuiMixin {
         instance.blitSprite(renderPipeline, customHeart, x, y, u, v);
         ls$afterHeartDraw(instance, renderPipeline, identifier, x, y, u, v);
         //?}
+    }
+
+    //? if <= 1.21.11 {
+    /*@Inject(method = "renderHearts", at = @At("HEAD"))
+    *///?} else {
+    @Inject(method = "extractHearts", at = @At("HEAD"))
+    //?}
+    private void startRenderingHearts(CallbackInfo ci) {
+        SecondWindClient.startHeartRender();
+    }
+
+    //? if <= 1.21.11 {
+    /*@Inject(method = "renderHearts", at = @At("TAIL"))
+    *///?} else {
+    @Inject(method = "extractHearts", at = @At("TAIL"))
+    //?}
+    private void customHeartBorders(GuiGraphicsExtractor guiGraphics, Player player, int x, int y, int rowHeight, int regenHeart, float maxHealth, int health, int displayHealth, int absorption, boolean blink, CallbackInfo ci) {
+        SecondWindClient.renderHeartBorders(guiGraphics, maxHealth);
     }
 
     @Unique
