@@ -4,6 +4,7 @@ import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.client.features.abilities.SecondWindClient;
+import net.mat0u5.lifeseries.client.features.abilities.ShieldBashClient;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.client.utils.ClientUtils;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
@@ -11,6 +12,7 @@ import net.mat0u5.matlib.client.render.RenderUtils;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.InBedChatScreen;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -67,7 +69,7 @@ public class GuiMixin {
     //?}
 
         //? if <= 1.20 {
-        /*if (heartType == Gui.HeartType.CONTAINER) SecondWindClient.onHeartContainer(x, y);
+        /*if (heartType == Gui.HeartType.CONTAINER) SecondWindClient.onRenderHeartContainer(x, y);
         *///?} else {
         if (identifier.getPath().startsWith("hud/heart/container")) SecondWindClient.onRenderHeartContainer(x, y);
         //?}
@@ -136,6 +138,19 @@ public class GuiMixin {
     //?}
     private void customHeartBorders(GuiGraphicsExtractor guiGraphics, Player player, int x, int y, int rowHeight, int regenHeart, float maxHealth, int health, int displayHealth, int absorption, boolean blink, CallbackInfo ci) {
         SecondWindClient.renderHeartBorders(guiGraphics, maxHealth);
+    }
+
+    //? if <= 1.20.5 {
+    /*@Inject(method = "renderSlot", at = @At("TAIL"))
+    private void shieldBashBorder(GuiGraphicsExtractor guiGraphics, int x, int y, float partialTick, Player player, ItemStack stack, int seed, CallbackInfo ci) {
+    *///?} else if <= 1.21.11 {
+    /*@Inject(method = "renderSlot", at = @At("TAIL"))
+    private void shieldBashBorder(GuiGraphicsExtractor guiGraphics, int x, int y, DeltaTracker deltaTracker, Player player, ItemStack stack, int seed, CallbackInfo ci) {
+    *///?} else {
+    @Inject(method = "extractSlot", at = @At("TAIL"))
+    private void shieldBashBorder(GuiGraphicsExtractor guiGraphics, int x, int y, DeltaTracker deltaTracker, Player player, ItemStack stack, int seed, CallbackInfo ci) {
+    //?}
+        ShieldBashClient.renderShieldBorder(guiGraphics, x, y, player, stack);
     }
 
     @Unique

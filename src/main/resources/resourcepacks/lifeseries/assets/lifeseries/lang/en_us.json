@@ -16,5 +16,6 @@
   "entity.lifeseries.snail": "Snail",
   "entity.lifeseries.triviabot": "Trivia Bot",
   "entity.lifeseries.angrysnowman": "Angry Snowman",
+  "effect.lifeseries.sticky_feet": "Sticky Feet",
   "generator.lifeseries.simple_life": "Simple Life"
 }

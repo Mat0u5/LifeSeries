@@ -5,6 +5,7 @@ import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.entity.angrysnowman.AngrySnowman;
 import net.mat0u5.lifeseries.entity.snail.Snail;
 import net.mat0u5.lifeseries.entity.triviabot.TriviaBot;
+import net.mat0u5.lifeseries.registries.EffectRegistry;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.AbilityManager;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.Superpowers;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.superpowers.SuperpowersWildcard;
@@ -264,6 +265,27 @@ public abstract class LivingEntityMixin {
         return instance.getFriction();
     }
 //?}
+
+    @Inject(method = "getBlockSpeedFactor", at = @At("RETURN"), cancellable = true)
+    private void stickyFeetSpeed(CallbackInfoReturnable<Float> cir) {
+        LivingEntity entity = (LivingEntity) (Object) this;
+        if (entity.onGround() && EffectRegistry.hasStickyFeet(entity)) {
+            cir.setReturnValue(Math.min(cir.getReturnValue(), EffectRegistry.STICKY_FEET_SPEED_FACTOR));
+        }
+    }
+
+    @Inject(method = "jumpFromGround", at = @At("TAIL"))
+    private void stickyFeetJump(CallbackInfo ci) {
+        EffectRegistry.playHoneyEffects((LivingEntity) (Object) this);
+    }
+
+    @Inject(method = "checkFallDamage", at = @At("HEAD"))
+    private void stickyFeetLand(double y, boolean onGround, net.minecraft.world.level.block.state.BlockState state, net.minecraft.core.BlockPos pos, CallbackInfo ci) {
+        LivingEntity entity = (LivingEntity) (Object) this;
+        if (onGround && entity.fallDistance > 0) {
+            EffectRegistry.playHoneyEffects(entity);
+        }
+    }
 
     //? if <= 26.2 {
     //@ModifyArg(method = "handleEquipmentChanges", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/protocol/game/ClientboundSetEquipmentPacket;<init>(ILjava/util/List;)V"), index = 1)

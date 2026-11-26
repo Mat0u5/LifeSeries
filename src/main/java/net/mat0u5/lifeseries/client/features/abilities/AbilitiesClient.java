@@ -172,6 +172,7 @@ public class AbilitiesClient {
 		activeAbilities = new ArrayList<>();
 		healthVisionHealths = new HashMap<>();
 		SecondWindClient.reset();
+		ShieldBashClient.reset();
 	}
 
 	// textures/gui/menu/heart_texture/hearts_<hearts>.png, null when theres none

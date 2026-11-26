@@ -26,7 +26,7 @@ public enum Abilities {
 	,RESISTANCE(ResistanceAbility::new, AbilityIcon.effect("resistance"), "Resistance", ChatFormatting.GRAY, PASSIVE, "Permanent Resistance I.", "• This is in addition to your armour enchantments.")
 	,SATURATION(SaturationAbility::new, AbilityIcon.effect("saturation"), "Saturation", ChatFormatting.GOLD, PASSIVE, "Regenerate health twice as fast when your hunger bar is nearly full.", "")
 	,SECOND_WIND(SecondWindAbility::new, AbilityIcon.custom("second_wind"), "Second Wind", ChatFormatting.YELLOW, ACTIVE, "TODO", "")
-	,SHIELD_BASH(EmptyAbility::new, AbilityIcon.custom("shield_bash"), "Shield Bash", ChatFormatting.DARK_RED, ACTIVE, "Launch back nearby players with a shield attack. ", "• Attack while blocking with a shield to activate.")
+	,SHIELD_BASH(ShieldBashAbility::new, AbilityIcon.custom("shield_bash"), "Shield Bash", ChatFormatting.DARK_RED, ACTIVE, "Launch back nearby players with a shield attack. ", "• Attack while blocking with a shield to activate.")
 	//? if > 1.20.3 {
 	,SMALLER(SmallerAbility::new, AbilityIcon.item(Items.CAKE), "Smaller", ChatFormatting.DARK_RED, PASSIVE, "Your model and hitbox are slightly smaller and harder to hit. ", "")
 	//?}

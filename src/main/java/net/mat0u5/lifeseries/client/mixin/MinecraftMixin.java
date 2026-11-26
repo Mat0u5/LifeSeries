@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.client.mixin;
 
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.client.features.abilities.ShieldBashClient;
 import net.mat0u5.lifeseries.config.WorldConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.WorldStem;
@@ -20,6 +21,11 @@ import java.util.Optional;
 @Mixin(value = Minecraft.class, priority = 1)
 @MixinEnvironment(value = "client", type = MixinEnvironment.Env.CLIENT)
 public abstract class MinecraftMixin {
+
+    @Inject(method = "handleKeybinds", at = @At("HEAD"))
+    private void onKeyPress(CallbackInfo ci) {
+        ShieldBashClient.onKeyPress();
+    }
 
     @Inject(method = "doWorldLoad", at = @At("HEAD"))
     //? if <= 1.20.2 {

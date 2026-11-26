@@ -19,6 +19,7 @@ public class Registries {
 	public static void register() {
 		MobRegistry.registerMobs();
 		ParticleRegistry.registerParticles();
+		EffectRegistry.registerEffects();
 		registerEvents();
 		registerCommands();
 		//? if <= 1.20.2 {

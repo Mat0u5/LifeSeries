@@ -33,6 +33,7 @@ public class SimplePackets {
     public static final SimpleStringListPacket ACTIVE_ABILITIES = new SimpleStringListPacket("ACTIVE_ABILITIES");
     public static final SimpleStringListPacket HEALTH_VISION = new SimpleStringListPacket("HEALTH_VISION");
     public static final SimpleStringListPacket SECOND_WIND = new SimpleStringListPacket("SECOND_WIND");
+    public static final SimpleStringListPacket SHIELD_BASH_COOLDOWN = new SimpleStringListPacket("SHIELD_BASH_COOLDOWN");
 
     public static final SimpleStringPacket CURRENT_SEASON = new SimpleStringPacket("CURRENT_SEASON");
     public static final SimpleStringPacket SESSION_STATUS = new SimpleStringPacket("SESSION_STATUS");
@@ -98,6 +99,7 @@ public class SimplePackets {
     public static final SimpleEmptyPacket SUPERPOWER_SHOW_COOLDOWN = new SimpleEmptyPacket("SUPERPOWER_SHOW_COOLDOWN");
     public static final SimpleEmptyPacket LIFESKINS_RELOAD_START = new SimpleEmptyPacket("LIFESKINS_RELOAD_START");
     public static final SimpleEmptyPacket IN_BETWEEN_LOADED = new SimpleEmptyPacket("IN_BETWEEN_LOADED");
+    public static final SimpleEmptyPacket SHIELD_BASH = new SimpleEmptyPacket("SHIELD_BASH");
 
 
     //public static final SimpleLongPacket _______ = new SimpleLongPacket("_______");

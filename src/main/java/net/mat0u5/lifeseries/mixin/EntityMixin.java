@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.mixin;
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.entity.snail.Snail;
+import net.mat0u5.lifeseries.registries.EffectRegistry;
 import net.mat0u5.lifeseries.seasons.season.wildlife.WildLife;
 import net.mat0u5.lifeseries.seasons.season.wildlife.wildcards.wildcard.snails.Snails;
 import net.mat0u5.lifeseries.utils.interfaces.IEntity;
@@ -160,6 +161,13 @@ public abstract class EntityMixin implements IMorph, IEntity {
             if (owner != thisEntity) {
                 cir.setReturnValue(false);
             }
+        }
+    }
+
+    @Inject(method = "getBlockJumpFactor", at = @At("RETURN"), cancellable = true)
+    private void stickyFeetJump(CallbackInfoReturnable<Float> cir) {
+        if ((Object) this instanceof LivingEntity entity && EffectRegistry.hasStickyFeet(entity)) {
+            cir.setReturnValue(Math.min(cir.getReturnValue(), EffectRegistry.STICKY_FEET_JUMP_FACTOR));
         }
     }
 }
