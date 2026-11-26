@@ -82,7 +82,11 @@ public class OtherUtils extends net.mat0u5.matlib.utils.other.OtherUtils {
 
         if (frozen) {
             if (serverTickRateManager.isSprinting()) {
-                serverTickRateManager.stopSprinting();
+                //? if <= 26.3 {
+                //serverTickRateManager.stopSprinting();
+                //?} else {
+                serverTickRateManager.stopSprinting(null);
+                //?}
             }
 
             if (serverTickRateManager.isSteppingForward()) {

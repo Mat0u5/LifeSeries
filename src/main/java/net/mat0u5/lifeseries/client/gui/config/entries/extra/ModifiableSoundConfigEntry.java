@@ -10,6 +10,7 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 
 import net.minecraft.resources.Identifier;
@@ -66,13 +67,14 @@ public class ModifiableSoundConfigEntry extends StringConfigEntry {
         try {
             Identifier soundId = IdentifierHelper.parse(getValue());
             clearError();
-            SoundInstance instance = SimpleSoundInstance.forUI(SoundEvent.createVariableRangeEvent(soundId), 1);
             //? if <= 26.3 {
-            /*//~ if >= 26.3 '.resolve(' -> '.getOrResolve(' {
+            /*SoundInstance instance = SimpleSoundInstance.forUI(SoundEvent.createVariableRangeEvent(soundId), 1);
+            //~ if >= 26.3 '.resolve(' -> '.getOrResolve(' {
             var resolved = instance.getOrResolve(Minecraft.getInstance().getSoundManager());
             boolean isUnknown = resolved == null;
             //~}
             *///?} else {
+            SoundInstance instance = SimpleSoundInstance.forUI(Holder.direct(SoundEvent.createVariableRangeEvent(soundId)), 1, 1);
             boolean resolved = instance.resolveAndSelectSound(Minecraft.getInstance().getSoundManager());
             boolean isUnknown = !resolved;
             //?}
