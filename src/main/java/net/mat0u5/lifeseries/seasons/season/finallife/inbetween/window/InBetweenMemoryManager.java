@@ -22,11 +22,11 @@ public class InBetweenMemoryManager {
 	public static final int MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MiB * 1024 * 1024;
 	public static final int MAX_IMAGE_DIMENSION = 4096; // Width / height in pixels
 	private static final List<String> BUNDLED_FILES = List.of(
-			"death1/1.png", "death1/1.ogg", "death1/2.png", "death1/2.ogg"
-			//,"death2/1.png", "death2/1.ogg", "death2/2.png", "death2/2.ogg"
+			"death1/1.jpg", "death1/1.ogg", "death1/2.jpg", "death1/2.ogg"
+			,"death2/1.jpg", "death2/1.ogg", "death2/2.jpg", "death2/2.ogg"
 	);
 	private static final Pattern DEATH_FOLDER_PATTERN = Pattern.compile("death([1-9]\\d{0,3})");
-	private static final Pattern MEMORY_FILE_PATTERN = Pattern.compile("([1-9]\\d{0,3})\\.(png|ogg)");
+	private static final Pattern MEMORY_FILE_PATTERN = Pattern.compile("([1-9]\\d{0,3})\\.(png|jpg|jpeg|ogg)");
 
 	// Separate thread for reading and caching
 	public static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor(runnable -> {
@@ -60,8 +60,12 @@ public class InBetweenMemoryManager {
 				Matcher fileMatcher = MEMORY_FILE_PATTERN.matcher(file.getName().toLowerCase(Locale.ROOT));
 				if (!fileMatcher.matches()) continue;
 				int number = Integer.parseInt(fileMatcher.group(1));
-				if (fileMatcher.group(2).equals("png")) images.put(number, file.toPath());
-				else sounds.put(number, file.toPath());
+				if (fileMatcher.group(2).equals("ogg")) {
+					sounds.put(number, file.toPath());
+				}
+				else if (images.putIfAbsent(number, file.toPath()) != null) {
+					LifeSeries.LOGGER.warn("[In-Between] Multiple images numbered {} in {}, ignoring {}.", number, deathFolder, file.getName());
+				}
 			}
 
 			for (Map.Entry<Integer, Path> entry : images.entrySet()) {
@@ -113,14 +117,14 @@ public class InBetweenMemoryManager {
 			}
 
 			byte[] data = Files.readAllBytes(path);
-			if (image ? !isPngFile(data) : !isOggFile(data)) {
-				LifeSeries.LOGGER.error("[In-Between] File {} is not a valid {} file.", path, image ? "PNG" : "OGG (Vorbis)");
+			if (image ? !isPngFile(data) && !isJpegFile(data) : !isOggFile(data)) {
+				LifeSeries.LOGGER.error("[In-Between] File {} is not a valid {} file.", path, image ? "PNG or JPEG" : "OGG (Vorbis)");
 				return null;
 			}
 			if (image) {
-				// Width and height are at the start of the PNG header
-				int width = ((data[16] & 0xFF) << 24) | ((data[17] & 0xFF) << 16) | ((data[18] & 0xFF) << 8) | (data[19] & 0xFF);
-				int height = ((data[20] & 0xFF) << 24) | ((data[21] & 0xFF) << 16) | ((data[22] & 0xFF) << 8) | (data[23] & 0xFF);
+				int[] size = isPngFile(data) ? pngSize(data) : jpegSize(data);
+				int width = size == null ? 0 : size[0];
+				int height = size == null ? 0 : size[1];
 				if (width <= 0 || height <= 0 || width > MAX_IMAGE_DIMENSION || height > MAX_IMAGE_DIMENSION) {
 					LifeSeries.LOGGER.error("[In-Between] Image {} is {}x{}, maximum supported is {}x{}.", path, width, height, MAX_IMAGE_DIMENSION, MAX_IMAGE_DIMENSION);
 					return null;
@@ -150,8 +154,45 @@ public class InBetweenMemoryManager {
 		}
 	}
 
-	private static boolean isPngFile(byte[] data) {
+	public static boolean isPngFile(byte[] data) {
 		return data.length > 24 && (data[0] & 0xFF) == 0x89 && data[1] == 'P' && data[2] == 'N' && data[3] == 'G';
+	}
+
+	public static boolean isJpegFile(byte[] data) {
+		return data.length > 4 && (data[0] & 0xFF) == 0xFF && (data[1] & 0xFF) == 0xD8 && (data[2] & 0xFF) == 0xFF;
+	}
+
+	private static int[] pngSize(byte[] data) {
+		return new int[]{readInt(data, 16, 4), readInt(data, 20, 4)};
+	}
+
+	@Nullable
+	private static int[] jpegSize(byte[] data) {
+		int i = 2;
+		while (i + 9 < data.length) {
+			if ((data[i] & 0xFF) != 0xFF) return null;
+			int marker = data[i + 1] & 0xFF;
+			if (marker == 0xFF) {
+				i++;
+				continue;
+			}
+			if (marker == 0x01 || (marker >= 0xD0 && marker <= 0xD7)) {
+				i += 2;
+				continue;
+			}
+			if (marker == 0xD9 || marker == 0xDA) return null;
+			if (marker >= 0xC0 && marker <= 0xCF && marker != 0xC4 && marker != 0xC8 && marker != 0xCC) {
+				return new int[]{readInt(data, i + 7, 2), readInt(data, i + 5, 2)};
+			}
+			i += 2 + readInt(data, i + 2, 2);
+		}
+		return null;
+	}
+
+	private static int readInt(byte[] data, int offset, int bytes) {
+		int value = 0;
+		for (int i = 0; i < bytes; i++) value = (value << 8) | (data[offset + i] & 0xFF);
+		return value;
 	}
 
 	private static final byte[] VORBIS_ID_HEADER = {1, 'v', 'o', 'r', 'b', 'i', 's'};

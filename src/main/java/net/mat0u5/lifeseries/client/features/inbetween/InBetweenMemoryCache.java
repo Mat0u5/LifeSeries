@@ -2,6 +2,7 @@ package net.mat0u5.lifeseries.client.features.inbetween;
 
 import com.mojang.blaze3d.platform.NativeImage;
 import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.client.render.inbetween.InBetweenShaders;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.window.InBetweenMemoryManager;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
@@ -10,6 +11,10 @@ import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -286,7 +291,7 @@ public class InBetweenMemoryCache {
 			byte[] data = readFile(hash);
 			if (data == null) return null;
 			try {
-				NativeImage image = NativeImage.read(new ByteArrayInputStream(data));
+				NativeImage image = InBetweenMemoryManager.isJpegFile(data) ? readJpeg(data) : NativeImage.read(new ByteArrayInputStream(data));
 				if (image.getWidth() > InBetweenMemoryManager.MAX_IMAGE_DIMENSION || image.getHeight() > InBetweenMemoryManager.MAX_IMAGE_DIMENSION) {
 					LifeSeries.LOGGER.error("[In-Between] Image {} is {}x{}, maximum supported is {}x{}.", hash, image.getWidth(), image.getHeight(), InBetweenMemoryManager.MAX_IMAGE_DIMENSION, InBetweenMemoryManager.MAX_IMAGE_DIMENSION);
 					image.close();
@@ -294,7 +299,7 @@ public class InBetweenMemoryCache {
 				}
 				return image;
 			} catch (IOException e) {
-				LifeSeries.LOGGER.error("[In-Between] Image {} is not a valid PNG.", hash, e);
+				LifeSeries.LOGGER.error("[In-Between] Image {} is not a valid PNG or JPEG.", hash, e);
 				return null;
 			}
 		}, EXECUTOR).whenComplete((image, err) -> Minecraft.getInstance().execute(() -> {
@@ -318,6 +323,33 @@ public class InBetweenMemoryCache {
 				failedImages.add(hash);
 			}
 		}));
+	}
+
+	// NativeImage only reads PNGs
+	private static NativeImage readJpeg(byte[] data) throws IOException {
+		try (ImageInputStream input = ImageIO.createImageInputStream(new ByteArrayInputStream(data))) {
+			Iterator<ImageReader> readers = ImageIO.getImageReaders(input);
+			if (!readers.hasNext()) throw new IOException("No JPEG reader available");
+			ImageReader reader = readers.next();
+			try {
+				reader.setInput(input, true, true);
+				int width = reader.getWidth(0);
+				int height = reader.getHeight(0);
+				if (width <= 0 || height <= 0 || width > InBetweenMemoryManager.MAX_IMAGE_DIMENSION || height > InBetweenMemoryManager.MAX_IMAGE_DIMENSION) {
+					throw new IOException("Invalid image size " + width + "x" + height);
+				}
+				BufferedImage decoded = reader.read(0);
+				NativeImage image = new NativeImage(width, height, false);
+				int[] row = new int[width];
+				for (int y = 0; y < height; y++) {
+					decoded.getRGB(0, y, width, 1, row, 0, width);
+					for (int x = 0; x < width; x++) InBetweenShaders.setPixel(image, x, y, row[x] | 0xFF000000);
+				}
+				return image;
+			} finally {
+				reader.dispose();
+			}
+		}
 	}
 
 	private static MemoryTexture createMemoryTexture(String hash, NativeImage image) {
