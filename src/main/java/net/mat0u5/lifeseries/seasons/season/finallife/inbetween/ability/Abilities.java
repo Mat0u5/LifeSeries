@@ -12,7 +12,7 @@ public enum Abilities {
 	EMPTY(EmptyAbility::new, AbilityIcon.item(Items.STONE), "Empty", ChatFormatting.RESET, PASSIVE, "", "")
 	,AIR_JUMP(AirJumpAbility::new, AbilityIcon.effect("jump_boost"), "Air Jump", ChatFormatting.AQUA, ACTIVE, "Double jump in mid-air.", "• No fall damage for falls under 5 blocks after the jump.\n• Up to 3 charges that recharge over time.")
 	,BLAST_RESISTANCE(BlastResistanceAbility::new, AbilityIcon.effect("absorption"), "Blast Resistance", ChatFormatting.GRAY, PASSIVE, "Take 75% less explosion damage.", "")
-	,DASH(DashAbility::new, AbilityIcon.effect("speed"), "Dash", ChatFormatting.AQUA, ACTIVE, "Double-tap a movement key to dash 4 blocks in that direction.", "")
+	,DASH(DashAbility::new, AbilityIcon.effect("speed"), "Dash", ChatFormatting.AQUA, ACTIVE, "Double-tap a movement key to dash 4 blocks in that direction.", "• Up to 3 charges that recharge over time.")
 	//? if > 1.20.3 {
 	,EXTRA_REACH(ExtraReachAbility::new, AbilityIcon.item(Items.RABBIT_FOOT), "Extra Reach", ChatFormatting.DARK_RED, PASSIVE, "+0.5 blocks of attack reach.", "")
 	//?}
@@ -23,16 +23,16 @@ public enum Abilities {
 	,KNOCKBACK_RESISTANCE(KnockbackResistanceAbility::new, AbilityIcon.item(Items.IRON_CHESTPLATE), "Knockback Resistance", ChatFormatting.GRAY, PASSIVE, "Take 75% less knockback.", "")
 	,MORE_DROPS(MoreDropsAbility::new, AbilityIcon.effect("luck"), "More Drops", ChatFormatting.GREEN, PASSIVE, "Permanent Luck I, for more mob and block drops.", "")
 	,PROJECTILE_PROTECTION(ProjectileProtectionAbility::new, AbilityIcon.item(Items.BOW), "Projectile Protection", ChatFormatting.DARK_RED, PASSIVE, "Take 50% less projectile damage.", "• This is in addition to your armour enchantments.")
-	,RESISTANCE(ResistanceAbility::new, AbilityIcon.effect("resistance"), "Resistance", ChatFormatting.GRAY, PASSIVE, "Permanent Resistance I.", "• This is in addition to your armour enchantments.")
+	,RESISTANCE(ResistanceAbility::new, AbilityIcon.effect("resistance"), "Resistance", ChatFormatting.GRAY, PASSIVE, "Permanent Resistance I.", "• This is in addition to your armour enchantments.") //TODO unofficial description
 	,SATURATION(SaturationAbility::new, AbilityIcon.effect("saturation"), "Saturation", ChatFormatting.GOLD, PASSIVE, "Regenerate health twice as fast when your hunger bar is nearly full.", "")
-	,SECOND_WIND(SecondWindAbility::new, AbilityIcon.custom("second_wind"), "Second Wind", ChatFormatting.YELLOW, ACTIVE, "TODO - unknown", "")
+	,SECOND_WIND(SecondWindAbility::new, AbilityIcon.custom("second_wind"), "Second Wind", ChatFormatting.YELLOW, ACTIVE, "Unknown", "") //TODO unofficial description
 	,SHIELD_BASH(ShieldBashAbility::new, AbilityIcon.custom("shield_bash"), "Shield Bash", ChatFormatting.DARK_RED, ACTIVE, "Launch back nearby players with a shield attack. ", "• Attack while blocking with a shield to activate.")
 	//? if > 1.20.3 {
 	,SMALLER(SmallerAbility::new, AbilityIcon.item(Items.CAKE), "Smaller", ChatFormatting.DARK_RED, PASSIVE, "Your model and hitbox are slightly smaller and harder to hit. ", "")
 	//?}
-	,SPEED(SpeedAbility::new, AbilityIcon.effect("speed"), "Speed", ChatFormatting.AQUA, PASSIVE, "Permanent Speed I.", "")
+	,SPEED(SpeedAbility::new, AbilityIcon.effect("speed"), "Speed", ChatFormatting.AQUA, PASSIVE, "Permanent Speed I", "")
 
-	//,TRIDENT(EmptyAbility::new, AbilityIcon.item(Items.TRIDENT), "Trident", ChatFormatting.AQUA, ACTIVE, "", "")
+	//,TRIDENT(EmptyAbility::new, AbilityIcon.item(Items.TRIDENT), "Trident", ChatFormatting.AQUA, ACTIVE, "Unknown", "")
 
 	;
 

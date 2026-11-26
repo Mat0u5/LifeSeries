@@ -3,5 +3,35 @@
 		"question": "During which series did Jimmy break his streak of being the first player eliminated?",
 		"answers": ["Wild Life", "Secret Life", "Past Life", "Limited Life"],
 		"correct_answer_index": 1
+	},
+	{
+		"question": " Which one of these was NOT a line from a poem in one of Martyn's videos?",
+		"answers": ["After every winter there comes a spring", "I'm moving to-oooooooo the nether", "Our will be done", "We are those that listen"],
+		"correct_answer_index": 1
+	},
+	{
+		"question": "For which of these seasons was Scott NOT the first Boogeyman?",
+		"answers": ["Limited Life", "Secret Life", "Last Life", "Past Life"],
+		"correct_answer_index": 2
+	},
+	{
+		"question": "In Past Life, which of these flowers was included on Gem's skins to represent the Villies?",
+		"answers": ["Poppies", "Allium", "Tulip", "Roses"],
+		"correct_answer_index": 3
+	},
+	{
+		"question": "Which series did Skizz NOT participate in? ",
+		"answers": ["Last Life", "Double Life", "Limited Life", "Wild Life"],
+		"correct_answer_index": 1
+	},
+	{
+		"question": "What flavor of cake was Grian's base in Double Life?",
+		"answers": ["Coffee", "Chocolate", "Red Velvet", "Strawberry"],
+		"correct_answer_index": 2
+	},
+	{
+		"question": "Which of the Specials did Cleo win? ",
+		"answers": ["Simple Life", "Nice Life", "Real Life"],
+		"correct_answer_index": 2
 	}
 ]
