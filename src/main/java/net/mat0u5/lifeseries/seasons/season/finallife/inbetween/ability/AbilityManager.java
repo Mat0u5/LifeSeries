@@ -70,6 +70,13 @@ public class AbilityManager {
 		return amount;
 	}
 
+	public static boolean preventDamage(ServerPlayer player, DamageSource source) {
+		for (Ability ability : getPlayerAbilities(player)) {
+			if (ability.preventDamage(source)) return true;
+		}
+		return false;
+	}
+
 	public static void onChosen(ServerPlayer player, InBetweenChoice choice) {
 		if (choice.isEmpty()) return;
 		Ability abilityInstance = choice.ability();

@@ -4,6 +4,8 @@ import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.utils.ClientSeasonChanger;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
 import net.mat0u5.lifeseries.client.compatibilities.VoicechatClient;
+import net.mat0u5.lifeseries.client.features.abilities.AirJumpClient;
+import net.mat0u5.lifeseries.client.features.abilities.DashClient;
 import net.mat0u5.lifeseries.client.features.inbetween.InBetweenChoicesClient;
 import net.mat0u5.lifeseries.client.features.inbetween.InBetweenEffectsClient;
 import net.mat0u5.lifeseries.client.features.inbetween.InBetweenMemoryCache;
@@ -122,6 +124,7 @@ public class ClientEvents {
         if (LifeSeries.modDisabled()) return;
         if (player != null) {
             sendPackets(player);
+            DashClient.applyMotion(player);
         }
     }
 
@@ -137,6 +140,8 @@ public class ClientEvents {
 
             if (player != null) {
                 tryTripleJump(player);
+                AirJumpClient.tick(player);
+                DashClient.tick(player);
                 checkOnGroundFor(player);
                 InBetweenEffectsClient.tick(player);
                 InBetweenWindowsClient.tick(player);

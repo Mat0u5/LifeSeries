@@ -117,8 +117,8 @@ public class SecondWindClient {
 			graphics.setColor(1, 1, 1, 1);
 			RenderSystem.disableBlend();
 			*///?} else if <= 1.21.5 {
-			/*graphics.blit(RenderType::guiTextured, GLOW_TEXTURE, 0, 0, 0.0F, 0.0F, width, height, width, height, argb(edgeAlpha, GLOW_COLOR));
-			*///?} else {
+			//graphics.blit(RenderType::guiTextured, GLOW_TEXTURE, 0, 0, 0.0F, 0.0F, width, height, width, height, argb(edgeAlpha, GLOW_COLOR));
+			//?} else {
 			graphics.blit(RenderPipelines.GUI_TEXTURED, GLOW_TEXTURE, 0, 0, 0.0F, 0.0F, width, height, width, height, argb(edgeAlpha, GLOW_COLOR));
 			//?}
 		}

@@ -10,9 +10,9 @@ import static net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.A
 
 public enum Abilities {
 	EMPTY(EmptyAbility::new, AbilityIcon.item(Items.STONE), "Empty", ChatFormatting.RESET, PASSIVE, "", "")
-	,AIR_JUMP(EmptyAbility::new, AbilityIcon.effect("jump_boost"), "Air Jump", ChatFormatting.AQUA, ACTIVE, "Double jump in mid-air.", "• No fall damage for falls under 5 blocks after the jump.\n• Up to 3 charges that recharge over time.")
+	,AIR_JUMP(AirJumpAbility::new, AbilityIcon.effect("jump_boost"), "Air Jump", ChatFormatting.AQUA, ACTIVE, "Double jump in mid-air.", "• No fall damage for falls under 5 blocks after the jump.\n• Up to 3 charges that recharge over time.")
 	,BLAST_RESISTANCE(BlastResistanceAbility::new, AbilityIcon.effect("absorption"), "Blast Resistance", ChatFormatting.GRAY, PASSIVE, "Take 75% less explosion damage.", "")
-	,DASH(EmptyAbility::new, AbilityIcon.effect("speed"), "Dash", ChatFormatting.AQUA, ACTIVE, "Double-tap a movement key to dash 4 blocks in that direction.", "")
+	,DASH(DashAbility::new, AbilityIcon.effect("speed"), "Dash", ChatFormatting.AQUA, ACTIVE, "Double-tap a movement key to dash 4 blocks in that direction.", "")
 	//? if > 1.20.3 {
 	,EXTRA_REACH(ExtraReachAbility::new, AbilityIcon.item(Items.RABBIT_FOOT), "Extra Reach", ChatFormatting.DARK_RED, PASSIVE, "+0.5 blocks of attack reach.", "")
 	//?}

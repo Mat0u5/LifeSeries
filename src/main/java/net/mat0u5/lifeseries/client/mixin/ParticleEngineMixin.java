@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.client.mixin;
 
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
+import net.mat0u5.lifeseries.client.features.abilities.DashClient;
 import net.mat0u5.lifeseries.client.features.inbetween.InBetweenChoicesClient;
 import net.mat0u5.lifeseries.client.features.inbetween.InBetweenEffectsClient;
 import net.mat0u5.lifeseries.client.features.inbetween.InBetweenWindowsClient;
@@ -42,6 +43,13 @@ public abstract class ParticleEngineMixin {
         InBetweenChoicesClient.onParticlesCleared();
         InBetweenEffectsClient.onParticlesCleared();
     }
+
+    //? if <= 1.21.6 {
+    /*@Inject(method = "render", at = @At("TAIL"))
+    private void renderDashGhosts(CallbackInfo ci) {
+        DashClient.renderDelayedGhosts();
+    }
+    *///?}
 
     //? if >= 1.21.9 {
     @Accessor("particles")

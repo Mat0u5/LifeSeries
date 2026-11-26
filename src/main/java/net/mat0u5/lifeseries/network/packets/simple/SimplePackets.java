@@ -34,6 +34,7 @@ public class SimplePackets {
     public static final SimpleStringListPacket HEALTH_VISION = new SimpleStringListPacket("HEALTH_VISION");
     public static final SimpleStringListPacket SECOND_WIND = new SimpleStringListPacket("SECOND_WIND");
     public static final SimpleStringListPacket SHIELD_BASH_COOLDOWN = new SimpleStringListPacket("SHIELD_BASH_COOLDOWN");
+    public static final SimpleStringListPacket ABILITY_CHARGES = new SimpleStringListPacket("ABILITY_CHARGES");
 
     public static final SimpleStringPacket CURRENT_SEASON = new SimpleStringPacket("CURRENT_SEASON");
     public static final SimpleStringPacket SESSION_STATUS = new SimpleStringPacket("SESSION_STATUS");
@@ -84,6 +85,7 @@ public class SimplePackets {
     public static final SimpleIntegerPacket TRIVIA_TIMER = new SimpleIntegerPacket("TRIVIA_TIMER");
     public static final SimpleIntegerPacket VOTING_TIME = new SimpleIntegerPacket("VOTING_TIME");
     public static final SimpleIntegerPacket POWER_TJ_JUMPS = new SimpleIntegerPacket("POWER_TJ_JUMPS");
+    public static final SimpleIntegerPacket DASH_GHOSTS = new SimpleIntegerPacket("DASH_GHOSTS");
 
     public static final SimpleEmptyPacket HOLDING_JUMP = new SimpleEmptyPacket("HOLDING_JUMP");
     public static final SimpleEmptyPacket SUPERPOWER_KEY = new SimpleEmptyPacket("SUPERPOWER_KEY");
@@ -100,6 +102,8 @@ public class SimplePackets {
     public static final SimpleEmptyPacket LIFESKINS_RELOAD_START = new SimpleEmptyPacket("LIFESKINS_RELOAD_START");
     public static final SimpleEmptyPacket IN_BETWEEN_LOADED = new SimpleEmptyPacket("IN_BETWEEN_LOADED");
     public static final SimpleEmptyPacket SHIELD_BASH = new SimpleEmptyPacket("SHIELD_BASH");
+    public static final SimpleEmptyPacket AIR_JUMP = new SimpleEmptyPacket("AIR_JUMP");
+    public static final SimpleEmptyPacket DASH = new SimpleEmptyPacket("DASH");
 
 
     //public static final SimpleLongPacket _______ = new SimpleLongPacket("_______");

@@ -18,6 +18,11 @@ import net.minecraft.client.renderer.item.ItemStackRenderState;
 //?}
 //? if <= 1.21.2
 //import net.minecraft.world.item.ItemStack;
+//? if <= 1.21.6 {
+/*import net.mat0u5.lifeseries.client.features.abilities.DashClient;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+*///?}
 
 @Mixin(value = ItemInHandLayer.class, priority = 1)
 @MixinEnvironment(value = "client", type = MixinEnvironment.Env.CLIENT)
@@ -45,4 +50,12 @@ public class ItemInHandLayerMixin {
         }
         return value;
     }
+
+    // In SubmitNodeCollectionMixin for >= 1.21.9
+    //? if <= 1.21.6 {
+    /*@Inject(method = "render", at = @At("HEAD"), cancellable = true)
+    private void hideDashGhostItems(CallbackInfo ci) {
+        if (DashClient.isRenderingGhost()) ci.cancel();
+    }
+    *///?}
 }

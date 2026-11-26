@@ -1,6 +1,7 @@
 package net.mat0u5.lifeseries.client.render;
 
 import net.mat0u5.lifeseries.LifeSeries;
+import net.mat0u5.lifeseries.client.features.abilities.DashClient;
 import net.mat0u5.lifeseries.client.features.abilities.SecondWindClient;
 import net.mat0u5.lifeseries.client.features.inbetween.InBetweenTransition;
 import net.mat0u5.lifeseries.seasons.season.Season;
@@ -53,6 +54,7 @@ public class ClientRenderer {
     public static void render(GuiGraphicsExtractor graphics) {
         if (!LifeSeries.modDisabled()) {
             SecondWindClient.renderGlowVignette(graphics);
+            DashClient.renderBlur(graphics);
             InBetweenTransition.render(graphics);
         }
         TextHud.renderText(graphics);

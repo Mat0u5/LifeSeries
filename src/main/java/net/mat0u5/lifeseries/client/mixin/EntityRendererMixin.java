@@ -16,6 +16,9 @@ import net.minecraft.client.renderer.entity.state.EntityRenderState;
 /*import org.spongepowered.asm.mixin.injection.ModifyArg;
 import net.mat0u5.lifeseries.client.utils.ClientUtils;
 import net.minecraft.network.chat.Component;
+import net.mat0u5.lifeseries.client.features.abilities.DashClient;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 *///?}
 //? if >= 26.1 {
 import net.mat0u5.lifeseries.seasons.util.LivesManager;
@@ -67,4 +70,12 @@ public class EntityRendererMixin<T extends Entity, S extends EntityRenderState> 
         return original;
     }
 //?}
+
+    // In SubmitNodeCollectionMixin for >= 1.21.9
+    //? if <= 1.21.6 {
+    /*@Inject(method = "renderNameTag", at = @At("HEAD"), cancellable = true)
+    private void hideDashGhostNameTag(CallbackInfo ci) {
+        if (DashClient.isRenderingGhost()) ci.cancel();
+    }
+    *///?}
 }

@@ -58,6 +58,10 @@ public abstract class Ability {
 		return amount;
 	}
 
+	public boolean preventDamage(DamageSource source) {
+		return false;
+	}
+
 	public enum AbilityType {
 		PASSIVE,
 		ACTIVE;

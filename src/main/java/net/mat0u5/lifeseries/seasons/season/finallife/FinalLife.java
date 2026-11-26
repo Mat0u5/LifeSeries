@@ -158,6 +158,7 @@ public class FinalLife extends Season {
 	public EventResult onPrePlayerDamage(ServerPlayer player, DamageSource source, float amount) {
 		EventResult res = InBetweenManager.onPrePlayerDamage(player, source);
 		if (!res.isPass()) return res;
+		if (AbilityManager.preventDamage(player, source)) return EventResult.DENY;
 		return super.onPrePlayerDamage(player, source, amount);
 	}
 

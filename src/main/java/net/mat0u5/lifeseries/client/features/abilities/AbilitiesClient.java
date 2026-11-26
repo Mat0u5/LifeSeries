@@ -173,6 +173,9 @@ public class AbilitiesClient {
 		healthVisionHealths = new HashMap<>();
 		SecondWindClient.reset();
 		ShieldBashClient.reset();
+		AbilityChargesClient.reset();
+		AirJumpClient.reset();
+		DashClient.reset();
 	}
 
 	// textures/gui/menu/heart_texture/hearts_<hearts>.png, null when theres none

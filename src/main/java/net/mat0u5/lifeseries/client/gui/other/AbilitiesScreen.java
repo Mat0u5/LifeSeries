@@ -222,10 +222,10 @@ public class AbilitiesScreen extends Screen {
 		/*if (custom != null) RenderUtils.texture(custom, x, y, 9, 9).render(graphics);
 		else RenderUtils.texture(ICONS, x, y, 9, 9).uv(type.equals("container") ? 16 : type.equals("full") ? 52 : 61, hardcore ? 45 : 0).textureSize(256, 256).render(graphics);
 		*///?} else if <= 1.21 {
-		/*graphics.blitSprite(sprite, x, y, 9, 9);
-		*///?} else if <= 1.21.5 {
-		/*graphics.blitSprite(RenderType::guiTextured, sprite, x, y, 9, 9);
-		*///?} else {
+		//graphics.blitSprite(sprite, x, y, 9, 9);
+		//?} else if <= 1.21.5 {
+		//graphics.blitSprite(RenderType::guiTextured, sprite, x, y, 9, 9);
+		//?} else {
 		graphics.blitSprite(RenderPipelines.GUI_TEXTURED, sprite, x, y, 9, 9);
 		//?}
 	}

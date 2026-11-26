@@ -20,8 +20,8 @@ import net.minecraft.client.renderer.FirstPersonHandsAndItemsRenderer;
 @MixinEnvironment(value = "client", type = MixinEnvironment.Env.CLIENT)
 public class ItemInHandRendererMixin {
     //? if <= 26.1 {
-    /*@Inject(method = "renderArmWithItem", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;pushPose()V", shift = At.Shift.AFTER, ordinal = 0))
-    *///?} else {
+    //@Inject(method = "renderArmWithItem", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;pushPose()V", shift = At.Shift.AFTER, ordinal = 0))
+    //?} else {
     @Inject(method = "submitArmWithItem", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;pushPose()V", shift = At.Shift.AFTER, ordinal = 0))
     //?}
     private void onArmAnim(CallbackInfo ci, @Local(argsOnly = true) PoseStack poseStack, @Local(argsOnly = true) InteractionHand hand) {

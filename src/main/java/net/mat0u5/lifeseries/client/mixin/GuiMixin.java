@@ -1,8 +1,10 @@
 package net.mat0u5.lifeseries.client.mixin;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.LifeSeriesClient;
+import net.mat0u5.lifeseries.client.features.abilities.AbilityChargesClient;
 import net.mat0u5.lifeseries.client.features.abilities.SecondWindClient;
 import net.mat0u5.lifeseries.client.features.abilities.ShieldBashClient;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -69,8 +71,8 @@ public class GuiMixin {
     //?}
 
         //? if <= 1.20 {
-        /*if (heartType == Gui.HeartType.CONTAINER) SecondWindClient.onRenderHeartContainer(x, y);
-        *///?} else {
+        //if (heartType == Gui.HeartType.CONTAINER) SecondWindClient.onRenderHeartContainer(x, y);
+        //?} else {
         if (identifier.getPath().startsWith("hud/heart/container")) SecondWindClient.onRenderHeartContainer(x, y);
         //?}
 
@@ -123,8 +125,8 @@ public class GuiMixin {
     }
 
     //? if <= 1.21.11 {
-    /*@Inject(method = "renderHearts", at = @At("HEAD"))
-    *///?} else {
+    //@Inject(method = "renderHearts", at = @At("HEAD"))
+    //?} else {
     @Inject(method = "extractHearts", at = @At("HEAD"))
     //?}
     private void startRenderingHearts(CallbackInfo ci) {
@@ -132,8 +134,8 @@ public class GuiMixin {
     }
 
     //? if <= 1.21.11 {
-    /*@Inject(method = "renderHearts", at = @At("TAIL"))
-    *///?} else {
+    //@Inject(method = "renderHearts", at = @At("TAIL"))
+    //?} else {
     @Inject(method = "extractHearts", at = @At("TAIL"))
     //?}
     private void customHeartBorders(GuiGraphicsExtractor guiGraphics, Player player, int x, int y, int rowHeight, int regenHeart, float maxHealth, int health, int displayHealth, int absorption, boolean blink, CallbackInfo ci) {
@@ -151,6 +153,17 @@ public class GuiMixin {
     private void shieldBashBorder(GuiGraphicsExtractor guiGraphics, int x, int y, DeltaTracker deltaTracker, Player player, ItemStack stack, int seed, CallbackInfo ci) {
     //?}
         ShieldBashClient.renderShieldBorder(guiGraphics, x, y, player, stack);
+    }
+
+    //? if <= 1.20.3 {
+    //@Inject(method = "renderHotbar", at = @At("TAIL"))
+    //?} else if <= 1.21.11 {
+    //@Inject(method = "renderItemHotbar", at = @At("TAIL"))
+    //?} else {
+    @Inject(method = "extractItemHotbar", at = @At("TAIL"))
+    //?}
+    private void abilityCharges(CallbackInfo ci, @Local(argsOnly = true) GuiGraphicsExtractor guiGraphics) {
+        AbilityChargesClient.renderCharges(guiGraphics);
     }
 
     @Unique

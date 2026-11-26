@@ -61,12 +61,12 @@ float lsRadius(vec2 centerd, float aspect) {
     return length(centerd) / (0.5 * length(vec2(aspect, 1.0)));
 }
 
-vec3 lsScene(vec2 uv, float blur) {
+vec3 lsScene(vec2 uv, float blur, float zoomBlur) {
     if (blur <= 0.001) {
         return texture(Sampler0, uv).rgb;
     }
     vec2 offset = uv - 0.5;
-    float zoom = 1.0 / (1.0 + 0.5 * blur);
+    float zoom = 1.0 / (1.0 + 0.5 * zoomBlur);
     float spread = 0.1 * blur;
     float split = 0.015 * blur;
     float jitter = fract(52.9829189 * fract(dot(gl_FragCoord.xy, vec2(0.06711056, 0.00583715))));
@@ -114,11 +114,12 @@ vec3 lsSwallowSmoke(vec3 scene, vec2 uv, float progress, float time, float aspec
 
 void main() {
     float blur = params.g;
+    float dashBlur = params.r;
     float swallow = params.b;
     float time = extra.x;
     float aspect = max(extra.y, 0.01);
 
-    vec3 color = lsScene(swallow > 0.0 ? lsRipple(screenUv, swallow, time, aspect) : screenUv, blur);
+    vec3 color = lsScene(swallow > 0.0 ? lsRipple(screenUv, swallow, time, aspect) : screenUv, max(blur, dashBlur), blur);
     if (swallow > 0.0) {
         color = lsSwallowSmoke(color, screenUv, swallow, time, aspect);
     }

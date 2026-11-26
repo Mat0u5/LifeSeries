@@ -4,6 +4,8 @@ import com.google.auto.service.AutoService;
 import io.netty.buffer.Unpooled;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.features.abilities.AbilitiesClient;
+import net.mat0u5.lifeseries.client.features.abilities.AbilityChargesClient;
+import net.mat0u5.lifeseries.client.features.abilities.DashClient;
 import net.mat0u5.lifeseries.client.features.abilities.SecondWindClient;
 import net.mat0u5.lifeseries.client.features.abilities.ShieldBashClient;
 import net.mat0u5.lifeseries.client.utils.ClientSeasonChanger;
@@ -104,6 +106,8 @@ public class LifeSeriesNetworkHandlerClient implements RegistrableClient {
         SimplePackets.HEALTH_VISION.setClientReceive(payload -> AbilitiesClient.onHealthVisionPayload(payload.value()));
         SimplePackets.SECOND_WIND.setClientReceive(payload -> SecondWindClient.onPayload(payload.value()));
         SimplePackets.SHIELD_BASH_COOLDOWN.setClientReceive(payload -> ShieldBashClient.onCooldownPayload(payload.value()));
+        SimplePackets.ABILITY_CHARGES.setClientReceive(payload -> AbilityChargesClient.onChargesPayload(payload.value()));
+        SimplePackets.DASH_GHOSTS.setClientReceive(payload -> DashClient.onDashGhostsPayload(payload.number()));
         SimplePackets.NICELIFE_LIVE_VOTING.setClientReceive(payload -> {
             LifeSeriesClient.liveVoting.clear();
             for (String string : payload.value()) {

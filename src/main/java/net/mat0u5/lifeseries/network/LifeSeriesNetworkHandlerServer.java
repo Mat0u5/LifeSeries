@@ -10,6 +10,8 @@ import net.mat0u5.lifeseries.config.modifiable.ModifiableText;
 import net.mat0u5.lifeseries.network.packets.*;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.Abilities;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.abilities.AirJumpAbility;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.abilities.DashAbility;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.abilities.ShieldBashAbility;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
@@ -198,6 +200,16 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
         SimplePackets.SHIELD_BASH.setServerReceive((player, payload) -> {
             if (LifeSeries.isSeason(Seasons.FINAL_LIFE) && AbilityManager.getAbility(player, Abilities.SHIELD_BASH) instanceof ShieldBashAbility ability) {
                 ability.bash(player);
+            }
+        });
+        SimplePackets.AIR_JUMP.setServerReceive((player, payload) -> {
+            if (LifeSeries.isSeason(Seasons.FINAL_LIFE) && AbilityManager.getAbility(player, Abilities.AIR_JUMP) instanceof AirJumpAbility ability) {
+                ability.airJump(player);
+            }
+        });
+        SimplePackets.DASH.setServerReceive((player, payload) -> {
+            if (LifeSeries.isSeason(Seasons.FINAL_LIFE) && AbilityManager.getAbility(player, Abilities.DASH) instanceof DashAbility ability) {
+                ability.dash(player);
             }
         });
         SimplePackets.SELECTED_WILDCARD.setServerReceive((player, payload) -> {
