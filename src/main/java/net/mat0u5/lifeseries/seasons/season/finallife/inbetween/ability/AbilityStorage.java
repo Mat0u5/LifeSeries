@@ -35,6 +35,7 @@ public class AbilityStorage {
 			if (entry.getValue().isEmpty()) continue;
 			JsonArray list = new JsonArray();
 			for (Ability ability : entry.getValue()) {
+				if (ability.isForced()) continue;
 				JsonObject json = new JsonObject();
 				json.addProperty("id", ability.ability().name().toLowerCase(Locale.ROOT));
 				//ability.saveExtraData(json);

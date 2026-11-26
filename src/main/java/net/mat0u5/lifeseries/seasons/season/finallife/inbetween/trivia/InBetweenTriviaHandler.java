@@ -182,7 +182,6 @@ public class InBetweenTriviaHandler extends TriviaHandler {
 
 	public void answeredIncorrect() {
 		super.answeredIncorrect();
-		//TODO unknown if anything happens.
 		ModifiableSound.FINALLIFE_TRIVIA_INCORRECT.playWithSource(PlayerUtils.getAllPlayers(), bot, SoundSource.NEUTRAL, 1f, 1);
 	}
 

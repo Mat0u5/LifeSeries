@@ -181,7 +181,7 @@ public class AbilitiesClient {
 	// textures/gui/menu/heart_texture/hearts_<hearts>.png, null when theres none
 	@Nullable
 	public static HeartTexture findHeartTexture(double hearts) {
-		if (hearts < 0 || hearts % 1 != 0) return null;
+		if (hearts % 1 != 0) return null;
 		Identifier texture = IdentifierHelper.lifeseries("textures/gui/menu/heart_texture/hearts_" + (int) hearts + ".png");
 		Optional<Resource> resource = Minecraft.getInstance().getResourceManager().getResource(texture);
 		if (resource.isEmpty()) return null;

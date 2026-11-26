@@ -76,7 +76,7 @@ public class InBetweenWindowManager {
 	}
 
 	public static boolean hasWindows(int deathNumber) {
-		return isEnabled() && !InBetweenTriviaManager.hasTrivia(deathNumber); //TODO perhaps make this more configurable to allow for having both.
+		return isEnabled() && !InBetweenTriviaManager.hasTrivia(deathNumber);
 	}
 
 	@Nullable

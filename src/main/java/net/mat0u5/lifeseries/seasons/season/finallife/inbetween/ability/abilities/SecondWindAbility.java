@@ -83,7 +83,7 @@ public class SecondWindAbility extends Ability {
 		heartbeatsLeft = HEARTBEATS;
 		heartbeatTimer = HEARTBEAT_INTERVAL;
 		heartbeatPlayer = player;
-		((ServerLevel) player.level()).sendParticles(ParticleTypes.HAPPY_VILLAGER, player.getX(), player.getY() + player.getBbHeight() * 0.6, player.getZ(), 3, 0.5, 0.4, 0.5, 0);
+		((ServerLevel) player.level()).sendParticles(ParticleTypes.HAPPY_VILLAGER, player.getX(), player.getY() + player.getBbHeight() * 0.6, player.getZ(), 15, 0.5, 0.4, 0.5, 0);
 		SimplePackets.SECOND_WIND.sendToClient(List.of("trigger", String.valueOf(COOLDOWN)), player);
 	}
 

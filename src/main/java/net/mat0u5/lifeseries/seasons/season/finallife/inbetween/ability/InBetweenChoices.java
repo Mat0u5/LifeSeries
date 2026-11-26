@@ -11,28 +11,28 @@ public class InBetweenChoices {
 	private static final List<BoundedChoice> registered = new ArrayList<>();
 
 	static {
-		register(Abilities.AIR_JUMP, null, 3);
-		register(Abilities.BLAST_RESISTANCE, null, 3);
-		register(Abilities.DASH, null, 3);
+		register(Abilities.AIR_JUMP, null, null);
+		register(Abilities.BLAST_RESISTANCE, null, null);
+		register(Abilities.DASH, null, null);
 		//? if > 1.20.3 {
-		register(Abilities.EXTRA_REACH, null, 3);
+		register(Abilities.EXTRA_REACH, null, null);
 		//?}
-		register(Abilities.FEATHER_FALLING, null, 3);
-		register(Abilities.FIRE_RESISTANCE, null, 3);
-		register(Abilities.HASTE, null, 3);
-		register(Abilities.HEALTH_VISION, null, 3);
-		register(Abilities.KNOCKBACK_RESISTANCE, null, 3);
-		register(Abilities.MORE_DROPS, null, 3);
-		register(Abilities.PROJECTILE_PROTECTION, null, 3);
-		register(Abilities.RESISTANCE, null, 3);
-		register(Abilities.SATURATION, null, 3);
-		register(Abilities.SECOND_WIND, null, 3);
-		register(Abilities.SHIELD_BASH, null, 3);
+		register(Abilities.FEATHER_FALLING, null, null);
+		register(Abilities.FIRE_RESISTANCE, null, null);
+		register(Abilities.HASTE, null, null);
+		register(Abilities.HEALTH_VISION, null, null);
+		register(Abilities.KNOCKBACK_RESISTANCE, null, null);
+		register(Abilities.MORE_DROPS, null, null);
+		register(Abilities.PROJECTILE_PROTECTION, null, null);
+		register(Abilities.RESISTANCE, null, null);
+		register(Abilities.SATURATION, null, null);
+		register(Abilities.SECOND_WIND, null, null);
+		register(Abilities.SHIELD_BASH, null, null);
 		//? if > 1.20.3 {
-		register(Abilities.SMALLER, null, 3);
+		register(Abilities.SMALLER, null, null);
 		//?}
-		register(Abilities.SPEED, null, 3);
-		//register(Abilities.TRIDENT, 3, null);
+		register(Abilities.SPEED, null, null);
+		//register(Abilities.TRIDENT, null, null);
 
 		//TODO modify the death ranges.
 	}

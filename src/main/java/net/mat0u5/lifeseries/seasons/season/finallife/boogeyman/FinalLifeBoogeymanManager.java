@@ -6,6 +6,8 @@ import net.mat0u5.lifeseries.events.Events;
 import net.mat0u5.lifeseries.network.LifeSeriesNetworkHandlerServer;
 import net.mat0u5.lifeseries.seasons.season.finallife.FinalLife;
 import net.mat0u5.lifeseries.seasons.season.finallife.FinalLifeConfig;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.Abilities;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.AbilityManager;
 import net.mat0u5.lifeseries.seasons.util.WatcherManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
@@ -202,6 +204,7 @@ public class FinalLifeBoogeymanManager {
 
 	public void tick() {
 		for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
+			AbilityManager.setForcedAbility(player, Abilities.DASH, isBoogeyman(player)); // TODO this will need to be removed as the boogeyman goes to the in-between as well.
 			if (isEnabled() && isBoogeyman(player) && !player.isSpectator() && FINAL_LIFE_BOOGEYMAN_SPEED.get()) {
 				boolean giveSpeed = false;
 				MobEffectInstance effect = player.getEffect(SPEED_EFFECT);
@@ -384,7 +387,6 @@ public class FinalLifeBoogeymanManager {
 
 	private void onBecameBoogeyman(ServerPlayer player) {
 		((IPlayer)player).ls$message(ModifiableText.FINALLIFE_BOOGEYMAN_NOTICE_ADDED.get());
-		//TODO
 	}
 
 	private void onStoppedBeingBoogeyman(ServerPlayer player, boolean wasDead) {
@@ -392,7 +394,6 @@ public class FinalLifeBoogeymanManager {
 		restoreNormalGameMode(player);
 		ThrownBoogeymanWeapon.returnWeapons(player);
 		BoogeymanWeaponManager.removeBoogeymanWeaponNBTs(player);
-		//TODO
 	}
 
 	private Integer getStoredStatus(UUID uuid) {

@@ -114,6 +114,22 @@ public class AbilityManager {
 		}
 	}
 
+	public static void setForcedAbility(ServerPlayer player, Abilities ability, boolean shouldHave) {
+		Ability current = getAbility(player, ability);
+		if (shouldHave && current == null) {
+			Ability abilityInstance = ability.createAbility().setForced();
+			abilities.computeIfAbsent(player.getUUID(), uuid -> new ArrayList<>()).add(abilityInstance);
+			abilityInstance.bindPlayer(player);
+			abilityInstance.onStart();
+			sendUpdatePacket(player);
+		}
+		else if (!shouldHave && current != null && current.isForced()) {
+			current.onEnd();
+			abilities.get(player.getUUID()).remove(current);
+			sendUpdatePacket(player);
+		}
+	}
+
 	public static void clearAbilities(ServerPlayer player) {
 		var playerAbilities = getPlayerAbilities(player);
 		boolean hadAbilities = !playerAbilities.isEmpty();

@@ -10,6 +10,7 @@ public abstract class Ability {
 	private UUID playerUUID;
 	private final Abilities ability;
 	private int healthChange;
+	private boolean forced; // Given by default, e.g. boogeyman
 
 	public Ability(Abilities ability) {
 		this.ability = ability;
@@ -18,7 +19,16 @@ public abstract class Ability {
 	protected abstract int loadHealthChange();
 
 	public int getHealthChange() {
-		return this.healthChange;
+		return forced ? 0 : this.healthChange;
+	}
+
+	public boolean isForced() {
+		return forced;
+	}
+
+	public Ability setForced() {
+		this.forced = true;
+		return this;
 	}
 
 	public void reloadHealthChange() {

@@ -10,6 +10,7 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 
+import java.util.Arrays;
 import java.util.List;
 
 //? if <= 1.21
@@ -47,8 +48,8 @@ public class SecondWindClient {
 	private static long effectEnd = -1;
 	private static long lastHeartbeat = -1;
 
-	private static final int[] heartX = new int[64];
-	private static final int[] heartY = new int[64];
+	private static int[] heartX = new int[64];
+	private static int[] heartY = new int[64];
 	private static int heartCount;
 
 	public static void onPayload(List<String> payload) {
@@ -131,7 +132,10 @@ public class SecondWindClient {
 	}
 
 	public static void onRenderHeartContainer(int x, int y) {
-		if (heartCount >= heartX.length) return;
+		if (heartCount >= heartX.length) {
+			heartX = Arrays.copyOf(heartX, heartX.length * 2);
+			heartY = Arrays.copyOf(heartY, heartY.length * 2);
+		}
 		heartX[heartCount] = x;
 		heartY[heartCount] = y;
 		heartCount++;

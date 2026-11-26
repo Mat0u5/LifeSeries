@@ -27,7 +27,9 @@ public class FinalLifeConfig extends SeasonConfig {
 			"end_crystal",
 			//? if >= 1.21.11
 			"#minecraft:spears",
-			"elytra"
+			"elytra",
+			"golden_apple",
+			"enchanted_golden_apple"
 	);
 
 	public static final List<String> BLACKLISTED_BLOCKS = List.of(
