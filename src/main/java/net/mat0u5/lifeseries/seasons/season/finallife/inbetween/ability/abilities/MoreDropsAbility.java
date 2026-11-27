@@ -10,7 +10,7 @@ import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.Nullable;
 
 public class MoreDropsAbility extends Ability {
-	public static final ConfigRef<Integer> HEALTH = ConfigRef.of(() -> FinalLifeConfig.get().ABILITY_MORE_DROPS_HEALTH);
+	public static final ConfigRef<Integer> HEALTH = ConfigRef.of(() -> FinalLifeConfig.get().ABILITY_MORE_DROPS_HEARTS);
 	@Nullable
 	public static Entity capturedEntity;
 
@@ -19,7 +19,7 @@ public class MoreDropsAbility extends Ability {
 	}
 
 	@Override
-	protected int loadHealthChange() {
+	protected int loadHeartsChange() {
 		return HEALTH.get();
 	}
 

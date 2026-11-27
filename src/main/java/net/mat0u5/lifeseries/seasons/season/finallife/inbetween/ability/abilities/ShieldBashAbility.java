@@ -17,12 +17,11 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.InteractionHand;
 
 import java.util.List;
 
 public class ShieldBashAbility extends Ability {
-	public static final ConfigRef<Integer> HEALTH = ConfigRef.of(() -> FinalLifeConfig.get().ABILITY_SHIELD_BASH_HEALTH);
+	public static final ConfigRef<Integer> HEALTH = ConfigRef.of(() -> FinalLifeConfig.get().ABILITY_SHIELD_BASH_HEARTS);
 	public static final int COOLDOWN = 10 * 20; // 10s
 	private static final int STICKY_FEET_DURATION = 6 * 20; // 6s
 	private static final double BASH_FORWARD_OFFSET = 1;
@@ -38,7 +37,7 @@ public class ShieldBashAbility extends Ability {
 	}
 
 	@Override
-	protected int loadHealthChange() {
+	protected int loadHeartsChange() {
 		return HEALTH.get();
 	}
 

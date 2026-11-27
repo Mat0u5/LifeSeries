@@ -7,13 +7,13 @@ import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.minecraft.tags.DamageTypeTags;
 
 public class BlastResistanceAbility extends DamageReductionAbility {
-	public static final ConfigRef<Integer> HEALTH = ConfigRef.of(() -> FinalLifeConfig.get().ABILITY_BLAST_RESISTANCE_HEALTH);
+	public static final ConfigRef<Integer> HEALTH = ConfigRef.of(() -> FinalLifeConfig.get().ABILITY_BLAST_RESISTANCE_HEARTS);
 	public BlastResistanceAbility() {
 		super(Abilities.BLAST_RESISTANCE, DamageTypeTags.IS_EXPLOSION, 0.75F);
 	}
 
 	@Override
-	protected int loadHealthChange() {
+	protected int loadHeartsChange() {
 		return HEALTH.get();
 	}
 }

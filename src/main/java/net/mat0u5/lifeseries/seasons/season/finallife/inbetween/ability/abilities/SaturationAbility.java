@@ -8,13 +8,13 @@ import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.minecraft.server.level.ServerPlayer;
 
 public class SaturationAbility extends Ability {
-	public static final ConfigRef<Integer> HEALTH = ConfigRef.of(() -> FinalLifeConfig.get().ABILITY_SATURATION_HEALTH);
+	public static final ConfigRef<Integer> HEALTH = ConfigRef.of(() -> FinalLifeConfig.get().ABILITY_SATURATION_HEARTS);
 	public SaturationAbility() {
 		super(Abilities.SATURATION);
 	}
 
 	@Override
-	protected int loadHealthChange() {
+	protected int loadHeartsChange() {
 		return HEALTH.get();
 	}
 

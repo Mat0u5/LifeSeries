@@ -7,13 +7,13 @@ import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.minecraft.world.effect.MobEffects;
 
 public class SpeedAbility extends EffectAbility {
-	public static final ConfigRef<Integer> HEALTH = ConfigRef.of(() -> FinalLifeConfig.get().ABILITY_SPEED_HEALTH);
+	public static final ConfigRef<Integer> HEALTH = ConfigRef.of(() -> FinalLifeConfig.get().ABILITY_SPEED_HEARTS);
 	public SpeedAbility() {
 		super(Abilities.SPEED, MobEffects.SPEED, 0);
 	}
 
 	@Override
-	protected int loadHealthChange() {
+	protected int loadHeartsChange() {
 		return HEALTH.get();
 	}
 }

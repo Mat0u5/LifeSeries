@@ -9,14 +9,14 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 
 public class KnockbackResistanceAbility extends Ability {
-	public static final ConfigRef<Integer> HEALTH = ConfigRef.of(() -> FinalLifeConfig.get().ABILITY_KNOCKBACK_RESISTANCE_HEALTH);
+	public static final ConfigRef<Integer> HEALTH = ConfigRef.of(() -> FinalLifeConfig.get().ABILITY_KNOCKBACK_RESISTANCE_HEARTS);
 	private static final AttributeUtils.AttributeHolder KNOCKBACK_RESISTANCE = new AttributeUtils.AttributeHolder(Attributes.KNOCKBACK_RESISTANCE);
 	public KnockbackResistanceAbility() {
 		super(Abilities.KNOCKBACK_RESISTANCE);
 	}
 
 	@Override
-	protected int loadHealthChange() {
+	protected int loadHeartsChange() {
 		return HEALTH.get();
 	}
 

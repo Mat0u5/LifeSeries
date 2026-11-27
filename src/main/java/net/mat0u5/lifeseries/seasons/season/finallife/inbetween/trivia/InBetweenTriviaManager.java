@@ -32,7 +32,7 @@ import static net.mat0u5.matlib.MatLib.server;
 
 public class InBetweenTriviaManager {
 	public static final ConfigRef<Boolean> TRIVIA_ENABLED = ConfigRef.of(() -> FinalLifeConfig.get().IN_BETWEEN_TRIVIA);
-	public static final ConfigRef<List<String>> DEATHS = ConfigRef.of(() -> FinalLifeConfig.get().TRIVIA_DEATH_NUMBERS);
+	public static final ConfigRef<List<Integer>> DEATHS = ConfigRef.of(() -> FinalLifeConfig.get().TRIVIA_DEATH_NUMBERS);
 	public static final ConfigRef<Integer> QUESTION_TIME = ConfigRef.of(() -> FinalLifeConfig.get().TRIVIA_QUESTION_TIME);
 	//Timestamps
 	public static final int INTRO_DELAY = 20; // After the client finished loading the In-Between
@@ -57,8 +57,9 @@ public class InBetweenTriviaManager {
 
 	public static boolean hasTrivia(int deathNumber) {
 		if (!isEnabled()) return false;
-		for (String entry : DEATHS.get()) {
-			if (entry.trim().equals(String.valueOf(deathNumber))) return true;
+		for (Integer entry : DEATHS.get()) {
+			if (entry == null) continue;
+			if (entry == deathNumber) return true;
 		}
 		return false;
 	}

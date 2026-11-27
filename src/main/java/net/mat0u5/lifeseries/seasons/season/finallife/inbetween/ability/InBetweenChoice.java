@@ -56,6 +56,6 @@ public class InBetweenChoice {
 	}
 
 	public double getHearts() {
-		return this.ability == null ? 0 : this.ability.getHealthChange() / 2.0;
+		return this.ability == null ? 0 : this.ability.getHeartsChange();
 	}
 }

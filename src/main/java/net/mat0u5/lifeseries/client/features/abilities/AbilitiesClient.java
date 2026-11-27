@@ -47,7 +47,7 @@ public class AbilitiesClient {
 	@Nullable
 	public static Entity healthOnlyEntity;
 
-	public record ActiveAbility(Abilities ability, double hearts) {}
+	public record ActiveAbility(Abilities ability, int hearts) {}
 	public record HeartTexture(Identifier texture, int width, int height) {}
 
 	private static List<ActiveAbility> activeAbilities = new ArrayList<>();
@@ -56,7 +56,7 @@ public class AbilitiesClient {
 		for (String str : payload) {
 			try {
 				String[] split = str.split(";", 2);
-				newAbilities.add(new ActiveAbility(Abilities.valueOf(split[0]), split.length > 1 ? Double.parseDouble(split[1]) : 0));
+				newAbilities.add(new ActiveAbility(Abilities.valueOf(split[0]), split.length > 1 ? Integer.parseInt(split[1]) : 0));
 			}catch(Exception ignored) {}
 		}
 		activeAbilities = newAbilities;

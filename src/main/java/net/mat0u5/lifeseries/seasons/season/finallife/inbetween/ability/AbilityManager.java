@@ -38,7 +38,7 @@ public class AbilityManager {
 	}
 
 	public static void onReload() {
-		abilities.values().forEach(abilityList -> abilityList.forEach(Ability::reloadHealthChange));
+		abilities.values().forEach(abilityList -> abilityList.forEach(Ability::reloadHeartsChange));
 		PlayerUtils.getAllPlayers().forEach(AbilityManager::resetPlayerMaxHealth);
 		sendUpdatePacket(PlayerUtils.getAllPlayers());
 	}
@@ -89,7 +89,7 @@ public class AbilityManager {
 
 	public static void addAbility(ServerPlayer player, Ability abilityInstance, boolean delayedMessage) {
 		if (hasAbility(player, abilityInstance.ability())) return;
-		abilityInstance.reloadHealthChange();
+		abilityInstance.reloadHeartsChange();
 
 		UUID uuid = player.getUUID();
 		if (!abilities.containsKey(uuid)) {
@@ -98,7 +98,7 @@ public class AbilityManager {
 		abilities.get(uuid).add(abilityInstance);
 		saveStoredAbilities();
 		resetPlayerMaxHealth(player);
-		player.heal(abilityInstance.getHealthChange());
+		player.heal(abilityInstance.getHeartsChange()*2);
 		abilityInstance.bindPlayer(player);
 		abilityInstance.onStart();
 		sendUpdatePacket(player);
@@ -183,7 +183,7 @@ public class AbilityManager {
 	public static void resetPlayerMaxHealth(ServerPlayer player) {
 		double health = LifeSeries.seasonConfig.MAX_PLAYER_HEALTH.get();
 		for (Ability ability : getPlayerAbilities(player)) {
-			health += ability.getHealthChange();
+			health += ability.getHeartsChange()*2;
 		}
 		AttributeUtils.MAX_HEALTH.of(player).set(health);
 	}
@@ -200,7 +200,7 @@ public class AbilityManager {
 		for (ServerPlayer player : players) {
 			List<String> abilities = new ArrayList<>();
 			for (Ability ability : getPlayerAbilities(player)) {
-				abilities.add(ability.ability().name() + ";" + ability.getHealthChange() / 2.0);
+				abilities.add(ability.ability().name() + ";" + ability.getHeartsChange());
 			}
 			SimplePackets.ACTIVE_ABILITIES.sendToClient(abilities, player);
 		}

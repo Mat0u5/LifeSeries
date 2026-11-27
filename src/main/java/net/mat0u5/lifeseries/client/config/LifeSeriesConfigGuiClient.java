@@ -37,6 +37,6 @@ public class LifeSeriesConfigGuiClient implements RegistrableClient {
     }
 
     public static ConfigGuiEntry copyWithKey(ConfigGuiEntry base, String key) {
-        return new ConfigGuiEntry(base.configId, key, base.type, "", "", base.group, false, false, true, false, false, "", new ArrayList<>());
+        return new ConfigGuiEntry(base.configId, key, base.type, "", "", base.group, false, false, true, false, false, false, "", new ArrayList<>());
     }
 }

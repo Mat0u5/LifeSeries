@@ -7,13 +7,13 @@ import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.minecraft.tags.DamageTypeTags;
 
 public class ProjectileProtectionAbility extends DamageReductionAbility {
-	public static final ConfigRef<Integer> HEALTH = ConfigRef.of(() -> FinalLifeConfig.get().ABILITY_PROJECTILE_PROTECTION_HEALTH);
+	public static final ConfigRef<Integer> HEALTH = ConfigRef.of(() -> FinalLifeConfig.get().ABILITY_PROJECTILE_PROTECTION_HEARTS);
 	public ProjectileProtectionAbility() {
 		super(Abilities.PROJECTILE_PROTECTION, DamageTypeTags.IS_PROJECTILE, 0.5F);
 	}
 
 	@Override
-	protected int loadHealthChange() {
+	protected int loadHeartsChange() {
 		return HEALTH.get();
 	}
 }

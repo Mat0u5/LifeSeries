@@ -10,7 +10,7 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 
 public class AirJumpAbility extends ChargeAbility {
-	public static final ConfigRef<Integer> HEALTH = ConfigRef.of(() -> FinalLifeConfig.get().ABILITY_AIR_JUMP_HEALTH);
+	public static final ConfigRef<Integer> HEALTH = ConfigRef.of(() -> FinalLifeConfig.get().ABILITY_AIR_JUMP_HEARTS);
 	private static final double SAFE_FALL_DISTANCE = 5;
 	private static final int LANDED_TICKS = 10;
 
@@ -22,7 +22,7 @@ public class AirJumpAbility extends ChargeAbility {
 	}
 
 	@Override
-	protected int loadHealthChange() {
+	protected int loadHeartsChange() {
 		return HEALTH.get();
 	}
 

@@ -14,7 +14,7 @@ import net.minecraft.sounds.SoundSource;
 import java.util.List;
 
 public class SecondWindAbility extends Ability {
-	public static final ConfigRef<Integer> HEALTH = ConfigRef.of(() -> FinalLifeConfig.get().ABILITY_SECOND_WIND_HEALTH);
+	public static final ConfigRef<Integer> HEALTH = ConfigRef.of(() -> FinalLifeConfig.get().ABILITY_SECOND_WIND_HEARTS);
 	public static final int TRIGGER_HEALTH = 10;
 	private static final float INSTANT_HEAL = 10; // After trigger
 	private static final float HEARTBEAT_HEAL = 2;
@@ -32,7 +32,7 @@ public class SecondWindAbility extends Ability {
 	}
 
 	@Override
-	protected int loadHealthChange() {
+	protected int loadHeartsChange() {
 		return HEALTH.get();
 	}
 

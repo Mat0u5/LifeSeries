@@ -10,7 +10,7 @@ import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.minecraft.server.level.ServerPlayer;
 
 public class DashAbility extends ChargeAbility {
-	public static final ConfigRef<Integer> HEALTH = ConfigRef.of(() -> FinalLifeConfig.get().ABILITY_DASH_HEALTH);
+	public static final ConfigRef<Integer> HEALTH = ConfigRef.of(() -> FinalLifeConfig.get().ABILITY_DASH_HEARTS);
 	private static final double GHOST_VIEW_DISTANCE = 128;
 
 	public DashAbility() {
@@ -18,7 +18,7 @@ public class DashAbility extends ChargeAbility {
 	}
 
 	@Override
-	protected int loadHealthChange() {
+	protected int loadHeartsChange() {
 		return HEALTH.get();
 	}
 

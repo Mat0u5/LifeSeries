@@ -9,7 +9,7 @@ import net.minecraft.server.level.ServerPlayer;
 
 public class SmallerAbility extends Ability {
 	//? if > 1.20.3 {
-	public static final ConfigRef<Integer> HEALTH = ConfigRef.of(() -> FinalLifeConfig.get().ABILITY_SMALLER_HEALTH);
+	public static final ConfigRef<Integer> HEALTH = ConfigRef.of(() -> FinalLifeConfig.get().ABILITY_SMALLER_HEARTS);
 	//?}
 	public SmallerAbility() {
 		//? if <= 1.20.3 {
@@ -20,7 +20,7 @@ public class SmallerAbility extends Ability {
 	}
 
 	@Override
-	protected int loadHealthChange() {
+	protected int loadHeartsChange() {
 		//? if <= 1.20.3 {
 		//return 0;
 		//?} else {

@@ -59,7 +59,7 @@ public enum Abilities {
 		if (instance instanceof EmptyAbility) {
 			instance = new EmptyAbility(this); // Load the empty ability with the current ability
 		}
-		instance.reloadHealthChange();
+		instance.reloadHeartsChange();
 		return instance;
 	}
 

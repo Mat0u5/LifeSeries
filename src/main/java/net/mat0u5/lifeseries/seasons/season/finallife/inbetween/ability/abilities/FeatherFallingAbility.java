@@ -7,14 +7,14 @@ import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.minecraft.tags.DamageTypeTags;
 
 public class FeatherFallingAbility extends DamageReductionAbility {
-	public static final ConfigRef<Integer> HEALTH = ConfigRef.of(() -> FinalLifeConfig.get().ABILITY_FEATHER_FALLING_HEALTH);
+	public static final ConfigRef<Integer> HEALTH = ConfigRef.of(() -> FinalLifeConfig.get().ABILITY_FEATHER_FALLING_HEARTS);
 	public FeatherFallingAbility() {
 		// Feather Falling IV = 48%
 		super(Abilities.FEATHER_FALLING, DamageTypeTags.IS_FALL, 0.48F);
 	}
 
 	@Override
-	protected int loadHealthChange() {
+	protected int loadHeartsChange() {
 		return HEALTH.get();
 	}
 }

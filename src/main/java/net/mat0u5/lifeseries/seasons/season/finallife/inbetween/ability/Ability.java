@@ -9,17 +9,17 @@ import java.util.UUID;
 public abstract class Ability {
 	private UUID playerUUID;
 	private final Abilities ability;
-	private int healthChange;
+	private int heartsChange;
 	private boolean forced; // Given by default, e.g. boogeyman
 
 	public Ability(Abilities ability) {
 		this.ability = ability;
 	}
 
-	protected abstract int loadHealthChange();
+	protected abstract int loadHeartsChange();
 
-	public int getHealthChange() {
-		return forced ? 0 : this.healthChange;
+	public int getHeartsChange() {
+		return forced ? 0 : this.heartsChange;
 	}
 
 	public boolean isForced() {
@@ -31,8 +31,8 @@ public abstract class Ability {
 		return this;
 	}
 
-	public void reloadHealthChange() {
-		this.healthChange = this.loadHealthChange();
+	public void reloadHeartsChange() {
+		this.heartsChange = this.loadHeartsChange();
 	}
 
 	public void bindPlayer(ServerPlayer player) {

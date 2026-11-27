@@ -12,7 +12,7 @@ public class EmptyAbility extends Ability {
 	}
 
 	@Override
-	protected int loadHealthChange() {
+	protected int loadHeartsChange() {
 		return 0;
 	}
 }

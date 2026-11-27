@@ -12,7 +12,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 
 public class ExtraReachAbility extends Ability {
 	//? if > 1.20.3 {
-	public static final ConfigRef<Integer> HEALTH = ConfigRef.of(() -> FinalLifeConfig.get().ABILITY_EXTRA_REACH_HEALTH);
+	public static final ConfigRef<Integer> HEALTH = ConfigRef.of(() -> FinalLifeConfig.get().ABILITY_EXTRA_REACH_HEARTS);
 	private static final AttributeUtils.AttributeHolder ENTITY_INTERACTION_RANGE = new AttributeUtils.AttributeHolder(Attributes.ENTITY_INTERACTION_RANGE);
 	//?}
 	public ExtraReachAbility() {
@@ -24,7 +24,7 @@ public class ExtraReachAbility extends Ability {
 	}
 
 	@Override
-	protected int loadHealthChange() {
+	protected int loadHeartsChange() {
 		//? if <= 1.20.3 {
 		//return 0;
 		//?} else {

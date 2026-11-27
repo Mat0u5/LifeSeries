@@ -14,7 +14,7 @@ import java.util.List;
 
 // Drawn client-side, the server sends players' health
 public class HealthVisionAbility extends Ability {
-	public static final ConfigRef<Integer> HEALTH = ConfigRef.of(() -> FinalLifeConfig.get().ABILITY_HEALTH_VISION_HEALTH);
+	public static final ConfigRef<Integer> HEALTH = ConfigRef.of(() -> FinalLifeConfig.get().ABILITY_HEALTH_VISION_HEARTS);
 	private List<String> lastSent = List.of();
 
 	public HealthVisionAbility() {
@@ -22,7 +22,7 @@ public class HealthVisionAbility extends Ability {
 	}
 
 	@Override
-	protected int loadHealthChange() {
+	protected int loadHeartsChange() {
 		return HEALTH.get();
 	}
 
