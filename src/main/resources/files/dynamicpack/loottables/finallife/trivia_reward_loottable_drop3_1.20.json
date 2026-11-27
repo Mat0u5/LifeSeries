@@ -122,6 +122,27 @@
       "entries": [
         {
           "type": "minecraft:item",
+          "name": "minecraft:diamond",
+          "weight": 20,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": 8
+            }
+          ]
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 80
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "type": "minecraft:item",
           "name": "minecraft:enchanted_book",
           "weight": 50,
           "functions": [
@@ -129,6 +150,29 @@
               "function": "minecraft:set_enchantments",
               "enchantments": {
                 "minecraft:efficiency": 1
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 50
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "bonus_rolls": 0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:enchanted_book",
+          "weight": 50,
+          "functions": [
+            {
+              "function": "minecraft:set_enchantments",
+              "enchantments": {
+                "minecraft:protection": 1
               }
             }
           ]

@@ -20,7 +20,7 @@
 		"correct_answer_index": 3
 	},
 	{
-		"question": "Which series did Skizz NOT participate in? ",
+		"question": "Which series did Skizz NOT participate in?",
 		"answers": ["Last Life", "Double Life", "Limited Life", "Wild Life"],
 		"correct_answer_index": 1
 	},
@@ -30,8 +30,33 @@
 		"correct_answer_index": 2
 	},
 	{
-		"question": "Which of the Specials did Cleo win? ",
+		"question": "Which of the Specials did Cleo win?",
 		"answers": ["Simple Life", "Nice Life", "Real Life"],
 		"correct_answer_index": 2
+	},
+	{
+		"question": "In which season did Joel create a dog army?",
+		"answers": ["Third Life", "Wild Life", "Past Life", "Last Life"],
+		"correct_answer_index": 0
+	},
+	{
+		"question": "Who was Bdubs' first victim as the first ever Boogeyman in Last Life?",
+		"answers": ["Etho", "Grian", "Tango", "Skizz"],
+		"correct_answer_index": 1
+	},
+	{
+		"question": "In Wild Life, what item did Pearl give Impulse to try and help him win the series?",
+		"answers": ["Diamond Sword", "Encouraging Words", "Totem of Undying", "Golden Apple"],
+		"correct_answer_index": 2
+	},
+	{
+		"question": "Which unique weapon did Mumbo use to get a kill in Last Life?",
+		"answers": ["Fireworks", "Potion", "End Crystals", "TNT"],
+		"correct_answer_index": 2
+	},
+	{
+		"question": "The axe Martyn used to behead Ren was named...",
+		"answers": ["THE RED ARMY IS COMING", "THE RED KING RISES", "RED WINTER IS HERE", "RED WINTER IS COMING"],
+		"correct_answer_index": 3
 	}
 ]
