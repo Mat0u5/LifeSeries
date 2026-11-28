@@ -3,10 +3,8 @@ package net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.abiliti
 import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.registries.EffectRegistry;
-import net.mat0u5.lifeseries.seasons.season.finallife.FinalLifeConfig;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.Abilities;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.Ability;
-import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -21,7 +19,6 @@ import net.minecraft.world.phys.Vec3;
 import java.util.List;
 
 public class ShieldBashAbility extends Ability {
-	public static final ConfigRef<Integer> HEALTH = ConfigRef.of(() -> FinalLifeConfig.get().ABILITY_SHIELD_BASH_HEARTS);
 	public static final int COOLDOWN = 10 * 20; // 10s
 	private static final int STICKY_FEET_DURATION = 6 * 20; // 6s
 	private static final double BASH_FORWARD_OFFSET = 1;
@@ -34,11 +31,6 @@ public class ShieldBashAbility extends Ability {
 
 	public ShieldBashAbility() {
 		super(Abilities.SHIELD_BASH);
-	}
-
-	@Override
-	protected int loadHeartsChange() {
-		return HEALTH.get();
 	}
 
 	@Override

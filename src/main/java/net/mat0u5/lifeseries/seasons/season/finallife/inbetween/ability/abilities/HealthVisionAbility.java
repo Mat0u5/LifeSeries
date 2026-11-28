@@ -1,11 +1,9 @@
 package net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.abilities;
 
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
-import net.mat0u5.lifeseries.seasons.season.finallife.FinalLifeConfig;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.Abilities;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.Ability;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
-import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 
@@ -14,16 +12,10 @@ import java.util.List;
 
 // Drawn client-side, the server sends players' health
 public class HealthVisionAbility extends Ability {
-	public static final ConfigRef<Integer> HEALTH = ConfigRef.of(() -> FinalLifeConfig.get().ABILITY_HEALTH_VISION_HEARTS);
 	private List<String> lastSent = List.of();
 
 	public HealthVisionAbility() {
 		super(Abilities.HEALTH_VISION);
-	}
-
-	@Override
-	protected int loadHeartsChange() {
-		return HEALTH.get();
 	}
 
 	@Override

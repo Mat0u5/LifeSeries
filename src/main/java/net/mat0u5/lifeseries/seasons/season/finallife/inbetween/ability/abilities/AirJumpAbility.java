@@ -1,16 +1,13 @@
 package net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.abilities;
 
 import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
-import net.mat0u5.lifeseries.seasons.season.finallife.FinalLifeConfig;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.Abilities;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.abilities.template.ChargeAbility;
-import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 
 public class AirJumpAbility extends ChargeAbility {
-	public static final ConfigRef<Integer> HEALTH = ConfigRef.of(() -> FinalLifeConfig.get().ABILITY_AIR_JUMP_HEARTS);
 	private static final double SAFE_FALL_DISTANCE = 5;
 	private static final int LANDED_TICKS = 10;
 
@@ -19,11 +16,6 @@ public class AirJumpAbility extends ChargeAbility {
 
 	public AirJumpAbility() {
 		super(Abilities.AIR_JUMP);
-	}
-
-	@Override
-	protected int loadHeartsChange() {
-		return HEALTH.get();
 	}
 
 	@Override

@@ -25,7 +25,7 @@ import java.util.Map;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 
 public class DashClient {
-	private static final int DOUBLE_TAP_WINDOW_TICKS = 7;
+	private static final int DOUBLE_TAP_WINDOW_TICKS = 5;
 	private static final int DASH_TICKS = 4; // Dash duration
 	private static final double DASH_SPEED = 0.95; // Blocks per tick -> ~4 blocks in total
 	private static final double END_SPEED = 0.25;

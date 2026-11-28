@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.client.render.ClientRenderer;
 import net.mat0u5.lifeseries.client.utils.ClientUtils;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.Abilities;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.Ability;
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.matlib.client.render.RenderUtils;
 import net.minecraft.ChatFormatting;
@@ -22,18 +23,12 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.InputStream;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 //? if >= 1.21.9
 import net.minecraft.network.chat.FontDescription;
 //? if >= 26.2
 import net.minecraft.world.scores.TeamColor;
-import net.minecraft.sounds.SoundEvents;
 
 public class AbilitiesClient {
 	//? if <= 1.21.6 {
@@ -44,9 +39,6 @@ public class AbilitiesClient {
 	private static final FontDescription ICONS = new FontDescription.Resource(IdentifierHelper.lifeseries("icons"));
 	//?}
 	private static final double HEALTH_VISION_DISTANCE_SQ = 4096; // Vanilla name tag distance
-	// Set while a player renderer shows only the health of a player with a hidden name (<= 1.21)
-	@Nullable
-	public static Entity healthOnlyEntity;
 
 	public record ActiveAbility(Abilities ability, int hearts) {}
 	public record HeartTexture(Identifier texture, int width, int height) {}
@@ -60,7 +52,18 @@ public class AbilitiesClient {
 				newAbilities.add(new ActiveAbility(Abilities.valueOf(split[0]), split.length > 1 ? Integer.parseInt(split[1]) : 0));
 			}catch(Exception ignored) {}
 		}
-		activeAbilities = newAbilities;
+		List<ActiveAbility> sortedAbilities = new ArrayList<>();
+		sortedAbilities.addAll(getSortedAbilitiesForType(newAbilities, Ability.AbilityType.PASSIVE));
+		sortedAbilities.addAll(getSortedAbilitiesForType(newAbilities, Ability.AbilityType.ACTIVE));
+		sortedAbilities.addAll(getSortedAbilitiesForType(newAbilities, Ability.AbilityType.RED));
+		activeAbilities = sortedAbilities;
+	}
+
+	public static List<ActiveAbility> getSortedAbilitiesForType(List<ActiveAbility> input, Ability.AbilityType type) {
+		List<ActiveAbility> result = new ArrayList<>(input);
+		result.removeIf(activeAbility -> activeAbility.ability().abilityType() != type);
+		result.sort(Comparator.comparing(o -> o.ability().title()));
+		return result;
 	}
 
 	private static Map<Integer, Integer> healthVisionHealths = new HashMap<>(); // Entity id -> health
@@ -106,7 +109,7 @@ public class AbilitiesClient {
 		}
 		else if (ability == Abilities.SOULMATE) {
 			showMoreDetailsText = false;
-			infoText.append("§7Press ").append(ClientKeybinds.triggerAbility.getTranslatedKeyMessage().copy().withStyle(ChatFormatting.WHITE, ChatFormatting.BOLD)).append("§7 to summon ???. Make sure it's midday and you are in open air.");
+			infoText.append("§7Press ").append(ClientKeybinds.triggerAbility.getTranslatedKeyMessage().copy().withStyle(ChatFormatting.WHITE, ChatFormatting.BOLD)).append("§7 to summon ???.");
 		}
 		else {
 			infoText.append("§7You have gained the ").append(smallCaps(ability.title()).withStyle(ability.choiceColor())).append(" §7ability!");

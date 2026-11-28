@@ -10,9 +10,4 @@ public class EmptyAbility extends Ability {
 	public EmptyAbility(Abilities ability) {
 		super(ability);
 	}
-
-	@Override
-	protected int loadHeartsChange() {
-		return 0;
-	}
 }

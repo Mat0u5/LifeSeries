@@ -2,10 +2,8 @@ package net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.abiliti
 
 import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
-import net.mat0u5.lifeseries.seasons.season.finallife.FinalLifeConfig;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.Abilities;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.Ability;
-import net.mat0u5.matlib.config.entry.ConfigRef;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -14,7 +12,6 @@ import net.minecraft.sounds.SoundSource;
 import java.util.List;
 
 public class SecondWindAbility extends Ability {
-	public static final ConfigRef<Integer> HEALTH = ConfigRef.of(() -> FinalLifeConfig.get().ABILITY_SECOND_WIND_HEARTS);
 	public static final int TRIGGER_HEALTH = 10;
 	private static final float INSTANT_HEAL = 10; // After trigger
 	private static final float HEARTBEAT_HEAL = 2;
@@ -29,11 +26,6 @@ public class SecondWindAbility extends Ability {
 
 	public SecondWindAbility() {
 		super(Abilities.SECOND_WIND);
-	}
-
-	@Override
-	protected int loadHeartsChange() {
-		return HEALTH.get();
 	}
 
 	@Override

@@ -100,6 +100,38 @@ public enum Abilities {
 		return enabled != null && enabled.get();
 	}
 
+	public int getHearts() {
+		FinalLifeConfig config = FinalLifeConfig.get();
+		ConfigurableValue<Integer> hearts = switch (this) {
+			case AIR_JUMP -> config.ABILITY_AIR_JUMP_HEARTS;
+			case BLAST_RESISTANCE -> config.ABILITY_BLAST_RESISTANCE_HEARTS;
+			case DASH -> config.ABILITY_DASH_HEARTS;
+			//? if > 1.20.3 {
+			case EXTRA_REACH -> config.ABILITY_EXTRA_REACH_HEARTS;
+			//?}
+			case FEATHER_FALLING -> config.ABILITY_FEATHER_FALLING_HEARTS;
+			case FIRE_RESISTANCE -> config.ABILITY_FIRE_RESISTANCE_HEARTS;
+			case HASTE -> config.ABILITY_HASTE_HEARTS;
+			case HEALTH_VISION -> config.ABILITY_HEALTH_VISION_HEARTS;
+			case KNOCKBACK_RESISTANCE -> config.ABILITY_KNOCKBACK_RESISTANCE_HEARTS;
+			case MORE_DROPS -> config.ABILITY_MORE_DROPS_HEARTS;
+			case PROJECTILE_PROTECTION -> config.ABILITY_PROJECTILE_PROTECTION_HEARTS;
+			case RESISTANCE -> config.ABILITY_RESISTANCE_HEARTS;
+			case SATURATION -> config.ABILITY_SATURATION_HEARTS;
+			case SECOND_WIND -> config.ABILITY_SECOND_WIND_HEARTS;
+			case SHIELD_BASH -> config.ABILITY_SHIELD_BASH_HEARTS;
+			//? if > 1.20.3 {
+			case SMALLER -> config.ABILITY_SMALLER_HEARTS;
+			//?}
+			case SNAIL_PROTECT -> config.ABILITY_SNAIL_PROTECT_HEARTS;
+			case SOULMATE -> config.ABILITY_SOULMATE_HEARTS;
+			case SPEED -> config.ABILITY_SPEED_HEARTS;
+			case THROW_SWORDS -> config.ABILITY_THROW_SWORDS_HEARTS;
+			default -> null;
+		};
+		return hearts == null ? 0 : hearts.get();
+	}
+
 	public AbilityIcon icon() {
 		return this.icon;
 	}

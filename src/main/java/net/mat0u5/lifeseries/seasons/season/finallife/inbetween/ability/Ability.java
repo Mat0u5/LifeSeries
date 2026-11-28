@@ -16,8 +16,6 @@ public abstract class Ability {
 		this.ability = ability;
 	}
 
-	protected abstract int loadHeartsChange();
-
 	public int getHeartsChange() {
 		return forced ? 0 : this.heartsChange;
 	}
@@ -32,7 +30,7 @@ public abstract class Ability {
 	}
 
 	public void reloadHeartsChange() {
-		this.heartsChange = this.loadHeartsChange();
+		this.heartsChange = this.ability.getHearts();
 	}
 
 	public void bindPlayer(ServerPlayer player) {
