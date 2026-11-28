@@ -631,11 +631,13 @@ public enum ModifiableText {
     ,FINALLIFE_BOOGEYMAN_NOTICE_REMOVED(Seasons.FINAL_LIFE, "§cYou are no longer a Boogeyman!")
     ,FINALLIFE_BOOGEYMAN_COMMAND_NONE(Seasons.FINAL_LIFE, "There aren't any boogeymen")
     ,FINALLIFE_BOOGEYMAN_COMMAND_CLEAR(Seasons.FINAL_LIFE, "Cleared all boogeymen")
-
     ,FINALLIFE_BOOGEYMAN_LIST(Seasons.FINAL_LIFE, "Current Boogeymen: {}", List.of("list"))
     ,FINALLIFE_BOOGEYMAN_ADD(Seasons.FINAL_LIFE, "{} is now a Boogeyman", List.of("Player"))
     ,FINALLIFE_BOOGEYMAN_REMOVE(Seasons.FINAL_LIFE, "{} is no longer a Boogeyman", List.of("Player"))
-
+    ,FINALLIFE_BOOGEYMAN_SPAWN(Seasons.FINAL_LIFE, "Spawned {} as the Boogeyman", List.of("Player"))
+    ,FINALLIFE_BOOGEYMAN_DESPAWN(Seasons.FINAL_LIFE, "Despawned {} as the Boogeyman",List.of("Player"))
+    ,FINALLIFE_BOOGEYMAN_COMMAND_ALREADY_SPAWNED(Seasons.FINAL_LIFE, "That Boogeyman is already spawned in")
+    ,FINALLIFE_BOOGEYMAN_COMMAND_ALREADY_DESPAWNED(Seasons.FINAL_LIFE, "That Boogeyman is already despawned")
     ,FINALLIFE_BOOGEYMAN_USERNAME(Seasons.FINAL_LIFE, "The_Boogeyman")
     ,FINALLIFE_BOOGEYMAN_MESSAGE_JOIN(Seasons.FINAL_LIFE, Formatted.LOOSELY_STYLED, "§e{} joined the game", List.of("username"))
     ,FINALLIFE_BOOGEYMAN_MESSAGE_LEAVE(Seasons.FINAL_LIFE, Formatted.LOOSELY_STYLED, "§e{} left the game", List.of("username"))

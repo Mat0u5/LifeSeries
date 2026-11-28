@@ -6,6 +6,7 @@ import net.mat0u5.lifeseries.mixin.ItemDisplayAccessor;
 import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.InBetweenInstance;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.InBetweenManager;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.trivia.InBetweenTriviaManager;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.matlib.utils.other.TextUtils;
 import net.minecraft.server.level.ServerPlayer;
@@ -117,7 +118,7 @@ public class InBetweenChoiceManager {
 	}
 
 	public void checkChoices(ServerPlayer player) {
-		int inside = getChoiceInside(player);
+		int inside = InBetweenTriviaManager.blocksExit(inBetween) ? -1 : getChoiceInside(player);
 		if (inside < 0) {
 			if (choosing >= 0) InBetweenManager.onChoiceLeft(player);
 			choosing = -1;

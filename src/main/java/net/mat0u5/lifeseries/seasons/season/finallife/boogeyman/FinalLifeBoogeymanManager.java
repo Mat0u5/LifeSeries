@@ -274,7 +274,7 @@ public class FinalLifeBoogeymanManager {
 	}
 
 	public boolean isDeadBoogeyman(ServerPlayer player) {
-		return isBoogeyman(player) && isStoredDead(player.getUUID());
+		return player != null && isDeadBoogeyman(player.getUUID());
 	}
 
 	public List<UUID> getBoogeymen() {
@@ -304,6 +304,27 @@ public class FinalLifeBoogeymanManager {
 		for (UUID uuid : oldBoogeymen) {
 			checkBoogeymanStatus(PlayerUtils.getPlayer(uuid), true);
 		}
+	}
+
+	public boolean isDeadBoogeyman(UUID uuid) {
+		return isBoogeyman(uuid) && isStoredDead(uuid);
+	}
+
+	public void spawnBoogeyman(UUID uuid) {
+		setStoredStatus(uuid, SCOREBOARD_STATUS_ALIVE);
+		ServerPlayer player = PlayerUtils.getPlayer(uuid);
+		if (player == null) return;
+		checkBoogeymanGameMode(player);
+		announceJoin();
+	}
+
+	public void despawnBoogeyman(UUID uuid) {
+		setStoredStatus(uuid, SCOREBOARD_STATUS_DEAD);
+		ServerPlayer player = PlayerUtils.getPlayer(uuid);
+		if (player == null) return;
+		hiddenGameModes.remove(uuid);
+		checkBoogeymanGameMode(player);
+		announceLeave(player);
 	}
 
 	public void reloadDisguises() {
@@ -505,6 +526,14 @@ public class FinalLifeBoogeymanManager {
 		List<String> result = new ArrayList<>();
 		for (UUID uuid : boogeymen) {
 			result.add(getRealName(uuid));
+		}
+		return result;
+	}
+
+	public List<String> getSpawnSuggestions(boolean spawn) {
+		List<String> result = new ArrayList<>();
+		for (UUID uuid : boogeymen) {
+			if (isStoredDead(uuid) == spawn) result.add(getRealName(uuid));
 		}
 		return result;
 	}

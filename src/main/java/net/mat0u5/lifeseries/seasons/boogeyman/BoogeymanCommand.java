@@ -172,6 +172,18 @@ public class BoogeymanCommand extends CustomCommand {
                                         .executes(context -> fl_removeBoogey(context.getSource(), StringArgumentType.getString(context, "player")))
                                 )
                         )
+                        .then(literal("spawn")
+                                .then(argument("player", StringArgumentType.word())
+                                        .suggests((context, builder) -> SharedSuggestionProvider.suggest(fl_getSpawnSuggestions(true), builder))
+                                        .executes(context -> fl_spawnBoogey(context.getSource(), StringArgumentType.getString(context, "player"), true))
+                                )
+                        )
+                        .then(literal("despawn")
+                                .then(argument("player", StringArgumentType.word())
+                                        .suggests((context, builder) -> SharedSuggestionProvider.suggest(fl_getSpawnSuggestions(false), builder))
+                                        .executes(context -> fl_spawnBoogey(context.getSource(), StringArgumentType.getString(context, "player"), false))
+                                )
+                        )
                         .then(literal("list")
                                 .executes(context -> fl_listBoogey(context.getSource()))
                         )
@@ -543,6 +555,49 @@ public class BoogeymanCommand extends CustomCommand {
         bm.removeBoogeyman(target);
         sendCommandFeedbackQuiet(source, ModifiableText.FINALLIFE_BOOGEYMAN_REMOVE.get(realName));
 
+        return 1;
+    }
+
+    public List<String> fl_getSpawnSuggestions(boolean spawn) {
+        FinalLifeBoogeymanManager bm = fl_getBM();
+        if (bm == null) return List.of();
+        return bm.getSpawnSuggestions(spawn);
+    }
+
+    public int fl_spawnBoogey(CommandSourceStack source, String targetName, boolean spawn) {
+        if (checkBannedFinalLife(source)) return -1;
+        FinalLifeBoogeymanManager bm = fl_getBM();
+        if (bm == null) return -1;
+        if (!bm.isEnabled()) {
+            sendCommandFailure(source, ModifiableText.FINALLIFE_BOOGEYMAN_COMMAND_DISABLED.get());
+            return -1;
+        }
+
+        UUID target = bm.resolvePlayer(targetName);
+        if (target == null) {
+            sendCommandFailure(source, ModifiableText.FINALLIFE_BOOGEYMAN_COMMAND_UNKNOWN.get(targetName));
+            return -1;
+        }
+
+        if (!bm.isBoogeyman(target)) {
+            sendCommandFailure(source, ModifiableText.FINALLIFE_BOOGEYMAN_COMMAND_NOT.get());
+            return -1;
+        }
+
+        if (bm.isDeadBoogeyman(target) != spawn) {
+            sendCommandFailure(source, spawn ? ModifiableText.FINALLIFE_BOOGEYMAN_COMMAND_ALREADY_SPAWNED.get() : ModifiableText.FINALLIFE_BOOGEYMAN_COMMAND_ALREADY_DESPAWNED.get());
+            return -1;
+        }
+
+        String realName = FinalLifeBoogeymanManager.getRealName(target);
+        if (spawn) {
+            bm.spawnBoogeyman(target);
+            sendCommandFeedbackQuiet(source, ModifiableText.FINALLIFE_BOOGEYMAN_SPAWN.get(realName));
+        }
+        else {
+            bm.despawnBoogeyman(target);
+            sendCommandFeedbackQuiet(source, ModifiableText.FINALLIFE_BOOGEYMAN_DESPAWN.get(realName));
+        }
         return 1;
     }
 

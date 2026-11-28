@@ -103,6 +103,11 @@ public class InBetweenTriviaManager {
 		return bot == null || !bot.isAlive();
 	}
 
+	public static boolean blocksExit(InBetweenInstance inBetween) {
+		TriviaBot bot = bots.get(inBetween.playerUUID);
+		return bot != null && bot.isAlive() && !bot.submittedAnswer();
+	}
+
 	public static void sendPacketInfo(ServerPlayer player, String... values) {
 		SimplePackets.IN_BETWEEN_TRIVIA.sendToClient(List.of(values), player);
 	}
