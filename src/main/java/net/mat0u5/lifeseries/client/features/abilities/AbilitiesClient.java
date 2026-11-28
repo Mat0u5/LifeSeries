@@ -3,6 +3,7 @@ package net.mat0u5.lifeseries.client.features.abilities;
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.client.events.ClientKeybinds;
 import net.mat0u5.lifeseries.client.gui.other.AbilitiesScreen;
+import net.mat0u5.lifeseries.network.packets.simple.SimplePackets;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
 import net.mat0u5.lifeseries.client.render.ClientRenderer;
 import net.mat0u5.lifeseries.client.utils.ClientUtils;
@@ -91,6 +92,7 @@ public class AbilitiesClient {
 		if (player == null) return;
 
 		MutableComponent infoText = Component.empty();
+		boolean showMoreDetailsText = true;
 		if (ability == Abilities.RESISTANCE || ability == Abilities.FIRE_RESISTANCE || ability == Abilities.KNOCKBACK_RESISTANCE || ability == Abilities.PROJECTILE_PROTECTION || ability == Abilities.BLAST_RESISTANCE) {
 			infoText.append("§7You have gained ").append(smallCaps(ability.title()).withStyle(ability.choiceColor())).append("§7!");
 		}
@@ -102,11 +104,16 @@ public class AbilitiesClient {
 		else if (ability == Abilities.DASH) {
 			infoText.append("§7You have gained the ability to ").append(smallCaps(ability.title()).withStyle(ability.choiceColor())).append("§7!");
 		}
+		else if (ability == Abilities.SOULMATE) {
+			showMoreDetailsText = false;
+		}
+			infoText.append("§7Press ").append(ClientKeybinds.triggerAbility.getTranslatedKeyMessage().copy().withStyle(ChatFormatting.WHITE, ChatFormatting.BOLD)).append("§7 to summon ???. Make sure it's midday and you are in open air.");
+		}
 		else {
 			infoText.append("§7You have gained the ").append(smallCaps(ability.title()).withStyle(ability.choiceColor())).append(" §7ability!");
 		}
 
-		infoText.append(" §7Press ").append(ClientKeybinds.openAbilityScreen.getTranslatedKeyMessage().copy().withStyle(ChatFormatting.WHITE, ChatFormatting.BOLD)).append("§7 for more details.");
+		if (showMoreDetailsText) infoText.append(" §7Press ").append(ClientKeybinds.openAbilityScreen.getTranslatedKeyMessage().copy().withStyle(ChatFormatting.WHITE, ChatFormatting.BOLD)).append("§7 for more details.");
 
 		//? if <= 1.21.11 {
 		/*player.displayClientMessage(Component.empty(), false);
@@ -122,6 +129,11 @@ public class AbilitiesClient {
 	public static void onPressOpenScreenKey() {
 		if (!LifeSeries.isSeason(Seasons.FINAL_LIFE) || Minecraft.getInstance().player == null) return;
 		RenderUtils.setScreen(new AbilitiesScreen());
+	}
+
+	public static void onPressTriggerAbility() {
+		if (!LifeSeries.isSeason(Seasons.FINAL_LIFE) || Minecraft.getInstance().player == null) return;
+		SimplePackets.TRIGGER_ABILITY.sendToServer();
 	}
 
 	public static boolean isActive(Abilities ability) {

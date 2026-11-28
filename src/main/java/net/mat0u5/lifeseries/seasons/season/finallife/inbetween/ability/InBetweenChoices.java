@@ -31,7 +31,10 @@ public class InBetweenChoices {
 		//? if > 1.20.3 {
 		register(Abilities.SMALLER, null, null);
 		//?}
+		register(Abilities.SNAIL_PROTECT, null, null);
+		register(Abilities.SOULMATE, null, null);
 		register(Abilities.SPEED, null, null);
+		register(Abilities.THROW_SWORDS, null, null);
 		//register(Abilities.TRIDENT, null, null);
 
 		//TODO modify the death ranges.

@@ -29,7 +29,11 @@ public class FinalLifeConfig extends SeasonConfig {
 			"#minecraft:spears",
 			"elytra",
 			"golden_apple",
-			"enchanted_golden_apple"
+			"enchanted_golden_apple",
+			"potion",
+			"splash_potion",
+			"lingering_potion",
+			"tipped_arrow"
 	);
 
 	public static final List<String> BLACKLISTED_BLOCKS = List.of(

@@ -104,6 +104,7 @@ public class SimplePackets {
     public static final SimpleEmptyPacket SHIELD_BASH = new SimpleEmptyPacket("SHIELD_BASH");
     public static final SimpleEmptyPacket AIR_JUMP = new SimpleEmptyPacket("AIR_JUMP");
     public static final SimpleEmptyPacket DASH = new SimpleEmptyPacket("DASH");
+    public static final SimpleEmptyPacket TRIGGER_ABILITY = new SimpleEmptyPacket("TRIGGER_ABILITY");
 
 
     //public static final SimpleLongPacket _______ = new SimpleLongPacket("_______");

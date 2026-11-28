@@ -10,6 +10,7 @@ import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.InBetwee
 import net.mat0u5.lifeseries.utils.other.IdentifierHelper;
 import net.mat0u5.matlib.client.render.RenderUtils;
 import net.mat0u5.matlib.client.utils.TextColors;
+import net.mat0u5.matlib.utils.other.TextUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
@@ -272,7 +273,18 @@ public class AbilitiesScreen extends Screen {
 		private AbilityEntry(Abilities ability, double hearts) {
 			icon = ability.icon();
 			item = icon.itemStack();
-			name = Component.literal(ability.title()).withStyle(ability.abilityType() == Ability.AbilityType.ACTIVE ? ChatFormatting.YELLOW : ChatFormatting.GREEN); //TODO this might not be fully correct.
+			var abilityType = ability.abilityType();
+			ChatFormatting color;
+			if (abilityType == Ability.AbilityType.RED) {
+				color = ChatFormatting.RED;
+			}
+			else if (abilityType == Ability.AbilityType.ACTIVE) {
+				color = ChatFormatting.YELLOW;
+			}
+			else {
+				color = ChatFormatting.GREEN;
+			}
+			name = Component.literal(ability.title()).withStyle(color);
 			heartTexture = AbilitiesClient.findHeartTexture(hearts);
 			fallbackHeartText = AbilitiesClient.smallCaps(InBetweenChoice.heartsText(hearts).getString()).withStyle(ChatFormatting.RED);
 			int texWidth = heartTexture != null ? heartTexture.width() : font.width(fallbackHeartText);
@@ -283,7 +295,11 @@ public class AbilitiesScreen extends Screen {
 			tooltip.addAll(font.split(Component.literal(ability.description().trim()), TOOLTIP_WIDTH));
 			if (!ability.additionalDescription().isBlank()) {
 				tooltip.add(FormattedCharSequence.EMPTY);
-				tooltip.addAll(font.split(Component.literal(ability.additionalDescription().trim()).withStyle(ChatFormatting.GRAY), TOOLTIP_WIDTH));
+				String additionalDescription = ability.additionalDescription().trim();
+				if (ability == Abilities.SOULMATE) {
+					additionalDescription = TextUtils.formatString(additionalDescription, ClientKeybinds.triggerAbility.getTranslatedKeyMessage().getString());
+				}
+				tooltip.addAll(font.split(Component.literal(additionalDescription).withStyle(ChatFormatting.GRAY), TOOLTIP_WIDTH));
 			}
 		}
 

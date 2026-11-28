@@ -74,6 +74,7 @@ public abstract class Ability {
 
 	public enum AbilityType {
 		PASSIVE,
-		ACTIVE;
+		ACTIVE,
+		RED;
 	}
 }

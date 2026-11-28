@@ -23,14 +23,17 @@ public enum Abilities {
 	,KNOCKBACK_RESISTANCE(KnockbackResistanceAbility::new, AbilityIcon.item(Items.IRON_CHESTPLATE), "Knockback Resistance", ChatFormatting.GRAY, PASSIVE, "Take 75% less knockback.", "")
 	,MORE_DROPS(MoreDropsAbility::new, AbilityIcon.effect("luck"), "More Drops", ChatFormatting.GREEN, PASSIVE, "Permanent Luck I, for more mob and block drops.", "")
 	,PROJECTILE_PROTECTION(ProjectileProtectionAbility::new, AbilityIcon.item(Items.BOW), "Projectile Protection", ChatFormatting.DARK_RED, PASSIVE, "Take 50% less projectile damage.", "• This is in addition to your armour enchantments.")
-	,RESISTANCE(ResistanceAbility::new, AbilityIcon.effect("resistance"), "Resistance", ChatFormatting.GRAY, PASSIVE, "Permanent Resistance I.", "• This is in addition to your armour enchantments.") //TODO unofficial description
-	,SATURATION(SaturationAbility::new, AbilityIcon.effect("saturation"), "Saturation", ChatFormatting.GOLD, PASSIVE, "Regenerate health twice as fast when your hunger bar is nearly full.", "")
-	,SECOND_WIND(SecondWindAbility::new, AbilityIcon.custom("second_wind"), "Second Wind", ChatFormatting.YELLOW, ACTIVE, "Unknown", "") //TODO unofficial description
+	,RESISTANCE(ResistanceAbility::new, AbilityIcon.effect("resistance"), "Resistance", ChatFormatting.GRAY, PASSIVE, "Permanent Resistance I.", "• This is in addition to your armour enchantments.")
+	,SATURATION(SaturationAbility::new, AbilityIcon.effect("saturation"), "Saturation", ChatFormatting.GOLD, PASSIVE, "Regenerate health twice as fast when your hunger bar is nearly full.", "") //TODO extended description
+	,SECOND_WIND(SecondWindAbility::new, AbilityIcon.custom("second_wind"), "Second Wind", ChatFormatting.YELLOW, ACTIVE, "Unknown", "") //TODO description + color
 	,SHIELD_BASH(ShieldBashAbility::new, AbilityIcon.custom("shield_bash"), "Shield Bash", ChatFormatting.DARK_RED, ACTIVE, "Launch back nearby players with a shield attack. ", "• Attack while blocking with a shield to activate.")
 	//? if > 1.20.3 {
 	,SMALLER(SmallerAbility::new, AbilityIcon.item(Items.CAKE), "Smaller", ChatFormatting.DARK_RED, PASSIVE, "Your model and hitbox are slightly smaller and harder to hit. ", "")
 	//?}
+	,SNAIL_PROTECT(EmptyAbility::new, AbilityIcon.custom("snail_protect"), "Snail Protect", ChatFormatting.DARK_RED, ACTIVE, "Unknown", "") //TODO description + color
+	,SOULMATE(EmptyAbility::new, AbilityIcon.custom("soulmate"), "???", ChatFormatting.DARK_RED, RED, "???", "§ePress [{}] to activate")
 	,SPEED(SpeedAbility::new, AbilityIcon.effect("speed"), "Speed", ChatFormatting.AQUA, PASSIVE, "Permanent Speed I", "")
+	,THROW_SWORDS(EmptyAbility::new, AbilityIcon.item(Items.DIAMOND_SWORD), "Throw Swords", ChatFormatting.AQUA, ACTIVE, "Unknown", "") //TODO description + color
 
 	//,TRIDENT(EmptyAbility::new, AbilityIcon.item(Items.TRIDENT), "Trident", ChatFormatting.AQUA, ACTIVE, "Unknown", "")
 

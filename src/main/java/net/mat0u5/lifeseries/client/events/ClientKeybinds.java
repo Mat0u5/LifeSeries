@@ -13,6 +13,7 @@ public class ClientKeybinds {
     public static KeyMapping openConfig;
     public static KeyMapping runCommand;
     public static KeyMapping openAbilityScreen;
+    public static KeyMapping triggerAbility;
 
     //? if <= 1.21.6 {
     //public static final String KEYBIND_ID = "key.category.lifeseries.general";
@@ -32,6 +33,9 @@ public class ClientKeybinds {
         }
         while (openAbilityScreen != null && openAbilityScreen.consumeClick()) {
             AbilitiesClient.onPressOpenScreenKey();
+        }
+        while (triggerAbility != null && triggerAbility.consumeClick()) {
+            AbilitiesClient.onPressTriggerAbility();
         }
     }
 
@@ -64,6 +68,12 @@ public class ClientKeybinds {
                 InputConstants.KEY_J,
                 KEYBIND_ID
         );
+        triggerAbility = new KeyMapping(
+                "key.lifeseries.triggerability",
+                type,
+                InputConstants.KEY_C,
+                KEYBIND_ID
+        );
         if (VersionControl.isDevVersion()) {
             runCommand = new KeyMapping(
                     "key.lifeseries.runcommand",
@@ -77,6 +87,7 @@ public class ClientKeybinds {
                 list.add(superpower);
                 list.add(openConfig);
                 list.add(openAbilityScreen);
+                list.add(triggerAbility);
                 if (VersionControl.isDevVersion()) {
                     list.add(runCommand);
                 }

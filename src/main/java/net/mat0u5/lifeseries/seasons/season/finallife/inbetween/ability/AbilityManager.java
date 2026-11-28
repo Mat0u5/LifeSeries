@@ -205,5 +205,9 @@ public class AbilityManager {
 			SimplePackets.ACTIVE_ABILITIES.sendToClient(abilities, player);
 		}
 	}
+
+	public static void onTriggerAbilityPacket(ServerPlayer player) {
+		//TODO soulmate ability trigger
+	}
 }
 

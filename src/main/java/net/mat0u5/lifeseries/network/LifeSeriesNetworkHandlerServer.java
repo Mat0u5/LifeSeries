@@ -161,6 +161,11 @@ public class LifeSeriesNetworkHandlerServer implements RegistrableServer {
     }
 
     public void initializeSimplePacketReceivers() {
+        SimplePackets.TRIGGER_ABILITY.setServerReceive((player, payload) -> {
+            if (LifeSeries.isSeason(Seasons.FINAL_LIFE)) {
+                AbilityManager.onTriggerAbilityPacket(player);
+            }
+        });
         SimplePackets.TRIVIA_ANSWER.setServerReceive((player, payload) -> {
             if (VersionControl.isDevVersion()) LifeSeries.LOGGER.info(TextUtils.formatString("[PACKET_SERVER] Received trivia answer (from {}): {}", player, payload.number()));
             if (LifeSeries.isSeason(Seasons.NICE_LIFE)) {
