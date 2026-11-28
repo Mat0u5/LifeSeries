@@ -1,7 +1,7 @@
 package net.mat0u5.lifeseries.mixin;
 
 import dev.kikugie.fletching_table.annotation.MixinEnvironment;
-import net.mat0u5.lifeseries.seasons.season.finallife.boogeyman.BoogeymanWeaponManager;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.abilities.weapons.ThrownWeaponManager;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -30,9 +30,9 @@ public class ItemStackBoogeymanMixin {
     private void ls$startChargingThrow(Level level, Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
     //?}
         ItemStack stack = (ItemStack) (Object) this;
-        BoogeymanWeaponManager.UseResult result = BoogeymanWeaponManager.onUseItem(stack, level, player);
-        if (result == BoogeymanWeaponManager.UseResult.PASS) return;
-        if (result == BoogeymanWeaponManager.UseResult.DENY) {
+        ThrownWeaponManager.UseResult result = ThrownWeaponManager.onUseItem(stack, level, player);
+        if (result == ThrownWeaponManager.UseResult.PASS) return;
+        if (result == ThrownWeaponManager.UseResult.DENY) {
             //? if <= 1.21 {
             //cir.setReturnValue(InteractionResultHolder.pass(stack));
             //?} else {
@@ -78,8 +78,8 @@ public class ItemStackBoogeymanMixin {
     @Inject(method = "releaseUsing", at = @At("HEAD"), cancellable = true)
     private void ls$releaseThrow(Level level, LivingEntity entity, int timeLeft, CallbackInfo ci) {
         ItemStack stack = (ItemStack) (Object) this;
-        if (!BoogeymanWeaponManager.isBoogeymanWeapon(stack)) return;
+        if (!ThrownWeaponManager.isThrowableWeapon(stack)) return;
         ci.cancel();
-        BoogeymanWeaponManager.onStopUseItem(stack, level, entity, timeLeft);
+        ThrownWeaponManager.onStopUseItem(stack, level, entity, timeLeft);
     }
 }

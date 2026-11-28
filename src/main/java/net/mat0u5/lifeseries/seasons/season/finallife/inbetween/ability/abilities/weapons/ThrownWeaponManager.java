@@ -1,9 +1,11 @@
-package net.mat0u5.lifeseries.seasons.season.finallife.boogeyman;
+package net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.abilities.weapons;
 
 import net.mat0u5.lifeseries.LifeSeries;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
 import net.mat0u5.lifeseries.seasons.season.finallife.FinalLife;
 import net.mat0u5.lifeseries.seasons.season.finallife.FinalLifeConfig;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.Abilities;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.AbilityManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.player.PlayerUtils;
 import net.mat0u5.matlib.config.entry.ConfigRef;
@@ -51,15 +53,15 @@ import net.minecraft.world.item.component.BlocksAttacks;
 import net.minecraft.world.item.component.Weapon;
 //?}
 
-public class BoogeymanWeaponManager {
-	public static final String BOOGEYMAN_WEAPON_NBT = "BoogeymanWeapon";
+public class ThrownWeaponManager {
+	public static final String THROWABLE_WEAPON_NBT = "ThrowableWeapon";
 	public static final int CONSUME_DURATION = 100000;
 	public static final float THROW_SPEED = 1.0F;
 	public static final double SOUND_RANGE = 32;
 
-	public static final ConfigRef<Boolean> WEAPONS_ENABLED = ConfigRef.of(() -> FinalLifeConfig.get().FINAL_LIFE_BOOGEYMAN_THROWABLE_WEAPONS);
-	public static final ConfigRef<Double> WEAPON_RANGE = ConfigRef.of(() -> FinalLifeConfig.get().FINAL_LIFE_BOOGEYMAN_THROW_RANGE);
-	public static final ConfigRef<Double> WEAPON_CHARGE_TIME = ConfigRef.of(() -> FinalLifeConfig.get().FINAL_LIFE_BOOGEYMAN_THROW_CHARGE_TIME);
+	public static final ConfigRef<Boolean> WEAPONS_ENABLED = ConfigRef.of(() -> FinalLifeConfig.get().ABILITY_THROW_SWORDS_ENABLED);
+	public static final ConfigRef<Double> WEAPON_RANGE = ConfigRef.of(() -> FinalLifeConfig.get().ABILITY_THROW_SWORDS_THROW_RANGE);
+	public static final ConfigRef<Double> WEAPON_CHARGE_TIME = ConfigRef.of(() -> FinalLifeConfig.get().ABILITY_THROW_SWORDS_THROW_CHARGE_TIME);
 
 	public static boolean isWeapon(ItemStack stack) {
 		return stack != null && !stack.isEmpty() && (stack.is(ItemTags.SWORDS) || stack.is(ItemTags.AXES));
@@ -69,27 +71,22 @@ public class BoogeymanWeaponManager {
 		return stack != null && !stack.isEmpty() && stack.is(ItemTags.AXES);
 	}
 
-	public static boolean isBoogeymanWeapon(ItemStack stack) {
-		return isWeapon(stack) && ItemStackUtils.hasCustomComponentEntry(stack, BOOGEYMAN_WEAPON_NBT);
+	public static boolean isThrowableWeapon(ItemStack stack) {
+		return isWeapon(stack) && ItemStackUtils.hasCustomComponentEntry(stack, THROWABLE_WEAPON_NBT);
 	}
 
 	public static boolean areWeaponsActive() {
-		if (LifeSeries.modDisabled()) return false;
-		if (!(currentSeason instanceof FinalLife finalLife)) return false;
-		return finalLife.finalLifeBoogeymanManager.isEnabled() && WEAPONS_ENABLED.get();
+		return !LifeSeries.modDisabled() && currentSeason instanceof FinalLife;
 	}
 
 	public static boolean canThrowWeapon(ServerPlayer player) {
 		if (player == null || !areWeaponsActive()) return false;
-		FinalLife finalLife = (FinalLife) currentSeason;
-		FinalLifeBoogeymanManager bm = finalLife.finalLifeBoogeymanManager;
-		return bm.isBoogeyman(player) && !player.isSpectator();
+		return AbilityManager.hasAbility(player, Abilities.THROW_SWORDS) && !player.isSpectator();
 	}
 
 	public static boolean isBlacklistedFor(ServerPlayer player, ItemStack stack) {
-		if (player == null || !isBoogeymanWeapon(stack) || !areWeaponsActive()) return false;
-		FinalLife finalLife = (FinalLife) currentSeason;
-		return !finalLife.finalLifeBoogeymanManager.canHaveBoogeymanWeapons(player);
+		if (player == null || !isThrowableWeapon(stack) || !areWeaponsActive()) return false;
+		return !AbilityManager.hasAbility(player, Abilities.THROW_SWORDS);
 	}
 
 	private static final Map<UUID, ItemStack> currentCharging = new HashMap<>();
@@ -101,7 +98,7 @@ public class BoogeymanWeaponManager {
 		if (chargingStack == null || !player.isUsingItem() || player.getUseItem() != chargingStack) return;
 		if (player.getTicksUsingItem() < getChargeTicks()) return;
 		playedChargedSound.add(player.getUUID());
-		ModifiableSound.FINALLIFE_BOOGEYMAN_WEAPON_CHARGED.play(player);
+		ModifiableSound.FINALLIFE_ABILITY_WEAPON_CHARGED.play(player);
 	}
 
 	public enum UseResult {
@@ -111,7 +108,7 @@ public class BoogeymanWeaponManager {
 	}
 
 	public static UseResult onUseItem(ItemStack stack, Level level, Player player) {
-		if (LifeSeries.modDisabled() || !isBoogeymanWeapon(stack)) return UseResult.PASS;
+		if (LifeSeries.modDisabled() || !isThrowableWeapon(stack)) return UseResult.PASS;
 		if (level.isClientSide()) return UseResult.ACCEPT;
 		if (player instanceof ServerPlayer serverPlayer && canThrowWeapon(serverPlayer)) {
 			currentCharging.put(serverPlayer.getUUID(), stack);
@@ -119,7 +116,7 @@ public class BoogeymanWeaponManager {
 			return UseResult.ACCEPT;
 		}
 		if (!areWeaponsActive() || (player instanceof ServerPlayer serverPlayer && isBlacklistedFor(serverPlayer, stack))) {
-			removeBoogeymanWeaponNBT(stack);
+			removeThrowableWeaponNBT(stack);
 		}
 		return UseResult.DENY;
 	}
@@ -144,9 +141,9 @@ public class BoogeymanWeaponManager {
 		if (stack == null || stack.isEmpty()) return;
 		ServerLevel level = ((IPlayer)player).ls$getServerLevel();
 		Vec3 speed = player.getLookAngle().normalize().scale(THROW_SPEED);
-		ThrownBoogeymanWeapon.spawn(new ThrownBoogeymanWeapon(player, stack.copy(), hand, WEAPON_RANGE.get(), speed));
+		ThrownWeapon.spawn(new ThrownWeapon(player, stack.copy(), hand, WEAPON_RANGE.get(), speed));
 		player.setItemInHand(hand, ItemStack.EMPTY);
-		ModifiableSound.FINALLIFE_BOOGEYMAN_WEAPON_THROW.playWithSource(getNearbyPlayers(level, player.position(), SOUND_RANGE), player, SoundSource.PLAYERS, 0.5F, 1.0F);
+		ModifiableSound.FINALLIFE_ABILITY_THROWABLE_WEAPON_THROW.playWithSource(getNearbyPlayers(level, player.position(), SOUND_RANGE), player, SoundSource.PLAYERS, 0.5F, 1.0F);
 	}
 
 	//? if >= 1.21.2 {
@@ -169,13 +166,13 @@ public class BoogeymanWeaponManager {
 		boolean removeWeapons = !areWeaponsActive();
 		for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
 			if (removeWeapons) {
-				removeBoogeymanWeaponNBTs(player);
+				removeThrowableWeaponNBTs(player);
 				continue;
 			}
 			if (canThrowWeapon(player)) {
 				Inventory inventory = player.getInventory();
 				for (int i = 0; i < inventory.getContainerSize(); i++) {
-					addBoogeymanWeaponNBT(inventory.getItem(i));
+					addThrowableWeaponNBT(inventory.getItem(i));
 				}
 				preventUseEnd(player);
 				onFullyCharged(player);
@@ -185,30 +182,30 @@ public class BoogeymanWeaponManager {
 				for (int i = 0; i < inventory.getContainerSize(); i++) {
 					ItemStack stack = inventory.getItem(i);
 					if (isBlacklistedFor(player, stack)) {
-						removeBoogeymanWeaponNBT(stack);
+						removeThrowableWeaponNBT(stack);
 					}
 				}
 			}
 		}
 	}
 
-	public static void removeAllBoogeymanWeaponNBTs() {
+	public static void removeAllThrowableWeaponNBTs() {
 		for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
-			removeBoogeymanWeaponNBTs(player);
+			removeThrowableWeaponNBTs(player);
 		}
 	}
 
-	public static void removeBoogeymanWeaponNBTs(ServerPlayer player) {
+	public static void removeThrowableWeaponNBTs(ServerPlayer player) {
 		Inventory inventory = player.getInventory();
 		for (int i = 0; i < inventory.getContainerSize(); i++) {
-			removeBoogeymanWeaponNBT(inventory.getItem(i));
+			removeThrowableWeaponNBT(inventory.getItem(i));
 		}
 	}
 
-	public static void addBoogeymanWeaponNBT(ItemStack stack) {
+	public static void addThrowableWeaponNBT(ItemStack stack) {
 		if (!isWeapon(stack)) return;
-		if (!ItemStackUtils.hasCustomComponentEntry(stack, BOOGEYMAN_WEAPON_NBT)) {
-			ItemStackUtils.setCustomComponentBoolean(stack, BOOGEYMAN_WEAPON_NBT, true);
+		if (!ItemStackUtils.hasCustomComponentEntry(stack, THROWABLE_WEAPON_NBT)) {
+			ItemStackUtils.setCustomComponentBoolean(stack, THROWABLE_WEAPON_NBT, true);
 		}
 		//? if >= 1.21.2 {
 		if (!THROW_CONSUMABLE.equals(stack.get(DataComponents.CONSUMABLE))) {
@@ -217,10 +214,10 @@ public class BoogeymanWeaponManager {
 		//?}
 	}
 
-	public static void removeBoogeymanWeaponNBT(ItemStack stack) {
+	public static void removeThrowableWeaponNBT(ItemStack stack) {
 		if (!isWeapon(stack)) return;
-		if (ItemStackUtils.hasCustomComponentEntry(stack, BOOGEYMAN_WEAPON_NBT)) {
-			ItemStackUtils.removeCustomComponentEntry(stack, BOOGEYMAN_WEAPON_NBT);
+		if (ItemStackUtils.hasCustomComponentEntry(stack, THROWABLE_WEAPON_NBT)) {
+			ItemStackUtils.removeCustomComponentEntry(stack, THROWABLE_WEAPON_NBT);
 		}
 		//? if >= 1.21.2 {
 		if (stack.has(DataComponents.CONSUMABLE) && !stack.getPrototype().has(DataComponents.CONSUMABLE)) {
@@ -230,7 +227,7 @@ public class BoogeymanWeaponManager {
 	}
 
 	private static void preventUseEnd(ServerPlayer player) {
-		if (player.isUsingItem() && isBoogeymanWeapon(player.getUseItem()) && player.getUseItemRemainingTicks() <= 20) {
+		if (player.isUsingItem() && isThrowableWeapon(player.getUseItem()) && player.getUseItemRemainingTicks() <= 20) {
 			player.stopUsingItem();
 		}
 	}

@@ -1,4 +1,4 @@
-package net.mat0u5.lifeseries.seasons.season.finallife.boogeyman;
+package net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.abilities.weapons;
 
 import com.mojang.math.Transformation;
 import net.mat0u5.lifeseries.config.modifiable.ModifiableSound;
@@ -51,8 +51,8 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 //import net.minecraft.world.item.enchantment.Enchantments;
 //?}
 
-public class ThrownBoogeymanWeapon {
-	public static final String ITEM_DISPLAY_TAG = "lifeseries_boogeyman_weapon";
+public class ThrownWeapon {
+	public static final String ITEM_DISPLAY_TAG = "lifeseries_throwable_weapon";
 	public static final int MAX_AGE = 200;
 	public static final double PICKUP_DISTANCE = 1.25;
 	public static final double RETURN_DRAG = 0.8;
@@ -61,7 +61,7 @@ public class ThrownBoogeymanWeapon {
 	public static final float SPIN_DEGREES_PER_TICK = 50.0F;
 	public static final int SOUND_INTERVAL = 4;
 
-	private static final List<ThrownBoogeymanWeapon> currentThrownWeapons = new ArrayList<>();
+	private static final List<ThrownWeapon> currentThrownWeapons = new ArrayList<>();
 	private static int timer = 0;
 
 	private final ServerLevel level;
@@ -81,13 +81,13 @@ public class ThrownBoogeymanWeapon {
 	private int age = 0;
 	private float yRot;
 
-	public ThrownBoogeymanWeapon(ServerPlayer owner, ItemStack itemStack, InteractionHand hand, double maxRange, Vec3 velocity) {
+	public ThrownWeapon(ServerPlayer owner, ItemStack itemStack, InteractionHand hand, double maxRange, Vec3 velocity) {
 		this.level = ((IPlayer)owner).ls$getServerLevel();
 		this.ownerUUID = owner.getUUID();
 		this.hand = hand;
 		this.maxRange = maxRange;
 		this.itemStack = itemStack;
-		this.isAxe = BoogeymanWeaponManager.isAxe(itemStack);
+		this.isAxe = ThrownWeaponManager.isAxe(itemStack);
 		this.position = new Vec3(owner.getX(), owner.getEyeY() - 0.1, owner.getZ());
 		this.velocity = velocity;
 		this.yRot = getYRotFromVelocity(0);
@@ -104,13 +104,13 @@ public class ThrownBoogeymanWeapon {
 		display.addTag(ITEM_DISPLAY_TAG);
 	}
 
-	public static void spawn(ThrownBoogeymanWeapon weapon) {
+	public static void spawn(ThrownWeapon weapon) {
 		weapon.level.addFreshEntity(weapon.display);
 		currentThrownWeapons.add(weapon);
 	}
 
 	public static void onTick(MinecraftServer server) {
-		for (ThrownBoogeymanWeapon weapon : new ArrayList<>(currentThrownWeapons)) {
+		for (ThrownWeapon weapon : new ArrayList<>(currentThrownWeapons)) {
 			if (!weapon.discarded) {
 				weapon.tick();
 			}
@@ -163,7 +163,7 @@ public class ThrownBoogeymanWeapon {
 
 		if (age % SOUND_INTERVAL == 1) {
 			float pitch = 0.9F + level.getRandom().nextFloat() * 0.3F;
-			ModifiableSound.FINALLIFE_BOOGEYMAN_WEAPON_AIR.playWithSource(BoogeymanWeaponManager.getNearbyPlayers(level, position, BoogeymanWeaponManager.SOUND_RANGE), display, SoundSource.PLAYERS, 0.2F, pitch);
+			ModifiableSound.FINALLIFE_ABILITY_WEAPON_AIR.playWithSource(ThrownWeaponManager.getNearbyPlayers(level, position, ThrownWeaponManager.SOUND_RANGE), display, SoundSource.PLAYERS, 0.2F, pitch);
 		}
 	}
 
@@ -237,8 +237,8 @@ public class ThrownBoogeymanWeapon {
 	private HitOutcome onHitEntity(ServerPlayer owner, Entity target) {
 		boolean hurt = false;
 		DamageSource source = createDamageSource(owner);
-		float damage = BoogeymanWeaponManager.getAttackDamage(itemStack, level, target, source);
-		boolean blockedByShield = target instanceof LivingEntity livingTarget && BoogeymanWeaponManager.isBlockedByShield(livingTarget, source, damage);
+		float damage = ThrownWeaponManager.getAttackDamage(itemStack, level, target, source);
+		boolean blockedByShield = target instanceof LivingEntity livingTarget && ThrownWeaponManager.isBlockedByShield(livingTarget, source, damage);
 		boolean disableShield = isAxe && blockedByShield;
 
 		// Temporarily put the weapon in the owner's hands, so that it is processed.
@@ -276,10 +276,10 @@ public class ThrownBoogeymanWeapon {
 		}
 
 		if (disableShield) {
-			BoogeymanWeaponManager.disableShield(level, (LivingEntity) target);
+			ThrownWeaponManager.disableShield(level, (LivingEntity) target);
 		}
 
-		ModifiableSound.FINALLIFE_BOOGEYMAN_WEAPON_HIT.playWithSource(display, SoundSource.PLAYERS, 1.0F, 1.0F);
+		ModifiableSound.FINALLIFE_ABILITY_WEAPON_HIT.playWithSource(display, SoundSource.PLAYERS, 1.0F, 1.0F);
 		if (blockedByShield) return HitOutcome.BLOCKED;
 		return hurt ? HitOutcome.HIT : HitOutcome.FAILED;
 	}
@@ -407,9 +407,9 @@ public class ThrownBoogeymanWeapon {
 	}
 
 	public static void returnAllWeapons() {
-		List<ThrownBoogeymanWeapon> weapons = new ArrayList<>(currentThrownWeapons);
+		List<ThrownWeapon> weapons = new ArrayList<>(currentThrownWeapons);
 		currentThrownWeapons.clear();
-		for (ThrownBoogeymanWeapon weapon : weapons) {
+		for (ThrownWeapon weapon : weapons) {
 			if (!weapon.discarded) {
 				weapon.returnOrDrop(weapon.getOwner());
 			}
@@ -417,7 +417,7 @@ public class ThrownBoogeymanWeapon {
 	}
 
 	public static void returnWeapons(ServerPlayer player) {
-		for (ThrownBoogeymanWeapon weapon : new ArrayList<>(currentThrownWeapons)) {
+		for (ThrownWeapon weapon : new ArrayList<>(currentThrownWeapons)) {
 			if (!player.getUUID().equals(weapon.ownerUUID)) continue;
 			currentThrownWeapons.remove(weapon);
 			if (!weapon.discarded) {
@@ -444,7 +444,7 @@ public class ThrownBoogeymanWeapon {
 	}
 
 	private static boolean isTracked(Entity display) {
-		for (ThrownBoogeymanWeapon weapon : currentThrownWeapons) {
+		for (ThrownWeapon weapon : currentThrownWeapons) {
 			if (weapon.display == display) return true;
 		}
 		return false;

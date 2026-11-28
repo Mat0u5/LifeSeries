@@ -8,6 +8,7 @@ import net.mat0u5.lifeseries.seasons.season.finallife.FinalLife;
 import net.mat0u5.lifeseries.seasons.season.finallife.FinalLifeConfig;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.Abilities;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.AbilityManager;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.abilities.weapons.ThrownWeaponManager;
 import net.mat0u5.lifeseries.seasons.util.WatcherManager;
 import net.mat0u5.lifeseries.utils.interfaces.IPlayer;
 import net.mat0u5.lifeseries.utils.other.TaskScheduler;
@@ -204,7 +205,11 @@ public class FinalLifeBoogeymanManager {
 
 	public void tick() {
 		for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
-			AbilityManager.setForcedAbility(player, Abilities.DASH, isBoogeyman(player)); // TODO this will need to be removed as the boogeyman goes to the in-between as well.
+
+			// TODO this will need to be removed as the boogeyman goes to the in-between as well.
+			AbilityManager.setForcedAbility(player, Abilities.DASH, isBoogeyman(player));
+			AbilityManager.setForcedAbility(player, Abilities.THROW_SWORDS, isBoogeyman(player) && ThrownWeaponManager.WEAPONS_ENABLED.get());
+
 			if (isEnabled() && isBoogeyman(player) && !player.isSpectator() && FINAL_LIFE_BOOGEYMAN_SPEED.get()) {
 				boolean giveSpeed = false;
 				MobEffectInstance effect = player.getEffect(SPEED_EFFECT);
@@ -266,10 +271,6 @@ public class FinalLifeBoogeymanManager {
 
 	public boolean isBoogeyman(ServerPlayer player) {
 		return player != null && isBoogeyman(player.getUUID());
-	}
-
-	public boolean canHaveBoogeymanWeapons(ServerPlayer player) {
-		return player != null && (isBoogeyman(player) || hasStoredStatus(player.getUUID()));
 	}
 
 	public boolean isDeadBoogeyman(ServerPlayer player) {
@@ -392,8 +393,9 @@ public class FinalLifeBoogeymanManager {
 	private void onStoppedBeingBoogeyman(ServerPlayer player, boolean wasDead) {
 		((IPlayer)player).ls$message(ModifiableText.FINALLIFE_BOOGEYMAN_NOTICE_REMOVED.get());
 		restoreNormalGameMode(player);
-		ThrownBoogeymanWeapon.returnWeapons(player);
-		BoogeymanWeaponManager.removeBoogeymanWeaponNBTs(player);
+		//TODO this needs to be removed later
+		AbilityManager.setForcedAbility(player, Abilities.DASH, false);
+		AbilityManager.setForcedAbility(player, Abilities.THROW_SWORDS, false);
 	}
 
 	private Integer getStoredStatus(UUID uuid) {

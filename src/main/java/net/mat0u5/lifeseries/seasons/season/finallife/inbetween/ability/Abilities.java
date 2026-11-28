@@ -33,7 +33,7 @@ public enum Abilities {
 	,SNAIL_PROTECT(EmptyAbility::new, AbilityIcon.custom("snail_protect"), "Snail Protect", ChatFormatting.DARK_RED, ACTIVE, "Unknown", "") //TODO description + color
 	,SOULMATE(EmptyAbility::new, AbilityIcon.custom("soulmate"), "???", ChatFormatting.DARK_RED, RED, "???", "§ePress [{}] to activate")
 	,SPEED(SpeedAbility::new, AbilityIcon.effect("speed"), "Speed", ChatFormatting.AQUA, PASSIVE, "Permanent Speed I", "")
-	,THROW_SWORDS(EmptyAbility::new, AbilityIcon.item(Items.DIAMOND_SWORD), "Throw Swords", ChatFormatting.AQUA, ACTIVE, "Unknown", "") //TODO description + color
+	,THROW_SWORDS(ThrowSwordsAbility::new, AbilityIcon.item(Items.DIAMOND_SWORD), "Throw Swords", ChatFormatting.AQUA, ACTIVE, "Unknown", "") //TODO description + color
 
 	//,TRIDENT(EmptyAbility::new, AbilityIcon.item(Items.TRIDENT), "Trident", ChatFormatting.AQUA, ACTIVE, "Unknown", "")
 

@@ -96,23 +96,6 @@ public class FinalLifeConfig extends SeasonConfig {
 			.setNew(true)
 			.serverShared()
 			.group("season.boogeyman");
-	public final ConfigurableValue<Boolean> FINAL_LIFE_BOOGEYMAN_THROWABLE_WEAPONS = ConfigurableValue.register(this, "final_life_boogeyman_throwable_weapons", true)
-			.name("Throwable Weapons")
-			.description("Controls whether the boogeyman can throw their swords and axes.")
-			.setNew(true)
-			.group("season.boogeyman.throwable").groupHeader(true);
-	public final ConfigurableValue<Double> FINAL_LIFE_BOOGEYMAN_THROW_RANGE = ConfigurableValue.register(this, "final_life_boogeyman_throw_range", 25.0)
-			.bounded(0.0, null)
-			.name("Throw Range")
-			.description("How many blocks a thrown weapon flies before it returns to the boogeyman.")
-			.setNew(true)
-			.group("season.boogeyman.throwable");
-	public final ConfigurableValue<Double> FINAL_LIFE_BOOGEYMAN_THROW_CHARGE_TIME = ConfigurableValue.register(this, "final_life_boogeyman_throw_charge_time", 0.5)
-			.bounded(0.0, null)
-			.name("Throw Charge Time")
-			.description("How many seconds the boogeyman has to hold right click before releasing throws the weapon. Do note that changing this will desync the pull animation, which is 0.5s long.")
-			.setNew(true)
-			.group("season.boogeyman.throwable");
 	public final ConfigurableValue<Boolean> FINAL_LIFE_BOOGEYMAN_SPEED = ConfigurableValue.register(this, "final_life_boogeyman_speed", true)
 			.name("Speed Boost")
 			.description("Controls whether the boogeyman has a permanent speed effect.")
@@ -239,11 +222,43 @@ public class FinalLifeConfig extends SeasonConfig {
 			.name("Smaller Ability Hearts")
 			.description("Controls how many hearts this ability will add/subtract.")
 			.group("season.abilities");
+	public final ConfigurableValue<Integer> ABILITY_SNAIL_PROTECT_HEARTS = ConfigurableValue.register(this, "ability_snail_protect_hearts", 1, ConfigTypes.PLAYER_HEARTS)
+			.bounded(-10, 10)
+			.name("Snail Protect Ability Hearts")
+			.description("Controls how many hearts this ability will add/subtract.")
+			.group("season.abilities");
+	public final ConfigurableValue<Integer> ABILITY_SOULMATE_HEARTS = ConfigurableValue.register(this, "ability_soulmate_hearts", 10, ConfigTypes.PLAYER_HEARTS)
+			.bounded(-10, 10)
+			.name("Soulmate Ability Hearts")
+			.description("Controls how many hearts this ability will add/subtract.")
+			.group("season.abilities");
 	public final ConfigurableValue<Integer> ABILITY_SPEED_HEARTS = ConfigurableValue.register(this, "ability_speed_hearts", 3, ConfigTypes.PLAYER_HEARTS)
 			.bounded(-10, 10)
 			.name("Speed Ability Hearts")
 			.description("Controls how many hearts this ability will add/subtract.")
 			.group("season.abilities");
+	public final ConfigurableValue<Boolean> ABILITY_THROW_SWORDS_ENABLED = ConfigurableValue.register(this, "ability_throw_swords_enabled", true)
+			.name("Throw Swords Enabled")
+			.description("Controls whether the this ability is enabled.")
+			.setNew(true)
+			.group("season.abilities.throwswords").groupHeader(true);
+	public final ConfigurableValue<Integer> ABILITY_THROW_SWORDS_HEARTS = ConfigurableValue.register(this, "ability_throw_swords_hearts", 2, ConfigTypes.PLAYER_HEARTS)
+			.bounded(-10, 10)
+			.name("Ability Hearts")
+			.description("Controls how many hearts this ability will add/subtract.")
+			.group("season.abilities.throwswords");
+	public final ConfigurableValue<Double> ABILITY_THROW_SWORDS_THROW_RANGE = ConfigurableValue.register(this, "ability_throw_swords_throw_range", 25.0)
+			.bounded(0.0, null)
+			.name("Throw Range")
+			.description("How many blocks a thrown weapon flies before it returns to its thrower.")
+			.setNew(true)
+			.group("season.abilities.throwswords");
+	public final ConfigurableValue<Double> ABILITY_THROW_SWORDS_THROW_CHARGE_TIME = ConfigurableValue.register(this, "ability_throw_swords_throw_charge_time", 0.5)
+			.bounded(0.0, null)
+			.name("Throw Charge Time")
+			.description("How many seconds you have to hold right click before releasing throws the weapon. Do note that changing this will desync the pull animation, which is 0.5s long.")
+			.setNew(true)
+			.group("season.abilities.throwswords");
 	/*
 	public final ConfigurableValue<Integer> ABILITY_TRIDENT_HEARTS = ConfigurableValue.register(this, "ability_trident_hearts", 1, ConfigTypes.PLAYER_HEARTS)
 			.bounded(-10, 10)

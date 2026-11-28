@@ -4,9 +4,9 @@ import net.mat0u5.lifeseries.config.SeasonConfig;
 import net.mat0u5.lifeseries.entity.triviabot.server.trivia.TriviaHandler;
 import net.mat0u5.lifeseries.seasons.season.Season;
 import net.mat0u5.lifeseries.seasons.season.Seasons;
-import net.mat0u5.lifeseries.seasons.season.finallife.boogeyman.BoogeymanWeaponManager;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.abilities.weapons.ThrownWeaponManager;
 import net.mat0u5.lifeseries.seasons.season.finallife.boogeyman.FinalLifeBoogeymanManager;
-import net.mat0u5.lifeseries.seasons.season.finallife.boogeyman.ThrownBoogeymanWeapon;
+import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.abilities.weapons.ThrownWeapon;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.InBetweenManager;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.AbilityManager;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.trivia.InBetweenTriviaHandler;
@@ -112,7 +112,7 @@ public class FinalLife extends Season {
 	public void onPlayerDisconnect(ServerPlayer player) {
 		finalLifeBoogeymanManager.onPlayerDisconnect(player);
 		super.onPlayerDisconnect(player);
-		ThrownBoogeymanWeapon.returnWeapons(player);
+		ThrownWeapon.returnWeapons(player);
 		InBetweenManager.onPlayerDisconnect(player);
 		InBetweenFileSync.onPlayerDisconnect(player);
 		AbilityManager.onPlayerDisconnect(player);
@@ -123,8 +123,8 @@ public class FinalLife extends Season {
 		super.switchOutOfSeason(changedTo);
 		ScoreboardUtils.removeObjective(DEATHS_SCOREBOARD);
 		createScoreboards();
-		ThrownBoogeymanWeapon.returnAllWeapons();
-		BoogeymanWeaponManager.removeAllBoogeymanWeaponNBTs();
+		ThrownWeapon.returnAllWeapons();
+		ThrownWeaponManager.removeAllThrowableWeaponNBTs();
 		InBetweenManager.exitInBetweenAllPlayers();
 		InBetweenFileSync.switchOutOfSeason();
 		InBetweenTriviaManager.killAllBots();
@@ -136,7 +136,7 @@ public class FinalLife extends Season {
 	public void tick(MinecraftServer server) {
 		super.tick(server);
 		finalLifeBoogeymanManager.tick();
-		BoogeymanWeaponManager.onTick();
+		ThrownWeaponManager.onTick();
 		InBetweenManager.tick();
 		InBetweenFileSync.tick();
 		AbilityManager.tick();

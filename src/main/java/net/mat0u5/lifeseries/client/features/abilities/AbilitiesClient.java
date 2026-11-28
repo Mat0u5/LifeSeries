@@ -106,7 +106,6 @@ public class AbilitiesClient {
 		}
 		else if (ability == Abilities.SOULMATE) {
 			showMoreDetailsText = false;
-		}
 			infoText.append("§7Press ").append(ClientKeybinds.triggerAbility.getTranslatedKeyMessage().copy().withStyle(ChatFormatting.WHITE, ChatFormatting.BOLD)).append("§7 to summon ???. Make sure it's midday and you are in open air.");
 		}
 		else {

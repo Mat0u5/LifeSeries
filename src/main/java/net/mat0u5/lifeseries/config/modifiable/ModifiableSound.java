@@ -170,10 +170,6 @@ public enum ModifiableSound {
 	,NICELIFE_SNOWMAN_GROWL(Seasons.NICE_LIFE, IdentifierHelper.lifeseries("nicelife_snowman_growl"))
 
 	,FINALLIFE_BOOGEYMAN_JOIN(Seasons.FINAL_LIFE, SoundEvents.LIGHTNING_BOLT_THUNDER)
-	,FINALLIFE_BOOGEYMAN_WEAPON_THROW(Seasons.FINAL_LIFE, IdentifierHelper.vanilla("item.trident.throw"))
-	,FINALLIFE_BOOGEYMAN_WEAPON_HIT(Seasons.FINAL_LIFE, IdentifierHelper.vanilla("entity.player.attack.strong"))
-	,FINALLIFE_BOOGEYMAN_WEAPON_AIR(Seasons.FINAL_LIFE, IdentifierHelper.lifeseries("finallife_fly_woosh"))
-	,FINALLIFE_BOOGEYMAN_WEAPON_CHARGED(Seasons.FINAL_LIFE, IdentifierHelper.vanilla("item.crossbow.loading_end"))
 	,FINALLIFE_INBETWEEN_ENTER(Seasons.FINAL_LIFE, IdentifierHelper.lifeseries("finallife_inbetween_enter"))
 	,FINALLIFE_INBETWEEN_EXIT(Seasons.FINAL_LIFE, IdentifierHelper.lifeseries("finallife_inbetween_exit"))
 	,FINALLIFE_DIMENSION_LEAVE(Seasons.FINAL_LIFE, IdentifierHelper.vanilla("block.portal.trigger"))
@@ -196,6 +192,10 @@ public enum ModifiableSound {
 	,FINALLIFE_AIR_JUMP(Seasons.FINAL_LIFE, SoundEvents.WIND_CHARGE_BURST)
 	,FINALLIFE_DASH(Seasons.FINAL_LIFE, SoundEvents.WIND_CHARGE_BURST)
 	//~}
+	,FINALLIFE_ABILITY_THROWABLE_WEAPON_THROW(Seasons.FINAL_LIFE, IdentifierHelper.vanilla("item.trident.throw"))
+	,FINALLIFE_ABILITY_WEAPON_HIT(Seasons.FINAL_LIFE, IdentifierHelper.vanilla("entity.player.attack.strong"))
+	,FINALLIFE_ABILITY_WEAPON_AIR(Seasons.FINAL_LIFE, IdentifierHelper.lifeseries("finallife_fly_woosh"))
+	,FINALLIFE_ABILITY_WEAPON_CHARGED(Seasons.FINAL_LIFE, IdentifierHelper.vanilla("item.crossbow.loading_end"))
 
 	;
 
