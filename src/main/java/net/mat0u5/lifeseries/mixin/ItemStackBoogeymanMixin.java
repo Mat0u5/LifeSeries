@@ -53,15 +53,15 @@ public class ItemStackBoogeymanMixin {
     //? if <= 1.20.5 {
     /*@Inject(method = "getUseDuration", at = @At("HEAD"), cancellable = true)
     private void ls$throwUseDuration(CallbackInfoReturnable<Integer> cir) {
-        if (BoogeymanWeaponManager.isBoogeymanWeapon((ItemStack) (Object) this)) {
-            cir.setReturnValue(BoogeymanWeaponManager.CONSUME_DURATION);
+        if (ThrownWeaponManager.isThrowableWeapon((ItemStack) (Object) this)) {
+            cir.setReturnValue(ThrownWeaponManager.CONSUME_DURATION);
         }
     }
     *///?} else if <= 1.21 {
     /*@Inject(method = "getUseDuration", at = @At("HEAD"), cancellable = true)
     private void ls$throwUseDuration(LivingEntity entity, CallbackInfoReturnable<Integer> cir) {
-        if (BoogeymanWeaponManager.isBoogeymanWeapon((ItemStack) (Object) this)) {
-            cir.setReturnValue(BoogeymanWeaponManager.CONSUME_DURATION);
+        if (ThrownWeaponManager.isThrowableWeapon((ItemStack) (Object) this)) {
+            cir.setReturnValue(ThrownWeaponManager.CONSUME_DURATION);
         }
     }
     *///?}
@@ -69,7 +69,7 @@ public class ItemStackBoogeymanMixin {
     //? if <= 1.21 {
     /*@Inject(method = "getUseAnimation", at = @At("HEAD"), cancellable = true)
     private void ls$throwAnimation(CallbackInfoReturnable<UseAnim> cir) {
-        if (BoogeymanWeaponManager.isBoogeymanWeapon((ItemStack) (Object) this)) {
+        if (ThrownWeaponManager.isThrowableWeapon((ItemStack) (Object) this)) {
             cir.setReturnValue(UseAnim.SPEAR);
         }
     }

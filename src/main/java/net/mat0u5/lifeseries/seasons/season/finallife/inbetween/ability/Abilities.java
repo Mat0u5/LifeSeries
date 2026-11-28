@@ -1,6 +1,8 @@
 package net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability;
 
+import net.mat0u5.lifeseries.seasons.season.finallife.FinalLifeConfig;
 import net.mat0u5.lifeseries.seasons.season.finallife.inbetween.ability.abilities.*;
+import net.mat0u5.matlib.config.entry.ConfigurableValue;
 import net.minecraft.ChatFormatting;
 import net.minecraft.world.item.Items;
 
@@ -64,6 +66,38 @@ public enum Abilities {
 		}
 		instance.reloadHeartsChange();
 		return instance;
+	}
+
+	public boolean isEnabled() {
+		FinalLifeConfig config = FinalLifeConfig.get();
+		ConfigurableValue<Boolean> enabled = switch (this) {
+			case AIR_JUMP -> config.ABILITY_AIR_JUMP_ENABLED;
+			case BLAST_RESISTANCE -> config.ABILITY_BLAST_RESISTANCE_ENABLED;
+			case DASH -> config.ABILITY_DASH_ENABLED;
+			//? if > 1.20.3 {
+			case EXTRA_REACH -> config.ABILITY_EXTRA_REACH_ENABLED;
+			//?}
+			case FEATHER_FALLING -> config.ABILITY_FEATHER_FALLING_ENABLED;
+			case FIRE_RESISTANCE -> config.ABILITY_FIRE_RESISTANCE_ENABLED;
+			case HASTE -> config.ABILITY_HASTE_ENABLED;
+			case HEALTH_VISION -> config.ABILITY_HEALTH_VISION_ENABLED;
+			case KNOCKBACK_RESISTANCE -> config.ABILITY_KNOCKBACK_RESISTANCE_ENABLED;
+			case MORE_DROPS -> config.ABILITY_MORE_DROPS_ENABLED;
+			case PROJECTILE_PROTECTION -> config.ABILITY_PROJECTILE_PROTECTION_ENABLED;
+			case RESISTANCE -> config.ABILITY_RESISTANCE_ENABLED;
+			case SATURATION -> config.ABILITY_SATURATION_ENABLED;
+			case SECOND_WIND -> config.ABILITY_SECOND_WIND_ENABLED;
+			case SHIELD_BASH -> config.ABILITY_SHIELD_BASH_ENABLED;
+			//? if > 1.20.3 {
+			case SMALLER -> config.ABILITY_SMALLER_ENABLED;
+			//?}
+			case SNAIL_PROTECT -> config.ABILITY_SNAIL_PROTECT_ENABLED;
+			case SOULMATE -> config.ABILITY_SOULMATE_ENABLED;
+			case SPEED -> config.ABILITY_SPEED_ENABLED;
+			case THROW_SWORDS -> config.ABILITY_THROW_SWORDS_ENABLED;
+			default -> null;
+		};
+		return enabled != null && enabled.get();
 	}
 
 	public AbilityIcon icon() {

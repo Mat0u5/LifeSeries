@@ -655,6 +655,7 @@ public enum ModifiableText {
     ,FINALLIFE_ABILITIES_COMMAND_CLEAR_SINGLE(Seasons.FINAL_LIFE, "Cleared {}'s abilities", List.of("Player"))
     ,FINALLIFE_ABILITIES_COMMAND_CLEAR_MULTIPLE(Seasons.FINAL_LIFE, "Cleared the abilities of {} targets", List.of("number of targets"))
     ,FINALLIFE_ABILITIES_COMMAND_UNKNOWN(Seasons.FINAL_LIFE, "Unknown ability '{}'", List.of("ability"))
+    ,FINALLIFE_ABILITIES_COMMAND_DISABLED(Seasons.FINAL_LIFE, "The {} ability is disabled in the config", List.of("ability"))
     ,FINALLIFE_TRIVIA_QUESTION_INVALID(Seasons.FINAL_LIFE, "Could not find trivia with that question.")
     ,FINALLIFE_TRIVIA_SET_SINGLE(Seasons.FINAL_LIFE, "Assigned {}'s trivia", List.of("Player"))
     ,FINALLIFE_TRIVIA_SET_MULTIPLE(Seasons.FINAL_LIFE, "Assigned trivia of {} targets", List.of("number of targets"))

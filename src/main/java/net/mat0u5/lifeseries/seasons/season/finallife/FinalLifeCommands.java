@@ -189,7 +189,7 @@ public class FinalLifeCommands extends CustomCommand {
 		}
 		List<String> titles = new ArrayList<>();
 		for (Ability ability : abilities) {
-			titles.add(ability.ability().title());
+			titles.add(ability.ability().title() + (ability.ability().isEnabled() ? "" : " (disabled)"));
 		}
 		sendCommandFeedbackQuiet(source, ModifiableText.FINALLIFE_ABILITIES_COMMAND_GET.get(player, String.join(", ", titles)));
 		return 1;
@@ -199,6 +199,10 @@ public class FinalLifeCommands extends CustomCommand {
 		if (checkBanned(source)) return -1;
 		Abilities ability = parseAbility(source, name);
 		if (ability == null) return -1;
+		if (!ability.isEnabled()) {
+			sendCommandFailure(source, ModifiableText.FINALLIFE_ABILITIES_COMMAND_DISABLED.get(ability.title()));
+			return -1;
+		}
 		if (targets.size() == 1) {
 			ServerPlayer player = targets.iterator().next();
 			if (AbilityManager.hasAbility(player, ability)) {
@@ -228,7 +232,7 @@ public class FinalLifeCommands extends CustomCommand {
 		if (ability == null) return -1;
 		if (targets.size() == 1) {
 			ServerPlayer player = targets.iterator().next();
-			if (!AbilityManager.hasAbility(player, ability)) {
+			if (!AbilityManager.hasStoredAbility(player, ability)) {
 				sendCommandFailure(source, ModifiableText.FINALLIFE_ABILITIES_COMMAND_REMOVE_MISSING.get(player, ability.title()));
 				return -1;
 			}
@@ -236,7 +240,7 @@ public class FinalLifeCommands extends CustomCommand {
 
 		int removed = 0;
 		for (ServerPlayer player : targets) {
-			if (!AbilityManager.hasAbility(player, ability)) continue;
+			if (!AbilityManager.hasStoredAbility(player, ability)) continue;
 			AbilityManager.removeAbility(player, ability);
 			removed++;
 		}

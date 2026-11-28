@@ -15,6 +15,7 @@ import java.util.*;
 
 public class AbilityManager {
 	private static final Map<UUID, List<Ability>> abilities = new HashMap<>();
+	private static final Set<Abilities> disabledAbilities = EnumSet.noneOf(Abilities.class);
 
 	public static void saveStoredAbilities() {
 		AbilityStorage.save(abilities);
@@ -23,17 +24,49 @@ public class AbilityManager {
 	public static void loadStoredAbilities() {
 		abilities.clear();
 		abilities.putAll(AbilityStorage.load());
+		disabledAbilities.clear();
+		for (Abilities ability : Abilities.values()) {
+			if (!ability.isEnabled()) disabledAbilities.add(ability);
+		}
 		abilities.forEach((uuid, list) -> list.forEach(ability -> {
 			ability.bindPlayer(uuid);
-			if (PlayerUtils.getPlayer(uuid) != null) ability.onStart();
+			if (PlayerUtils.getPlayer(uuid) != null && ability.ability().isEnabled()) ability.onStart();
 		}));
 		sendUpdatePacket(PlayerUtils.getAllPlayers());
 	}
 
 	public static void tick() {
+		checkDisabledAbilities();
 		for (ServerPlayer player : PlayerUtils.getAllFunctioningPlayers()) {
-			var copyList = new ArrayList<>(getPlayerAbilities(player));
-			copyList.forEach(Ability::tick);
+			getActiveAbilities(player).forEach(Ability::tick);
+		}
+	}
+
+	private static void checkDisabledAbilities() {
+		for (Abilities ability : Abilities.values()) {
+			boolean disabled = !ability.isEnabled();
+			boolean storedDisabled = disabledAbilities.contains(ability);
+			if (disabled == storedDisabled) continue;
+
+			if (disabled) {
+				disabledAbilities.add(ability);
+			}
+			else {
+				disabledAbilities.remove(ability);
+			}
+
+			for (ServerPlayer player : PlayerUtils.getAllPlayers()) {
+				Ability abilityInstance = getStoredAbility(player, ability);
+				if (abilityInstance == null) continue;
+				if (disabled) {
+					abilityInstance.onEnd();
+				}
+				else {
+					abilityInstance.onStart();
+				}
+				resetPlayerMaxHealth(player);
+				sendUpdatePacket(player);
+			}
 		}
 	}
 
@@ -55,23 +88,23 @@ public class AbilityManager {
 		PlayerReference ref = PlayerReference.of(player);
 		TaskScheduler.scheduleTask(1, () -> {
 			ServerPlayer joined = ref.get();
-			if (joined != null) getPlayerAbilities(joined).forEach(Ability::onStart);
+			if (joined != null) getActiveAbilities(joined).forEach(Ability::onStart);
 		});
 	}
 
 	public static void onPlayerDisconnect(ServerPlayer player) {
-		getPlayerAbilities(player).forEach(Ability::onEnd);
+		getActiveAbilities(player).forEach(Ability::onEnd);
 	}
 
 	public static float modifyDamage(ServerPlayer player, DamageSource source, float amount) {
-		for (Ability ability : getPlayerAbilities(player)) {
+		for (Ability ability : getActiveAbilities(player)) {
 			amount = ability.modifyDamage(source, amount);
 		}
 		return amount;
 	}
 
 	public static boolean preventDamage(ServerPlayer player, DamageSource source) {
-		for (Ability ability : getPlayerAbilities(player)) {
+		for (Ability ability : getActiveAbilities(player)) {
 			if (ability.preventDamage(source)) return true;
 		}
 		return false;
@@ -88,7 +121,7 @@ public class AbilityManager {
 	}
 
 	public static void addAbility(ServerPlayer player, Ability abilityInstance, boolean delayedMessage) {
-		if (hasAbility(player, abilityInstance.ability())) return;
+		if (!abilityInstance.ability().isEnabled() || hasStoredAbility(player, abilityInstance.ability())) return;
 		abilityInstance.reloadHeartsChange();
 
 		UUID uuid = player.getUUID();
@@ -115,25 +148,24 @@ public class AbilityManager {
 	}
 
 	public static void setForcedAbility(ServerPlayer player, Abilities ability, boolean shouldHave) {
-		Ability current = getAbility(player, ability);
+		Ability current = getStoredAbility(player, ability);
 		if (shouldHave && current == null) {
 			Ability abilityInstance = ability.createAbility().setForced();
 			abilities.computeIfAbsent(player.getUUID(), uuid -> new ArrayList<>()).add(abilityInstance);
 			abilityInstance.bindPlayer(player);
-			abilityInstance.onStart();
+			if (ability.isEnabled()) abilityInstance.onStart();
 			sendUpdatePacket(player);
 		}
 		else if (!shouldHave && current != null && current.isForced()) {
-			current.onEnd();
+			if (ability.isEnabled()) current.onEnd();
 			abilities.get(player.getUUID()).remove(current);
 			sendUpdatePacket(player);
 		}
 	}
 
 	public static void clearAbilities(ServerPlayer player) {
-		var playerAbilities = getPlayerAbilities(player);
-		boolean hadAbilities = !playerAbilities.isEmpty();
-		playerAbilities.forEach(Ability::onEnd);
+		boolean hadAbilities = !getPlayerAbilities(player).isEmpty();
+		getActiveAbilities(player).forEach(Ability::onEnd);
 		abilities.put(player.getUUID(), new ArrayList<>());
 		saveStoredAbilities();
 		resetPlayerMaxHealth(player);
@@ -142,9 +174,9 @@ public class AbilityManager {
 	}
 
 	public static void removeAbility(ServerPlayer player, Abilities ability) {
-		Ability abilityInstance = getAbility(player, ability);
+		Ability abilityInstance = getStoredAbility(player, ability);
 		if (abilityInstance == null) return; // Does not have this ability
-		abilityInstance.onEnd();
+		if (ability.isEnabled()) abilityInstance.onEnd();
 		abilities.get(player.getUUID()).remove(abilityInstance);
 		saveStoredAbilities();
 		resetPlayerMaxHealth(player);
@@ -161,8 +193,19 @@ public class AbilityManager {
 		ModifiableSound.FINALLIFE_ABILITY_LOSE.play(player);
 	}
 
+	// Includes disabled abilities
 	public static List<Ability> getPlayerAbilities(ServerPlayer player) {
 		return abilities.getOrDefault(player.getUUID(), List.of());
+	}
+
+	public static List<Ability> getActiveAbilities(ServerPlayer player) {
+		List<Ability> active = new ArrayList<>();
+		for (Ability ability : getPlayerAbilities(player)) {
+			if (ability.ability().isEnabled()) {
+				active.add(ability);
+			}
+		}
+		return active;
 	}
 
 	public static boolean hasAbility(ServerPlayer player, Abilities ability) {
@@ -170,9 +213,18 @@ public class AbilityManager {
 		return abilityInstance != null;
 	}
 
+	// Only returns if the ability is enabled
 	public static Ability getAbility(ServerPlayer player, Abilities ability) {
-		List<Ability> abilities = getPlayerAbilities(player);
-		for (Ability abilityInstance : abilities) {
+		if (!ability.isEnabled()) return null;
+		return getStoredAbility(player, ability);
+	}
+
+	public static boolean hasStoredAbility(ServerPlayer player, Abilities ability) {
+		return getStoredAbility(player, ability) != null;
+	}
+
+	private static Ability getStoredAbility(ServerPlayer player, Abilities ability) {
+		for (Ability abilityInstance : getPlayerAbilities(player)) {
 			if (abilityInstance.ability() == ability) {
 				return abilityInstance;
 			}
@@ -182,7 +234,7 @@ public class AbilityManager {
 
 	public static void resetPlayerMaxHealth(ServerPlayer player) {
 		double health = LifeSeries.seasonConfig.MAX_PLAYER_HEALTH.get();
-		for (Ability ability : getPlayerAbilities(player)) {
+		for (Ability ability : getActiveAbilities(player)) {
 			health += ability.getHeartsChange()*2;
 		}
 		AttributeUtils.MAX_HEALTH.of(player).set(health);
@@ -199,7 +251,7 @@ public class AbilityManager {
 		}
 		for (ServerPlayer player : players) {
 			List<String> abilities = new ArrayList<>();
-			for (Ability ability : getPlayerAbilities(player)) {
+			for (Ability ability : getActiveAbilities(player)) {
 				abilities.add(ability.ability().name() + ";" + ability.getHeartsChange());
 			}
 			SimplePackets.ACTIVE_ABILITIES.sendToClient(abilities, player);

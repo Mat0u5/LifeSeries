@@ -51,7 +51,7 @@ public class InBetweenChoices {
 			Integer maxDeaths = boundedChoice.maxDeaths();
 			if (minDeaths != null && deathNum < minDeaths) continue;
 			if (maxDeaths != null && deathNum > maxDeaths) continue;
-			if (AbilityManager.hasAbility(player, boundedChoice.ability())) continue;
+			if (!boundedChoice.ability().isEnabled() || AbilityManager.hasStoredAbility(player, boundedChoice.ability())) continue;
 			choices.add(InBetweenChoice.of(boundedChoice.ability()));
 		}
 		Collections.shuffle(choices);
